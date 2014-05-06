@@ -1,0 +1,65 @@
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -419,7 +419,7 @@ clean-libLTLIBRARIES:
+ 	  rm -f $${locs}; \
+ 	}
+ libasound.la: $(libasound_la_OBJECTS) $(libasound_la_DEPENDENCIES) 
+-	$(AM_V_CCLD)$(libasound_la_LINK) -rpath $(libdir) $(libasound_la_OBJECTS) $(libasound_la_LIBADD) $(LIBS)
++	$(AM_V_CCLD)$(libasound_la_LINK) -rpath $(DESTDIR)$(libdir) $(libasound_la_OBJECTS) $(libasound_la_LIBADD) $(LIBS)
+ 
+ mostlyclean-compile:
+ 	-rm -f *.$(OBJEXT)
+--- a/src/pcm/scopes/Makefile.in
++++ b/src/pcm/scopes/Makefile.in
+@@ -348,7 +348,7 @@ clean-pkglibLTLIBRARIES:
+ 	  rm -f $${locs}; \
+ 	}
+ scope-level.la: $(scope_level_la_OBJECTS) $(scope_level_la_DEPENDENCIES) 
+-	$(AM_V_CCLD)$(scope_level_la_LINK) -rpath $(pkglibdir) $(scope_level_la_OBJECTS) $(scope_level_la_LIBADD) $(LIBS)
++	$(AM_V_CCLD)$(scope_level_la_LINK) -rpath $(DESTDIR)$(pkglibdir) $(scope_level_la_OBJECTS) $(scope_level_la_LIBADD) $(LIBS)
+ 
+ mostlyclean-compile:
+ 	-rm -f *.$(OBJEXT)
+--- alsa-lib-1.0.25/src/pcm/pcm_hw.c	2012-01-25 08:56:56.000000000 +0100
++++ alsa-lib-1.0.25_new/src/pcm/pcm_hw.c	2014-02-03 12:45:23.740979381 +0100
+@@ -499,7 +499,8 @@
+ static snd_pcm_state_t snd_pcm_hw_state(snd_pcm_t *pcm)
+ {
+ 	snd_pcm_hw_t *hw = pcm->private_data;
+-	int err = sync_ptr(hw, 0);
++	int err = sync_ptr(hw, SNDRV_PCM_SYNC_PTR_APPL | \
++				SNDRV_PCM_SYNC_PTR_AVAIL_MIN);
+ 	if (err < 0)
+ 		return err;
+ 	return (snd_pcm_state_t) hw->mmap_status->state;
+@@ -523,7 +524,9 @@
+ 	int fd = hw->fd, err;
+ 	if (SNDRV_PROTOCOL_VERSION(2, 0, 3) <= hw->version) {
+ 		if (hw->sync_ptr) {
+-			err = sync_ptr1(hw, SNDRV_PCM_SYNC_PTR_HWSYNC);
++			err = sync_ptr1(hw, SNDRV_PCM_SYNC_PTR_HWSYNC | \
++					SNDRV_PCM_SYNC_PTR_APPL | \
++					SNDRV_PCM_SYNC_PTR_AVAIL_MIN);
+ 			if (err < 0)
+ 				return err;
+ 		} else {
+@@ -673,7 +676,9 @@
+ 	} else {
+ 		snd_pcm_sframes_t avail;
+ 
+-		err = sync_ptr(hw, SNDRV_PCM_SYNC_PTR_HWSYNC);
++		err = sync_ptr(hw, SNDRV_PCM_SYNC_PTR_HWSYNC | \
++				SNDRV_PCM_SYNC_PTR_APPL | \
++				SNDRV_PCM_SYNC_PTR_AVAIL_MIN);
+ 		if (err < 0)
+ 			return err;
+ 		switch (FAST_PCM_STATE(hw)) {
+@@ -962,7 +967,7 @@
+ 	snd_pcm_hw_t *hw = pcm->private_data;
+ 	snd_pcm_uframes_t avail;
+ 
+-	sync_ptr(hw, 0);
++	sync_ptr(hw, SNDRV_PCM_SYNC_PTR_APPL|SNDRV_PCM_SYNC_PTR_AVAIL_MIN);
+ 	avail = snd_pcm_mmap_avail(pcm);
+ 	switch (FAST_PCM_STATE(hw)) {
+ 	case SNDRV_PCM_STATE_RUNNING:

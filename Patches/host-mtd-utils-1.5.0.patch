@@ -1,0 +1,13 @@
+--- mtd-utils-1.5.0/Makefile.orig	2012-05-07 09:19:39.000000000 +0200
++++ mtd-utils-1.5.0/Makefile	2014-04-30 18:07:11.365308291 +0200
+@@ -61,8 +61,8 @@
+ 	$(MAKE) -C $(TESTS) clean
+ 
+ install:: $(addprefix $(BUILDDIR)/,${BINS}) ${SCRIPTS}
+-	mkdir -p ${DESTDIR}/${SBINDIR}
+-	install -m 0755 $^ ${DESTDIR}/${SBINDIR}/
++	mkdir -p ${DESTDIR}/${BINDIR}
++	install -m 0755 $^ ${DESTDIR}/${BINDIR}/
+ 	mkdir -p ${DESTDIR}/${MANDIR}/man1
+ 	install -m 0644 mkfs.jffs2.1 ${DESTDIR}/${MANDIR}/man1/
+ 	-gzip -9f ${DESTDIR}/${MANDIR}/man1/*.1

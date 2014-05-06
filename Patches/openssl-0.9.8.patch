@@ -1,0 +1,26 @@
+-- openssl-0.9.8g.orig/Configure	2007-09-16 13:24:17.000000000 +0100
++++ openssl-0.9.8g/Configure	2007-11-01 16:24:54.000000000 +0000
+@@ -380,6 +380,12 @@
+ "qnx4",	"cc:-DL_ENDIAN -DTERMIO::(unknown):::${x86_gcc_des} ${x86_gcc_opts}:",
+ "qnx6",	"cc:-DL_ENDIAN -DTERMIOS::(unknown)::-lsocket:${x86_gcc_des} ${x86_gcc_opts}:",
+ 
++# Linux on SuperH
++"linux-sh","sh4-linux-gcc:-DL_ENDIAN -DTERMIO -pipe -Os::-D_REENTRANT::-ldl:BN_LLONG::::::::::::dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
++
++# Linux on ST200
++"linux-st200","st231-linux-gcc:-DL_ENDIAN -DTERMIO -O3::-D_REENTRANT::-ldl:BN_LLONG::::::::::::dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
++
+ #### SCO/Caldera targets.
+ #
+ # Originally we had like unixware-*, unixware-*-pentium, unixware-*-p6, etc.
+--- openssl-0.9.8l.old/Makefile.org	2009-03-03 23:40:29.000000000 +0100
++++ openssl-0.9.8l.new/Makefile.org	2014-02-13 17:14:20.564326000 +0100
+@@ -131,7 +131,7 @@
+ 
+ BASEADDR=
+ 
+-DIRS=   crypto fips ssl engines apps test tools
++DIRS=   crypto ssl
+ SHLIBDIRS= crypto ssl fips
+ 
+ # dirs in crypto to build
