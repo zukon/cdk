@@ -17,7 +17,7 @@ COMMONPATCHES_24 = \
 		linux-sh4-copro_stm24$(PATCH_STR).patch \
 		linux-sh4-strcpy_stm24$(PATCH_STR).patch \
 		linux-sh4-ext23_as_ext4_stm24$(PATCH_STR).patch \
-		bpa2_procfs_stm24$(PATCH_STR).patch \
+		linux-sh4-bpa2_procfs_stm24$(PATCH_STR).patch \
 		linux-ftdi_sio.c_stm24$(PATCH_STR).patch \
 		linux-sh4-lzma-fix_stm24$(PATCH_STR).patch \
 		linux-tune_stm24.patch \
@@ -38,9 +38,9 @@ TF7700PATCHES_24 = $(COMMONPATCHES_24) \
 		$(if $(P0209),linux-sh4-sata-v06_stm24$(PATCH_STR).patch)
 
 UFS910PATCHES_24 = $(COMMONPATCHES_24) \
-		stx7100_fdma_fix_stm24$(PATCH_STR).patch \
-		sata_32bit_fix_stm24$(PATCH_STR).patch \
-		sata_stx7100_B4Team_fix_stm24$(PATCH_STR).patch \
+		linux-sh4-stx7100_fdma_fix_stm24$(PATCH_STR).patch \
+		linux-sh4-sata_32bit_fix_stm24$(PATCH_STR).patch \
+		linux-sh4-sata_stx7100_B4Team_fix_stm24$(PATCH_STR).patch \
 		linux-sh4-ufs910_setup_stm24$(PATCH_STR).patch \
 		linux-usbwait123_stm24.patch \
 		linux-sh4-ufs910_reboot_stm24$(PATCH_STR).patch \
@@ -136,8 +136,8 @@ SPARK_PATCHES_24 = $(COMMONPATCHES_24) \
 		$(if $(P0209),linux-sh4-linux_yaffs2_stm24_0209.patch) \
 		$(if $(P0209),linux-sh4-lirc_stm.patch) \
 		$(if $(P0211)$(P0214),linux-sh4-lirc_stm_stm24$(PATCH_STR).patch) \
-		$(if $(P0211)$(P0214),af901x-NXP-TDA18218.patch) \
-		dvb-as102.patch
+		$(if $(P0211)$(P0214),linux-sh4-spark-af901x-NXP-TDA18218.patch) \
+		linux-sh4-spark-dvb-as102.patch
 
 SPARK7162_PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
@@ -152,8 +152,8 @@ FORTISPATCHES_24 = $(COMMONPATCHES_24) \
 		$(if $(P0209),linux-sh4-fortis_hdbox_i2c_st40_stm24$(PATCH_STR).patch)
 
 ADB_BOXPATCHES_24 = $(COMMONPATCHES_24) \
-		stx7100_fdma_fix_stm24$(PATCH_STR).patch \
-		sata_32bit_fix_stm24$(PATCH_STR).patch \
+		linux-sh4-stx7100_fdma_fix_stm24$(PATCH_STR).patch \
+		linux-sh4-sata_32bit_fix_stm24$(PATCH_STR).patch \
 		linux-sh4-adb_box_setup_stm24$(PATCH_STR).patch \
 		linux-usbwait123_stm24.patch \
 		linux-sh4-ufs910_reboot_stm24$(PATCH_STR).patch \
@@ -219,6 +219,12 @@ KERNELPATCHES_24 = \
 		$(if $(VITAMIN_HD5000),$(VITAMINHD5000PATCHES_24)) \
 		$(if $(SAGEMCOM88),$(SAGEMCOM88PATCHES_24))
 
+if ENABLE_ENIGMA2
+BUILDCONFIG=build-enigma2
+else
+BUILDCONFIG=build-neutrino
+endif
+
 KERNELHEADERS := linux-kernel-headers
 if ENABLE_P0209
 KERNELHEADERS_VERSION := 2.6.32.46-47
@@ -265,12 +271,12 @@ $(HOST_KERNEL_RPM): \
 	rpmbuild $(DRPMBUILD) -ba -v --clean --target=sh4-linux SPECS/$(HOST_KERNEL_SPEC)
 
 $(D)/linux-kernel.do_prepare: \
-		$(if $(HOST_KERNEL_PATCHES),$(HOST_KERNEL_PATCHES:%=Patches/%)) \
+		$(if $(HOST_KERNEL_PATCHES),$(HOST_KERNEL_PATCHES:%=Patches/$(BUILDCONFIG$)/%)) \
 		$(HOST_KERNEL_RPM)
 	rm -rf linux-sh4*
 	@rpm $(DRPM) --ignorearch --nodeps -Uhv $(lastword $^)
-	$(if $(HOST_KERNEL_PATCHES),cd $(KERNEL_DIR) && cat $(HOST_KERNEL_PATCHES:%=$(buildprefix)/Patches/%) | patch -p1)
-	$(INSTALL) -m644 Patches/$(HOST_KERNEL_CONFIG) $(KERNEL_DIR)/.config
+	$(if $(HOST_KERNEL_PATCHES),cd $(KERNEL_DIR) && cat $(HOST_KERNEL_PATCHES:%=$(buildprefix)/Patches/$(BUILDCONFIG$)/%) | patch -p1)
+	$(INSTALL) -m644 Patches/$(BUILDCONFIG)/$(HOST_KERNEL_CONFIG) $(KERNEL_DIR)/.config
 	-rm $(KERNEL_DIR)/localversion*
 	echo "$(KERNELSTMLABEL)" > $(KERNEL_DIR)/localversion-stm
 	$(MAKE) -C $(KERNEL_DIR) ARCH=sh oldconfig
@@ -279,10 +285,10 @@ $(D)/linux-kernel.do_prepare: \
 	rm $(KERNEL_DIR)/.config
 	touch $@
 
-$(D)/linux-kernel.do_compile: $(D)/linux-kernel.do_prepare Patches/$(HOST_KERNEL_CONFIG) | $(HOST_U_BOOT_TOOLS)
+$(D)/linux-kernel.do_compile: $(D)/linux-kernel.do_prepare Patches/$(BUILDCONFIG)/$(HOST_KERNEL_CONFIG) | $(HOST_U_BOOT_TOOLS)
 	cd $(KERNEL_DIR) && \
 		$(MAKE) ARCH=sh CROSS_COMPILE=$(target)- mrproper && \
-		@M4@ $(buildprefix)/Patches/$(HOST_KERNEL_CONFIG) > .config && \
+		@M4@ $(buildprefix)/Patches/$(BUILDCONFIG)/$(HOST_KERNEL_CONFIG) > .config && \
 		$(MAKE) ARCH=sh CROSS_COMPILE=$(target)- uImage modules
 	touch $@
 

@@ -41,6 +41,22 @@ if test -z "$TARGET_CFLAGS" -o -z "$TARGET_CXXFLAGS"; then
 	TARGET_CXXFLAGS="$TARGET_CFLAGS"
 fi
 
+AC_ARG_ENABLE(enigma2,
+	AS_HELP_STRING(--enable-enigma2, Setting up the CDK to build enigma2),
+	[case "${enableval}" in
+		yes) ENIGMA2=enigma2 ;;
+	esac],[enable_enigma2=no])
+AM_CONDITIONAL(ENABLE_ENIGMA2,test "$enable_enigma2" = "yes")
+AC_SUBST(ENIGMA2)
+
+AC_ARG_ENABLE(wlan,
+	AS_HELP_STRING(--enable-wlan, Setting up the CDK to build wlan),
+	[case "${enableval}" in
+		yes) WLAN=wlan ;;
+	esac],[enable_wlan=no])
+AM_CONDITIONAL(ENABLE_WLAN,test "$enable_wlan" = "yes")
+AC_SUBST(WLAN)
+
 AC_ARG_ENABLE(player191,
 	AS_HELP_STRING(--enable-player191, set up the CDK to use player191),
 	[case "${enableval}" in
@@ -392,15 +408,15 @@ if test "$prefix" = "NONE"; then
 fi
 
 AC_ARG_WITH(targetprefix,
-	[  --with-targetprefix=DIR    prefix for target files [[PREFIX/cdkroot]]],
+	[  --with-targetprefix=DIR prefix for target files [[PREFIX/cdkroot]]],
 	[targetprefix="$with_targetprefix"],[targetprefix="${prefix}/cdkroot"])
 
 AC_ARG_WITH(hostprefix,
-	[  --with-hostprefix=DIR    prefix for host files [[PREFIX/host]]],
+	[  --with-hostprefix=DIR   prefix for host files [[PREFIX/host]]],
 	[hostprefix="$with_hostprefix"],[hostprefix="${prefix}/host"])
 
 AC_ARG_WITH(bootprefix,
-	[  --with-bootprefix=DIR    prefix for boot files [[PREFIX/cdkroot-tftpboot]]],
+	[  --with-bootprefix=DIR   prefix for boot files [[PREFIX/cdkroot-tftpboot]]],
 	[bootprefix="$with_bootprefix"],[bootprefix="${prefix}/cdkroot-tftpboot"])
 
 AC_ARG_WITH(serversupport,
@@ -431,15 +447,15 @@ AC_SUBST(updatehttpprefix)
 AM_CONDITIONAL(DISABLE_UPDATE_HTTP,test "$updatehttpprefix" = "disable")
 
 AC_ARG_WITH(archivedir,
-	[  --with-archivedir=DIR    where to store downloaded files [[Archive/]]],
+	[  --with-archivedir=DIR   where to store downloaded files [[Archive/]]],
 	[archivedir="$with_archivedir"],[archivedir="$buildprefix/Archive"])
 
 AC_ARG_WITH(cvsdir,
-	[  --with-cvsdir=DIR    where to find the cvs],
+	[  --with-cvsdir=DIR       where to find the cvs],
 	[cvsdir="$with_cvsdir"],[cvsdir="NONE"])
 
 AC_ARG_WITH(appsdir,
-	[  --with-appsdir=DIR    apps dir from cvs [[[CVS/]apps/]]],
+	[  --with-appsdir=DIR      apps dir from cvs [[[CVS/]apps/]]],
 	[appsdir="$with_appsdir"],[appsdir="NONE"])
 
 AC_ARG_WITH(driverdir,
@@ -1008,6 +1024,19 @@ AC_MSG_RESULT([
 *  --with-cvsdir argument to configure?                          *
 *                       !!!WARNING!!!                            *
 ******************************************************************
+])
+fi
+
+## just error out now instead of mysteriously failing later.
+if test -n "$CONFIG_SITE"; then
+AC_MSG_ERROR([
+***************************************************************
+*                        !!!ERROR!!!                          *
+* The environment variable CONFIG_SITE is set on your system. *
+* This will likely break your build. Please rerun with unset  *
+* CONFIG_SITE.                                                *
+*                        !!!ERROR!!!                          *
+***************************************************************
 ])
 fi
 
