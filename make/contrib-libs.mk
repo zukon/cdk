@@ -1752,15 +1752,11 @@ $(D)/libdpf: bootstrap libusbcompat @DEPENDS_libdpf@
 	touch $@
 
 #
-#
 # libgd2
 #
-$(D)/libgd2: bootstrap libpng libjpeg libiconv libfreetype @DEPENDS_libgd2@
+$(D)/libgd2: bootstrap libpng libjpeg libfreetype @DEPENDS_libgd2@
 	@PREPARE_libgd2@
 	cd @DIR_libgd2@ && \
-		chmod +w configure && \
-		libtoolize -f -c && \
-		autoreconf -fi && \
 		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
