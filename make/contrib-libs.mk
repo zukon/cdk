@@ -663,25 +663,6 @@ $(D)/fontconfig: $(D)/bootstrap $(D)/libexpat $(D)/libfreetype @DEPENDS_fontconf
 	touch $@
 
 #
-# libxmlccwrap
-#
-$(D)/libxmlccwrap: $(D)/bootstrap @DEPENDS_libxmlccwrap@
-	@PREPARE_libxmlccwrap@
-	cd @DIR_libxmlccwrap@ && \
-		$(BUILDENV) \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
-			--target=$(target) \
-			--prefix=/usr && \
-		$(MAKE) all && \
-		@INSTALL_libxmlccwrap@ && \
-		sed -e "/^dependency_libs/ s,-L/usr/lib,-L$(targetprefix)/usr/lib,g" -i $(targetprefix)/usr/lib/libxmlccwrap.la && \
-		sed -e "/^dependency_libs/ s, /usr/lib, $(targetprefix)/usr/lib,g" -i $(targetprefix)/usr/lib/libxmlccwrap.la
-	@CLEANUP_libxmlccwrap@
-	touch $@
-
-#
 # a52dec
 #
 $(D)/a52dec: $(D)/bootstrap @DEPENDS_a52dec@
@@ -1216,6 +1197,23 @@ $(D)/libxslt: $(D)/bootstrap $(D)/libxml2 @DEPENDS_libxslt@
 		sed -e "/^XML2_LIBDIR/ s,/usr/lib,$(targetprefix)/usr/lib,g" -i $(targetprefix)/usr/lib/xsltConf.sh && \
 		sed -e "/^XML2_INCLUDEDIR/ s,/usr/include,$(targetprefix)/usr/include,g" -i $(targetprefix)/usr/lib/xsltConf.sh
 	@CLEANUP_libxslt@
+	touch $@
+
+#
+# libxmlccwrap
+#
+$(D)/libxmlccwrap: $(D)/bootstrap $(D)/libxml2 $(D)/libxslt @DEPENDS_libxmlccwrap@
+	@PREPARE_libxmlccwrap@
+	cd @DIR_libxmlccwrap@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--target=$(target) \
+			--prefix=/usr && \
+		$(MAKE) all && \
+		@INSTALL_libxmlccwrap@ && \
+	@CLEANUP_libxmlccwrap@
 	touch $@
 
 #
