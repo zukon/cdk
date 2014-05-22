@@ -41,6 +41,14 @@ if test -z "$TARGET_CFLAGS" -o -z "$TARGET_CXXFLAGS"; then
 	TARGET_CXXFLAGS="$TARGET_CFLAGS"
 fi
 
+AC_ARG_ENABLE(neutrino,
+	AS_HELP_STRING(--enable-neutrino, Setting up the CDK to build neutrino),
+	[case "${enableval}" in
+		yes) NEUTRINO=neutrino ;;
+	esac],[enable_neutrino=no])
+AM_CONDITIONAL(ENABLE_NEUTRINO,test "$enable_neutrino" = "yes")
+AC_SUBST(NEUTRINO)
+
 AC_ARG_ENABLE(enigma2,
 	AS_HELP_STRING(--enable-enigma2, Setting up the CDK to build enigma2),
 	[case "${enableval}" in
