@@ -49,13 +49,13 @@ AC_ARG_ENABLE(enigma2,
 AM_CONDITIONAL(ENABLE_ENIGMA2,test "$enable_enigma2" = "yes")
 AC_SUBST(ENIGMA2)
 
-AC_ARG_ENABLE(wlan,
-	AS_HELP_STRING(--enable-wlan, Setting up the CDK to build wlan),
+AC_ARG_ENABLE(wlandriver,
+	AS_HELP_STRING(--enable-wlandriver, Setting up the CDK to build wlandriver),
 	[case "${enableval}" in
-		yes) WLAN=wlan ;;
-	esac],[enable_wlan=no])
-AM_CONDITIONAL(ENABLE_WLAN,test "$enable_wlan" = "yes")
-AC_SUBST(WLAN)
+		yes) WLANDRIVER=wlandriver ;;
+	esac],[enable_wlandriver=no])
+AM_CONDITIONAL(ENABLE_WLANDRIVER,test "$enable_wlandriver" = "yes")
+AC_SUBST(WLANDRIVER)
 
 AC_ARG_ENABLE(player191,
 	AS_HELP_STRING(--enable-player191, set up the CDK to use player191),
