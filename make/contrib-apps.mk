@@ -172,6 +172,7 @@ $(D)/e2fsprogs: $(D)/bootstrap $(D)/utillinux @DEPENDS_e2fsprogs@
 $(D)/utillinux: $(D)/bootstrap $(D)/libz @DEPENDS_utillinux@
 	@PREPARE_utillinux@
 	cd @DIR_utillinux@ && \
+		autoreconf -fi && \
 		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
