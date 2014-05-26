@@ -1443,6 +1443,7 @@ $(D)/gstreamer: $(D)/bootstrap $(D)/glib2 $(D)/libxml2 @DEPENDS_gstreamer@
 			--prefix=/usr \
 			--disable-dependency-tracking \
 			--disable-check \
+			--disable-gst-debug \
 			--enable-introspection=no \
 			ac_cv_func_register_printf_function=no && \
 		$(MAKE) && \
