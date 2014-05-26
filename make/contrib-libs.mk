@@ -1439,6 +1439,7 @@ $(D)/gstreamer: $(D)/bootstrap $(D)/glib2 $(D)/libxml2 @DEPENDS_gstreamer@
 			--prefix=/usr \
 			--disable-dependency-tracking \
 			--disable-check \
+			--disable-debug \
 			--enable-introspection=no \
 			ac_cv_func_register_printf_function=no && \
 		$(MAKE) && \
@@ -1465,6 +1466,7 @@ $(D)/gst_plugins_base: $(D)/bootstrap $(D)/glib2 $(D)/gstreamer $(D)/libogg $(D)
 			--disable-vorbis \
 			--disable-vorbistest \
 			--disable-examples \
+			--disable-debug \
 			--disable-freetypetest \
 			--with-audioresample-format=int && \
 		$(MAKE) && \
@@ -1487,6 +1489,7 @@ $(D)/gst_plugins_good: $(D)/bootstrap $(D)/gstreamer $(D)/gst_plugins_base $(D)/
 			--disable-esdtest \
 			--disable-aalib \
 			--disable-shout2 \
+			--disable-debug \
 			--disable-x && \
 		$(MAKE) && \
 		@INSTALL_gst_plugins_good@
@@ -1520,6 +1523,7 @@ $(D)/gst_plugins_bad: $(D)/bootstrap $(D)/gstreamer $(D)/gst_plugins_base libmod
 			--disable-sdltest \
 			--disable-curl \
 			--disable-rsvg \
+			--disable-debug \
 			ac_cv_openssldir=no && \
 		$(MAKE) && \
 		@INSTALL_gst_plugins_bad@
@@ -1537,6 +1541,7 @@ $(D)/gst_plugins_ugly: $(D)/bootstrap $(D)/gstreamer $(D)/gst_plugins_base @DEPE
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=/usr \
+			--disable-debug \
 			--disable-mpeg2dec && \
 		$(MAKE) && \
 		@INSTALL_gst_plugins_ugly@
@@ -1589,6 +1594,7 @@ $(D)/gst_ffmpeg: $(D)/bootstrap $(D)/gstreamer $(D)/gst_plugins_base @DEPENDS_gs
 			--enable-demuxer=flac \
 			--enable-demuxer=mpegts \
 			\
+			--disable-debug \
 			--disable-bsfs \
 			--enable-pthreads \
 			--enable-bzlib"
