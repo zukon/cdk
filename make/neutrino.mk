@@ -17,7 +17,7 @@ NEUTRINO_DEPS  = bootstrap libcrypto libcurl libid3tag libmad libvorbisidec libp
 NEUTRINO_DEPS += ffmpeg liblua libdvbsipp libopenthreads libusb libalsa
 NEUTRINO_DEPS += $(EXTERNALLCD_DEP) $(MEDIAFW_DEP)
 
-N_CFLAGS   = -Wall -W -Wshadow -pipe -Os -fno-strict-aliasing
+N_CFLAGS   = -Wall -W -Wshadow -pipe -Os -fno-strict-aliasing -funsigned-char
 #-rdynamic
 
 N_CPPFLAGS = -I$(driverdir)/bpamem
@@ -83,7 +83,7 @@ $(appsdir)/libstb-hal-github/config.status: | $(NEUTRINO_DEPS)
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			$(PLATFORM_CPPFLAGS) \
-			CPPFLAGS="$(N_CPPFLAGS)"
+			CFLAGS="$(N_CFLAGS)" CXXFLAGS="$(N_CFLAGS)" CPPFLAGS="$(N_CPPFLAGS)"
 
 $(D)/libstb-hal-github.do_compile: $(appsdir)/libstb-hal-github/config.status
 	cd $(appsdir)/libstb-hal-github && \
@@ -148,9 +148,7 @@ $(appsdir)/neutrino-mp-github/config.status:
 			--with-stb-hal-build=$(appsdir)/libstb-hal-github \
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
-			CPPFLAGS="$(N_CPPFLAGS)"
-
-##			CFLAGS="$(N_CFLAGS)" CXXFLAGS="$(N_CFLAGS)" CPPFLAGS="$(N_CPPFLAGS)"
+			CFLAGS="$(N_CFLAGS)" CXXFLAGS="$(N_CFLAGS)" CPPFLAGS="$(N_CPPFLAGS)"
 
 $(D)/neutrino-mp-github.do_compile: $(appsdir)/neutrino-mp-github/config.status
 	cd $(appsdir)/neutrino-mp-github && \
@@ -227,7 +225,7 @@ $(appsdir)/neutrino-mp-martii-github/config.status:
 			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			$(PLATFORM_CPPFLAGS) \
-			CPPFLAGS="$(N_CPPFLAGS)"
+			CFLAGS="$(N_CFLAGS)" CXXFLAGS="$(N_CFLAGS)" CPPFLAGS="$(N_CPPFLAGS)"
 
 $(D)/neutrino-mp-martii-github.do_compile: $(appsdir)/neutrino-mp-martii-github/config.status
 	cd $(appsdir)/neutrino-mp-martii-github && \
