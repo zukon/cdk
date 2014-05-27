@@ -60,7 +60,6 @@ if [ ! -e /var/etc/.firstboot ]; then
    insmod $MODDIR/mmelog.ko
    insmod $MODDIR/mpeg2hw.ko mmeName=MPEG2_TRANSFORMER0;
    insmod $MODDIR/ksound.ko
-   insmod $MODDIR/p2div64.ko
    insmod $MODDIR/stm_v4l2.ko
    if [ $player -gt 131 ]; then
 	insmod $MODDIR/stmvout.ko
