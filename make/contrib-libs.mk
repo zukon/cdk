@@ -141,12 +141,14 @@ $(D)/libfreetype: $(D)/bootstrap $(D)/libpng @DEPENDS_libfreetype@
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix=/usr && \
+			--prefix=$(targetprefix)/usr && \
 		$(MAKE) all && \
 		sed -e "s,^prefix=,prefix=$(targetprefix)," < builds/unix/freetype-config > $(hostprefix)/bin/freetype-config && \
 		chmod 755 $(hostprefix)/bin/freetype-config && \
-		ln -sf $(targetprefix)/usr/include/freetype2/freetype $(targetprefix)/usr/include/freetype && \
 		@INSTALL_libfreetype@
+		if [ -d $(targetprefix)/usr/include/freetype2/freetype ] ; then \
+			ln -sf ./freetype2/freetype $(targetprefix)/usr/include/freetype; \
+		fi;
 	@CLEANUP_libfreetype@
 	touch $@
 
@@ -237,8 +239,8 @@ $(D)/libpng12: $(D)/bootstrap @DEPENDS_libpng12@
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix=/usr && \
-		$(MAKE) all && \
+			--prefix=$(targetprefix)/usr && \
+		ECHO=echo $(MAKE) all && \
 		sed -e "s,^prefix=,prefix=$(targetprefix)," < libpng-config > $(hostprefix)/bin/libpng-config && \
 		chmod 755 $(hostprefix)/bin/libpng-config && \
 		@INSTALL_libpng@
@@ -255,7 +257,7 @@ $(D)/libpng: $(D)/bootstrap $(D)/libz @DEPENDS_libpng@
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix=/usr && \
+			--prefix=$(targetprefix)/usr && \
 			ECHO=echo $(MAKE) all && \
 		sed -e 's,^prefix="/usr",prefix="$(targetprefix)/usr",' < libpng-config > $(hostprefix)/bin/libpng-config && \
 		chmod 755 $(hostprefix)/bin/libpng-config && \
@@ -1152,6 +1154,8 @@ $(D)/elementtree: $(D)/bootstrap @DEPENDS_elementtree@
 $(D)/libxml2: $(D)/bootstrap @DEPENDS_libxml2@
 	@PREPARE_libxml2@
 	cd @DIR_libxml2@ && \
+		touch NEWS AUTHORS ChangeLog && \
+		autoreconf -fi && \
 		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
@@ -1439,7 +1443,7 @@ $(D)/gstreamer: $(D)/bootstrap $(D)/glib2 $(D)/libxml2 @DEPENDS_gstreamer@
 			--prefix=/usr \
 			--disable-dependency-tracking \
 			--disable-check \
-			--disable-debug \
+			--disable-gst-debug \
 			--enable-introspection=no \
 			ac_cv_func_register_printf_function=no && \
 		$(MAKE) && \

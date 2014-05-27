@@ -230,7 +230,7 @@ $(D)/wireless_tools: $(D)/bootstrap @DEPENDS_wireless_tools@
 #
 # wpa_supplicant
 #
-$(D)/wpa_supplicant: $(D)/bootstrap $(D)/libopenssl $(D)/wireless_tools @DEPENDS_wpa_supplicant@
+$(D)/wpa_supplicant: $(D)/bootstrap $(D)/libcrypto $(D)/wireless_tools @DEPENDS_wpa_supplicant@
 	@PREPARE_wpa_supplicant@
 	cd @DIR_wpa_supplicant@/wpa_supplicant && \
 		$(INSTALL) -m 644 $(buildprefix)/Patches/wpa_supplicant.config .config && \

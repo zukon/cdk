@@ -120,13 +120,6 @@ $(D)/openrdate: $(D)/bootstrap @DEPENDS_openrdate@ $(OPENRDATE_ADAPTED_ETC_FILES
 			--prefix=/usr && \
 		$(MAKE) && \
 		@INSTALL_openrdate@
-	( cd root/etc && for i in $(OPENRDATE_ADAPTED_ETC_FILES); do \
-		[ -f $$i ] && $(INSTALL) -m644 $$i $(prefix)/$*cdkroot/etc/$$i || true; \
-		[ "$${i%%/*}" = "init.d" ] && chmod 755 $(prefix)/$*cdkroot/etc/$$i || true; done ) && \
-	( export HHL_CROSS_TARGET_DIR=$(prefix)/$*cdkroot && cd $(prefix)/$*cdkroot/etc/init.d && \
-		for s in rdate.sh ; do \
-			$(hostprefix)/bin/target-initdconfig --add $$s || \
-			echo "Unable to enable initd service: $$s" ; done && rm *rpmsave 2>/dev/null || true )
 	@CLEANUP_openrdate@
 	touch $@
 
@@ -162,7 +155,7 @@ $(D)/e2fsprogs: $(D)/bootstrap $(D)/utillinux @DEPENDS_e2fsprogs@
 		@INSTALL_e2fsprogs@
 		( cd @DIR_e2fsprogs@ && \
 		$(MAKE) install install-libs DESTDIR=$(targetprefix) && \
-	$(INSTALL) e2fsck/e2fsck.static $(targetprefix)/sbin ) || true
+		$(INSTALL) e2fsck/e2fsck.static $(targetprefix)/sbin ) || true
 	@CLEANUP_e2fsprogs@
 	touch $@
 
@@ -172,6 +165,7 @@ $(D)/e2fsprogs: $(D)/bootstrap $(D)/utillinux @DEPENDS_e2fsprogs@
 $(D)/utillinux: $(D)/bootstrap $(D)/libz @DEPENDS_utillinux@
 	@PREPARE_utillinux@
 	cd @DIR_utillinux@ && \
+		autoreconf -fi && \
 		$(BUILDENV) \
 		./configure \
 			--build=$(build) \

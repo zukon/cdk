@@ -57,7 +57,7 @@ RPMS/sh4/stlinux23-$(HOST_U_BOOT_TOOLS)-$(U_BOOT_TOOLS_VERSION).sh4.rpm: \
 	rpm $(DRPM) --nosignature -Uhv $< && \
 	rpmbuild $(DRPMBUILD) -bb -v --clean --target=sh4-linux --define "_stm_short_build_id 23" --define "_stm_pkg_prefix stlinux23" --define "_stm_uboot_dir $(buildprefix)/u-boot" SPECS/stm-$(HOST_U_BOOT_TOOLS).spec
 
-$(D)/$(HOST_U_BOOT_TOOLS): u-boot-utils.do_prepare RPMS/sh4/stlinux23-$(HOST_U_BOOT_TOOLS)-$(U_BOOT_TOOLS_VERSION).sh4.rpm | bootstrap-cross
+$(D)/$(HOST_U_BOOT_TOOLS): u-boot-utils.do_prepare RPMS/sh4/stlinux23-$(HOST_U_BOOT_TOOLS)-$(U_BOOT_TOOLS_VERSION).sh4.rpm | bootstrap
 	@rpm $(DRPM) --ignorearch --nodeps -Uhv $(lastword $^) && \
 	touch $@
 

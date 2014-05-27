@@ -1,32 +1,57 @@
+--- a/drivers/char/lirc/lirc_stm.c	2014-04-09 06:54:15.000000000 +0200
++++ b/drivers/char/lirc/lirc_stm.c	2014-03-20 18:46:14.000000000 +0100
+@@ -882,7 +882,7 @@
+ 	rx.error = 0;
+ 	rx.off_rbuf = 0;
+ 	rx.sumUs = 0;
+-	memset(rx.rbuf, 0, LIRC_STM_BUFSIZE);
++	memset(rx.rbuf, 0, LIRC_STM_BUFSIZE*4);		//fix freebox 12.01.2012 
+ }
+ 
+ static void lirc_stm_rx_interrupt(int irq, void *dev_id)
+@@ -1376,7 +1376,7 @@
+ 	 */
+ 
+ 	if ((rx.rbuf = (lirc_t *) devm_kzalloc(dev,
+-					       LIRC_STM_BUFSIZE,
++					       (LIRC_STM_BUFSIZE*4),	//fix freebox 12.01.2012 
+ 					       GFP_KERNEL)) == NULL)
+ 		return -ENOMEM;
+ 
 --- a/arch/sh/boards/mach-mb680/setup.c	2014-04-09 06:54:15.000000000 +0200
 +++ b/arch/sh/boards/mach-mb680/setup.c	2014-03-20 18:46:14.000000000 +0100
-@@ -26,18 +26,50 @@
+@@ -26,22 +26,53 @@
+ #include <linux/input.h>
+ #include <linux/stm/platform.h>
+ #include <linux/stm/stx7105.h>
+-#include <linux/stm/pci-glue.h>
++#include <linux/stm/pci-glue.h> //pci_synopsys is now pci-glue, was renamed
  #include <linux/mtd/mtd.h>
  #include <linux/mtd/physmap.h>
  #include <linux/mtd/partitions.h>
 +#include <linux/bpa2.h>
- #include <linux/spi/spi_gpio.h>
+-#include <linux/spi/spi_gpio.h>
  #include <asm/irq-ilc.h>
  #include <mach/common.h>
  #include "../mach-st/mb705-epld.h"
-+#include <linux/stm/pio.h>
++//#include <linux/stm/pio.h>
  
  
-+#define MB680_PIO_PHY_RESET stm_gpio(6, 6)
-+#define PIO13_2 stm_gpio(13, 2)
-+#define PIO13_3 stm_gpio(13, 3)
-+#define PIO16_2 stm_gpio(16, 2)
-+#define PIO15_3 stm_gpio(15, 3)
++#define PIO13_2 stm_gpio(13, 2) //reset usb1
++#define PIO13_3 stm_gpio(13, 3) //reset usb2
++#define PIO16_2 stm_gpio(16, 2) //reset dvb-t
++#define PIO15_3 stm_gpio(15, 3) //reset dvb-s
  
 -#define MB680_PIO_PHY_RESET stm_gpio(5, 5)
++#define MB680_PIO_PHY_RESET stm_gpio(6, 6)
 -#define MB680_PIO_PCI_SERR stm_gpio(6, 4)
--#define MB680_PIO_PCI_RESET stm_gpio(15, 6)
--#define MB680_PIO_MII_BUS_SWITCH stm_gpio(11, 2)
 +//#define MB680_PIO_PCI_SERR stm_gpio(6, 4)
+-#define MB680_PIO_PCI_RESET stm_gpio(15, 6)
 +//#define MB680_PIO_PCI_RESET stm_gpio(15, 6)
+-#define MB680_PIO_MII_BUS_SWITCH stm_gpio(11, 2)
 +//#define MB680_PIO_MII_BUS_SWITCH stm_gpio(11, 2)
  
-+const char *LMI_IO_partalias[] = { "v4l2-coded-video-buffers", "BPA2_Region1", "v4l2-video-buffers" ,
++const char *LMI_IO_partalias[] = { "audio", "v4l2-coded-video-buffers", "BPA2_Region1", "v4l2-video-buffers" ,
 +                                    "coredisplay-video", "gfx-memory", "BPA2_Region0", "LMI_VID", NULL };
 + 
 +/*
@@ -55,7 +80,7 @@
  
  
  static void __init mb680_setup(char** cmdline_p)
-@@ -46,72 +74,19 @@
+@@ -46,72 +74,18 @@
  
  	stx7105_early_device_init();
  
@@ -63,7 +88,6 @@
 -			.routing.asc2 = stx7105_asc2_pio4,
 -			.hw_flow_control = 1,
 +	stx7105_configure_asc(1, &(struct stx7105_asc_config) {
-+			//.routing.asc2 = stx7105_asc2_pio4,
 +			.hw_flow_control = 0,
  			.is_console = 1, });
 -	stx7105_configure_asc(3, &(struct stx7105_asc_config) {
@@ -130,12 +154,12 @@
 -	gpio_set_value(MB680_PIO_MII_BUS_SWITCH, 0);
 -	mdelay(20);
 +	gpio_set_value(MB680_PIO_PHY_RESET, 0);
-+	udelay(100);
++	udelay(150);
 +	gpio_set_value(MB680_PIO_PHY_RESET, 1);
  
  	return 0;
  }
-@@ -121,135 +105,60 @@
+@@ -121,135 +105,58 @@
  	.phy_mask = 0,
  };
  
@@ -157,15 +181,15 @@
 +// Nor Flash Configuration SagemCom UHD88/ESI88
 +static struct mtd_partition nor_parts[] = {
 +	{
-+		.name   = "uboot  NOR 512KB",
++		.name   = "NOR uboot 512KB",
 +		.size   = 0x00080000,	//512KB
 +		.offset = 0,
 +	}, {
-+		.name   = "kernel NOR 2.5MB",
++		.name   = "NOR kernel 2.5MB",
 +		.size   = 0x00280000,	//2.5MB
 +		.offset = 0x00080000,
 +	}, {
-+		.name   = "root         NOR",
++		.name   = "NOR rootFS",
 +		.size   = MTDPART_SIZ_FULL,
 +		.offset = MTDPART_OFS_APPEND,
 +	}
@@ -280,30 +304,35 @@
 -	/* Valid only for mb680 rev. A & rev. B (they had two SATA lines) */
 -	stx7105_configure_sata(1);
 -
- 	stx7105_configure_pwm(&(struct stx7105_pwm_config) {
+	stx7105_configure_pwm(&(struct stx7105_pwm_config) {
 -			.out0 = stx7105_pwm_out0_pio13_0,
 +			.out0 = stx7105_pwm_out0_pio4_4,
- 			.out1 = stx7105_pwm_out1_disabled, });
- 
-	/* NIM CD I2C bus*/
+			.out1 = stx7105_pwm_out1_disabled, });
+-
+-	/* NIM CD I2C bus*/
+-	stx7105_configure_ssc_i2c(1, &(struct stx7105_ssc_config) {
+-			.routing.ssc1.sclk = stx7105_ssc1_sclk_pio2_5,
+-			.routing.ssc1.mtsr = stx7105_ssc1_mtsr_pio2_6, });
 +	stx7105_configure_ssc_i2c(0, &(struct stx7105_ssc_config) {
 +			.routing.ssc1.sclk = stx7105_ssc0_sclk_pio2_2,
 +			.routing.ssc1.mtsr = stx7105_ssc0_mtsr_pio2_3, });
-	stx7105_configure_ssc_i2c(1, &(struct stx7105_ssc_config) {
-			.routing.ssc1.sclk = stx7105_ssc1_sclk_pio2_5,
-			.routing.ssc1.mtsr = stx7105_ssc1_mtsr_pio2_6, });
 -	/* NIM AB/STRecord I2C bus*/
 -	stx7105_configure_ssc_i2c(2, &(struct stx7105_ssc_config) {
++	stx7105_configure_ssc_i2c(1, &(struct stx7105_ssc_config) {
 -			.routing.ssc2.sclk = stx7105_ssc2_sclk_pio3_4,
++			.routing.ssc1.sclk = stx7105_ssc1_sclk_pio2_5,
 -			.routing.ssc2.mtsr = stx7105_ssc2_mtsr_pio3_5, });
-	/* HDMI I2C bus */
-	stx7105_configure_ssc_i2c(3, &(struct stx7105_ssc_config) {
-			.routing.ssc3.sclk = stx7105_ssc3_sclk_pio3_6,
-			.routing.ssc3.mtsr = stx7105_ssc3_mtsr_pio3_7, });
- 
++			.routing.ssc1.mtsr = stx7105_ssc1_mtsr_pio2_6, });
+-	/* HDMI I2C bus */
++ 	/* HDMI I2C bus - j00zek chyba jednak jest przydatne, bez mam kernel panic przez null w HDMI, jak tuner nie podlaczony */
+ 	stx7105_configure_ssc_i2c(3, &(struct stx7105_ssc_config) {
+ 			.routing.ssc3.sclk = stx7105_ssc3_sclk_pio3_6,
+ 			.routing.ssc3.mtsr = stx7105_ssc3_mtsr_pio3_7, });
+-
++//j00zek end
  	/*
  	 * Note that USB port configuration depends on jumper
-@@ -229,11 +275,14 @@
+@@ -229,8 +275,9 @@
  	 * norm	|  4[5]	J5B:2-3			 4[7]	J10B:2-3
  	 * alt	| 12[6]	J5B:1-2  J6G:open	14[7]	J10B:1-2  J11H:open
  	 */
@@ -314,11 +343,6 @@
  			.pwr_enabled = 1,
  			.routing.usb0.ovrcur = stx7105_usb0_ovrcur_pio4_4,
  			.routing.usb0.pwr = stx7105_usb0_pwr_pio4_5, });
-+
-+//UHD88 ma dwa usb
- 	stx7105_configure_usb(1, &(struct stx7105_usb_config) {
- 			.ovrcur_mode = stx7105_usb_ovrcur_active_low,
- 			.pwr_enabled = 1,
 @@ -242,8 +291,18 @@
  
  	gpio_request(MB680_PIO_PHY_RESET, "notPioResetMII");
@@ -353,7 +377,7 @@
 -	 *	J15A : fitted
 -	 */
 +	/* enable optical out */
-+	stpio_request_pin(10, 6, "opt_out", STPIO_ALT_OUT);
++	//stpio_request_pin(10, 6, "opt_out", STPIO_ALT_OUT);
 +
  	stx7105_configure_lirc(&(struct stx7105_lirc_config) {
 -#ifdef CONFIG_LIRC_STM_UHF
@@ -363,9 +387,9 @@
 -#endif
 -			.tx_enabled = 1,
 -			.tx_od_enabled = 1, });
-+				.tx_enabled = 0,
-+				.tx_od_enabled = 0,
-+				});
++			.tx_enabled = 0,
++			.tx_od_enabled = 0,
++			});
  
  	return platform_add_devices(mb680_devices, ARRAY_SIZE(mb680_devices));
  }

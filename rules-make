@@ -80,7 +80,7 @@ libmad;0.15.1b;libmad-0.15.1b;libmad-0.15.1b.tar.gz:libmad.patch;extract:libmad-
 libmpeg2;0.5.1;libmpeg2-0.5.1;libmpeg2-0.5.1.tar.gz;extract:libmpeg2-0.5.1.tar.gz
 libogg;1.3.1;libogg-1.3.1;libogg-1.3.1.tar.gz;extract:libogg-1.3.1.tar.gz
 libsamplerate;0.1.8;libsamplerate-0.1.8;libsamplerate-0.1.8.tar.gz;extract:libsamplerate-0.1.8.tar.gz
-libvorbis;1.3.4;libvorbis-1.3.4;libvorbis-1.3.4.tar.gz:libvorbis-1.3.3.patch;extract:libvorbis-1.3.4.tar.gz;patch:libvorbis-1.3.3.patch
+libvorbis;1.3.4;libvorbis-1.3.4;libvorbis-1.3.4.tar.gz;extract:libvorbis-1.3.4.tar.gz
 libvorbisidec;1.0.2+svn18153;libvorbisidec-1.0.2+svn18153;libvorbisidec_1.0.2+svn18153.orig.tar.gz:tremor.patch;extract:libvorbisidec_1.0.2+svn18153.orig.tar.gz;patch:tremor.patch
 
 #
@@ -234,7 +234,7 @@ jfsutils;1.1.15;jfsutils-1.1.15;jfsutils-1.1.15.tar.gz;extract:jfsutils-1.1.15.t
 lm_sensors;2.9.2;lm_sensors-2.9.2;lm_sensors-2.9.2.tar.gz;extract:lm_sensors-2.9.2.tar.gz
 sdparm;1.07;sdparm-1.07;sdparm-1.07.tgz;extract:sdparm-1.07.tgz
 parted;3.0;parted-3.0;parted-3.0.tar.gz;extract:parted-3.0.tar.gz
-utillinux;2.24;util-linux-2.24;util-linux-2.24.tar.bz2;extract:util-linux-2.24.tar.bz2
+utillinux;2.24;util-linux-2.24;util-linux-2.24.tar.bz2;extract:util-linux-2.24.tar.bz2;patch:util-linux-2.24.patch
 xfsprogs;3.1.8;xfsprogs-3.1.8;xfsprogs-3.1.8.tar.gz;extract:xfsprogs-3.1.8.tar.gz
 
 #

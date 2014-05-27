@@ -7,6 +7,7 @@ if [ "$1" == -h ] || [ "$1" == --help ]; then
  echo "Parameter 4: player (1-2)"
  echo "Parameter 5: Media Framework (1-4)"
  echo "Parameter 6: External LCD support (1-2)"
+ echo "Parameter 7: target build (1-2)"
  exit
 fi
 
@@ -340,7 +341,34 @@ esac
 
 ##############################################
 
-CONFIGPARAM="$CONFIGPARAM $PLAYER $MULTICOM $MEDIAFW $EXTERNAL_LCD"
+echo -e "\nSelect to build:"
+echo "   1) Neutrino"
+echo "      make yaud-neutrino"
+echo "      make yaud-neutrino-mp"
+echo "      make yaud-neutrino-mp-next"
+echo "      make yaud-neutrino-hd2-exp"
+echo ""
+echo "   2) Enigma2 + Wlan"
+echo "      make yaud-enigma2-pli-nightly"
+echo ""
+
+case $7 in
+	[1-2]) REPLY=$7
+	echo -e "\nSelected to build: $REPLY\n"
+	;;
+	*)
+	read -p "Select to build (1-2)? ";;
+esac
+
+case "$REPLY" in
+	1) MKTARGET="--enable-neutrino";;
+	2) MKTARGET="--enable-enigma2 --enable-wlandriver";;
+	*) MKTARGET="--enable-neutrino";;
+esac
+
+##############################################
+
+CONFIGPARAM="$CONFIGPARAM $PLAYER $MULTICOM $MEDIAFW $EXTERNAL_LCD $MKTARGET"
 
 ##############################################
 
@@ -360,11 +388,5 @@ echo $CONFIGPARAM >lastChoice
 echo " "
 echo "----------------------------------------"
 echo "Your build enivroment is ready :-)"
-echo "Your next step could be:"
 echo "----------------------------------------"
-echo "make yaud-neutrino"
-echo "make yaud-neutrino-mp"
-echo "make yaud-neutrino-mp-next"
-echo "make yaud-neutrino-hd2-exp"
-echo "make yaud-enigma2-pli-nightly"
-echo "----------------------------------------"
+echo " "

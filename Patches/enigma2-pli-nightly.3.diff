@@ -630,7 +630,7 @@ diff -Naur '--exclude-from=diff-ignore' enigma2-nightly.org/lib/driver/vfd.cpp e
 +#include <lib/driver/vfd.h>
 +
 +#ifdef PLATFORM_TF7700
-+#include "../../misc/tools/tffpctl/frontpanel.h"
++#include "../../tools/tffpctl/frontpanel.h"
 +#endif
 +
 +#define VFD_DEVICE "/dev/vfd"
@@ -3297,7 +3297,7 @@ diff -Naur '--exclude-from=diff-ignore' enigma2-nightly.org/lib/gdi/picload.cpp 
  
  #include <lib/gdi/picload.h>
  #include <lib/gdi/picexif.h>
-+#include "../../../misc/tools/libmmeimage/libmmeimage.h"
++#include "../../tools/libmmeimage/libmmeimage.h"
  
  extern "C" {
  #include <jpeglib.h>
@@ -3603,7 +3603,7 @@ diff -Naur '--exclude-from=diff-ignore' enigma2-nightly.org/lib/Makefile.am enig
  
 +if ENABLE_LIBEPLAYER3
 +AM_CPPFLAGS += \
-+	-I$(top_srcdir)/../misc/tools/libeplayer3/include
++	-I$(top_srcdir)/../tools/libeplayer3/include
 +endif
 +
  # initialize these, to be filled with targets in the included files

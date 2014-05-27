@@ -1,7 +1,7 @@
 #
 # yaud-enigma2-pli-nightly
 #
-yaud-enigma2-pli-nightly: yaud-none host_python lirc \
+yaud-enigma2-pli-nightly: yaud-none wpa_supplicant wireless_tools host_python lirc \
 		boot-elf enigma2-pli-nightly enigma2-plugins release
 	@TUXBOX_YAUD_CUSTOMIZE@
 
