@@ -60,6 +60,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 
    insmod $MODDIR/mmelog.ko
    insmod $MODDIR/ksound.ko
+   insmod $MODDIR/p2div64.ko
    insmod $MODDIR/stm_v4l2.ko
    if [ $player -gt 131 ]; then
       insmod $MODDIR/stmvout.ko

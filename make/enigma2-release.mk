@@ -719,6 +719,7 @@ endif
 		media/dvb/stm/h264_preprocessor/sth264pp.ko \
 		media/dvb/stm/allocator/stmalloc.ko \
 		stm/platform/platform.ko \
+		stm/platform/p2div64.ko \
 		media/sysfs/stm/stmsysfs.ko \
 	;do \
 		echo `pwd` player2/linux/drivers/$$mod; \

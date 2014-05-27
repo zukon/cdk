@@ -68,6 +68,7 @@ if [ ! -e /var/etc/.firstboot ]; then
    echo "init player 191"
    insmod $MODDIR/mmelog.ko
    insmod $MODDIR/ksound.ko
+   insmod $MODDIR/p2div64.ko
    insmod $MODDIR/stm_v4l2.ko
    insmod $MODDIR/stmvout.ko
    insmod $MODDIR/stmvbi.ko

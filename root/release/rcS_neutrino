@@ -61,6 +61,9 @@ if [ ! -e /var/etc/.firstboot ]; then
    insmod $MODDIR/mmelog.ko
    insmod $MODDIR/mpeg2hw.ko mmeName=MPEG2_TRANSFORMER0;
    insmod $MODDIR/ksound.ko
+# only for stm23
+   insmod $MODDIR/p2div64.ko
+# only for stm23
    insmod $MODDIR/stm_v4l2.ko
    insmod $MODDIR/stmvout.ko
    insmod $MODDIR/stmvbi.ko
