@@ -862,7 +862,6 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass @DEPENDS_ffmpeg@
 			--disable-indevs \
 			--disable-outdevs \
 			--disable-bsfs \
-			--disable-debug \
 			--enable-pthreads \
 			--enable-bzlib \
 			--enable-zlib \
@@ -1216,7 +1215,7 @@ $(D)/libxmlccwrap: $(D)/bootstrap $(D)/libxml2 $(D)/libxslt @DEPENDS_libxmlccwra
 			--target=$(target) \
 			--prefix=/usr && \
 		$(MAKE) all && \
-		@INSTALL_libxmlccwrap@ && \
+		@INSTALL_libxmlccwrap@
 	@CLEANUP_libxmlccwrap@
 	touch $@
 
@@ -1444,6 +1443,7 @@ $(D)/gstreamer: $(D)/bootstrap $(D)/glib2 $(D)/libxml2 @DEPENDS_gstreamer@
 			--disable-dependency-tracking \
 			--disable-check \
 			--disable-gst-debug \
+			--disable-debug \
 			--enable-introspection=no \
 			ac_cv_func_register_printf_function=no && \
 		$(MAKE) && \
@@ -1470,6 +1470,7 @@ $(D)/gst_plugins_base: $(D)/bootstrap $(D)/glib2 $(D)/gstreamer $(D)/libogg $(D)
 			--disable-vorbis \
 			--disable-vorbistest \
 			--disable-examples \
+			--disable-debug \
 			--disable-freetypetest \
 			--with-audioresample-format=int && \
 		$(MAKE) && \
@@ -1492,6 +1493,7 @@ $(D)/gst_plugins_good: $(D)/bootstrap $(D)/gstreamer $(D)/gst_plugins_base $(D)/
 			--disable-esdtest \
 			--disable-aalib \
 			--disable-shout2 \
+			--disable-debug \
 			--disable-x && \
 		$(MAKE) && \
 		@INSTALL_gst_plugins_good@
@@ -1525,6 +1527,7 @@ $(D)/gst_plugins_bad: $(D)/bootstrap $(D)/gstreamer $(D)/gst_plugins_base libmod
 			--disable-sdltest \
 			--disable-curl \
 			--disable-rsvg \
+			--disable-debug \
 			ac_cv_openssldir=no && \
 		$(MAKE) && \
 		@INSTALL_gst_plugins_bad@
@@ -1542,6 +1545,7 @@ $(D)/gst_plugins_ugly: $(D)/bootstrap $(D)/gstreamer $(D)/gst_plugins_base @DEPE
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=/usr \
+			--disable-debug \
 			--disable-mpeg2dec && \
 		$(MAKE) && \
 		@INSTALL_gst_plugins_ugly@
@@ -1594,6 +1598,7 @@ $(D)/gst_ffmpeg: $(D)/bootstrap $(D)/gstreamer $(D)/gst_plugins_base @DEPENDS_gs
 			--enable-demuxer=flac \
 			--enable-demuxer=mpegts \
 			\
+			--disable-debug \
 			--disable-bsfs \
 			--enable-pthreads \
 			--enable-bzlib"
@@ -1850,7 +1855,7 @@ $(D)/libcap: $(D)/bootstrap @DEPENDS_libcap@
 		PAM_CAP=no \
 		LIBATTR=no
 		@INSTALL_libcap@
-#	@CLEANUP_libcap@
+	@CLEANUP_libcap@
 	touch $@
 
 #
