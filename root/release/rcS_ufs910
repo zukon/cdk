@@ -67,6 +67,7 @@ if [ ! -e /var/etc/.firstboot ]; then
    insmod $MODDIR/mpeg2hw.ko mmeName=MPEG2_TRANSFORMER0;
    insmod $MODDIR/stmsysfs.ko
    insmod $MODDIR/ksound.ko
+   insmod $MODDIR/p2div64.ko
    insmod $MODDIR/stm_v4l2.ko
    insmod $MODDIR/pseudocard.ko
    if [ $player=='player179' ]; then

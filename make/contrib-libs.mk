@@ -862,7 +862,6 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass @DEPENDS_ffmpeg@
 			--disable-indevs \
 			--disable-outdevs \
 			--disable-bsfs \
-			--disable-debug \
 			--enable-pthreads \
 			--enable-bzlib \
 			--enable-zlib \
@@ -1216,7 +1215,7 @@ $(D)/libxmlccwrap: $(D)/bootstrap $(D)/libxml2 $(D)/libxslt @DEPENDS_libxmlccwra
 			--target=$(target) \
 			--prefix=/usr && \
 		$(MAKE) all && \
-		@INSTALL_libxmlccwrap@ && \
+		@INSTALL_libxmlccwrap@
 	@CLEANUP_libxmlccwrap@
 	touch $@
 
@@ -1444,6 +1443,7 @@ $(D)/gstreamer: $(D)/bootstrap $(D)/glib2 $(D)/libxml2 @DEPENDS_gstreamer@
 			--disable-dependency-tracking \
 			--disable-check \
 			--disable-gst-debug \
+			--disable-debug \
 			--enable-introspection=no \
 			ac_cv_func_register_printf_function=no && \
 		$(MAKE) && \
@@ -1855,7 +1855,7 @@ $(D)/libcap: $(D)/bootstrap @DEPENDS_libcap@
 		PAM_CAP=no \
 		LIBATTR=no
 		@INSTALL_libcap@
-#	@CLEANUP_libcap@
+	@CLEANUP_libcap@
 	touch $@
 
 #
