@@ -76,9 +76,9 @@ HS7810APATCHES_24 = $(COMMONPATCHES_24) \
 		$(if $(P0209)$(P0211),linux-sh4-i2c-stm-downgrade_stm24$(PATCH_STR).patch)
 
 HS7110PATCHES_24 = $(COMMONPATCHES_24) \
-		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
 		linux-sh4-lmb_stm24$(PATCH_STR).patch \
 		linux-sh4-hs7110_setup_stm24$(PATCH_STR).patch \
+		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
 		$(if $(P0209)$(P0211),linux-sh4-i2c-stm-downgrade_stm24$(PATCH_STR).patch)
 
 ATEMIO520PATCHES_24 = $(COMMONPATCHES_24) \
