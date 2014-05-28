@@ -1,5 +1,5 @@
---- linux-sh4-2.6.32.61_stm24_0212.org/arch/sh/boards/mach-hdk7105/setup.c	2014-03-05 08:32:54.000000000 +0100
-+++ linux-sh4-2.6.32.61_stm24_0212/arch/sh/boards/mach-hdk7105/setup.c	2014-03-05 08:53:35.000000000 +0100
+--- a/arch/sh/boards/mach-hdk7105/setup.c	2014-05-19 22:57:33.000000000 +0200
++++ b/arch/sh/boards/mach-hdk7105/setup.c	2014-05-28 20:23:17.026798000 +0200
 @@ -29,10 +29,44 @@
  #include <linux/mtd/physmap.h>
  #include <linux/mtd/nand.h>
@@ -312,8 +312,8 @@
  
  	stx7105_configure_nand(&(struct stm_nand_config) {
  			.driver = stm_nand_flex,
---- linux-sh4-2.6.32.61_stm24_0212.org/arch/sh/kernel/setup.c	2014-03-05 10:10:33.760522906 +0100
-+++ linux-sh4-2.6.32.61_stm24_0212/arch/sh/kernel/setup.c	2014-03-05 08:53:35.000000000 +0100
+--- a/arch/sh/kernel/setup.c	2014-05-28 20:17:26.866809000 +0200
++++ b/arch/sh/kernel/setup.c	2014-05-28 20:23:17.026798000 +0200
 @@ -389,6 +389,30 @@
  #endif
  #endif
@@ -345,8 +345,20 @@
  	/* Save unparsed command line copy for /proc/cmdline */
  	memcpy(boot_command_line, command_line, COMMAND_LINE_SIZE);
  	*cmdline_p = command_line;
---- linux-sh4-2.6.32.61_stm24_0212.org/drivers/mtd/devices/m25p80.c	2014-03-05 08:32:56.000000000 +0100
-+++ linux-sh4-2.6.32.61_stm24_0212/drivers/mtd/devices/m25p80.c	2014-03-05 08:53:35.000000000 +0100
+--- a/drivers/i2c/i2c-boardinfo.c	2009-12-03 04:51:21.000000000 +0100
++++ b/drivers/i2c/i2c-boardinfo.c	2014-05-28 20:23:17.046798000 +0200
+@@ -58,8 +58,7 @@
+  * The board info passed can safely be __initdata, but be careful of embedded
+  * pointers (for platform_data, functions, etc) since that won't be copied.
+  */
+-int __init
+-i2c_register_board_info(int busnum,
++int i2c_register_board_info(int busnum,
+ 	struct i2c_board_info const *info, unsigned len)
+ {
+ 	int status;
+--- a/drivers/mtd/devices/m25p80.c	2014-05-19 22:57:34.000000000 +0200
++++ b/drivers/mtd/devices/m25p80.c	2014-05-28 20:23:17.026798000 +0200
 @@ -28,6 +28,14 @@
  
  #include <linux/spi/spi.h>
@@ -610,9 +622,9 @@
  	flash->spi = spi;
  	mutex_init(&flash->lock);
  	dev_set_drvdata(&spi->dev, flash);
---- linux-sh4-2.6.32.61_stm24_0212.org/drivers/mtd/nand/nand_base.c	2014-03-05 08:32:56.000000000 +0100
-+++ linux-sh4-2.6.32.61_stm24_0212/drivers/mtd/nand/nand_base.c	2014-03-05 08:53:35.000000000 +0100
-@@ -1386,20 +1386,15 @@
+--- a/drivers/mtd/nand/nand_base.c	2014-05-19 22:57:34.000000000 +0200
++++ b/drivers/mtd/nand/nand_base.c	2014-05-28 20:23:17.026798000 +0200
+@@ -1386,19 +1386,14 @@
  
  			/* Now read the page into the buffer */
  			if (unlikely(ops->mode == MTD_OOB_RAW))
@@ -631,11 +643,9 @@
  			/* Transfer not aligned data */
  			if (!aligned) {
 -				if (!NAND_SUBPAGE_READ(chip) && !oob)
--					chip->pagebuf = realpage;
-+				chip->pagebuf = realpage;
+ 					chip->pagebuf = realpage;
  				memcpy(buf, chip->buffers->databuf + col, bytes);
  			}
- 
 @@ -2911,8 +2906,8 @@
  	/* Decode ID string */
  	if (nand_decode_id(mtd, chip, type, id_data, 8) != 0) {
@@ -647,8 +657,8 @@
  		return ERR_PTR(-EINVAL);
  	}
  
---- linux-sh4-2.6.32.61_stm24_0212.org/drivers/mtd/nand/nand_ecc.c	2014-03-05 08:32:56.000000000 +0100
-+++ linux-sh4-2.6.32.61_stm24_0212/drivers/mtd/nand/nand_ecc.c	2014-03-05 08:53:35.000000000 +0100
+--- a/drivers/mtd/nand/nand_ecc.c	2014-05-19 22:57:34.000000000 +0200
++++ b/drivers/mtd/nand/nand_ecc.c	2014-05-28 20:23:17.030798000 +0200
 @@ -492,12 +492,12 @@
  	}
  	/* count nr of bits; use table lookup, faster than calculating it */
@@ -665,8 +675,8 @@
  	return -1;
  }
  EXPORT_SYMBOL(__nand_correct_data);
---- linux-sh4-2.6.32.61_stm24_0212.org/drivers/mtd/nand/stm_nand_flex.c	2014-03-05 08:32:56.000000000 +0100
-+++ linux-sh4-2.6.32.61_stm24_0212/drivers/mtd/nand/stm_nand_flex.c	2014-03-05 08:53:35.000000000 +0100
+--- a/drivers/mtd/nand/stm_nand_flex.c	2014-05-19 22:57:34.000000000 +0200
++++ b/drivers/mtd/nand/stm_nand_flex.c	2014-05-28 20:23:17.038798000 +0200
 @@ -1449,7 +1449,16 @@
  	platform_driver_unregister(&stm_nand_flex_driver);
  }
@@ -684,8 +694,8 @@
  module_exit(stm_nand_flex_exit);
  
  MODULE_LICENSE("GPL");
---- linux-sh4-2.6.32.61_stm24_0212.org/drivers/net/phy/phy_device.c	2014-03-05 08:32:56.000000000 +0100
-+++ linux-sh4-2.6.32.61_stm24_0212/drivers/net/phy/phy_device.c	2014-03-05 08:53:35.000000000 +0100
+--- a/drivers/net/phy/phy_device.c	2014-05-19 22:57:34.000000000 +0200
++++ b/drivers/net/phy/phy_device.c	2014-05-28 20:23:17.038798000 +0200
 @@ -1104,7 +1104,7 @@
  		return retval;
  	}
@@ -695,8 +705,8 @@
  
  	return 0;
  }
---- linux-sh4-2.6.32.61_stm24_0212.org/drivers/net/stmmac/stmmac_mdio.c	2014-03-05 08:32:56.000000000 +0100
-+++ linux-sh4-2.6.32.61_stm24_0212/drivers/net/stmmac/stmmac_mdio.c	2014-03-05 08:53:35.000000000 +0100
+--- a/drivers/net/stmmac/stmmac_mdio.c	2014-05-19 22:57:34.000000000 +0200
++++ b/drivers/net/stmmac/stmmac_mdio.c	2014-05-28 20:23:17.042798000 +0200
 @@ -170,6 +170,7 @@
  	priv->mii = new_bus;
  
@@ -732,8 +742,20 @@
  			switch (phydev->irq) {
  			case PHY_POLL:
  				irq_str = "POLL";
---- linux-sh4-2.6.32.61_stm24_0212.org/drivers/spi/spi_stm.c	2014-03-05 08:32:56.000000000 +0100
-+++ linux-sh4-2.6.32.61_stm24_0212/drivers/spi/spi_stm.c	2014-03-05 08:53:35.000000000 +0100
+--- a/drivers/spi/spi.c	2009-12-03 04:51:21.000000000 +0100
++++ b/drivers/spi/spi.c	2014-05-28 20:23:17.050798000 +0200
+@@ -381,8 +381,7 @@
+  * The board info passed can safely be __initdata ... but be careful of
+  * any embedded pointers (platform_data, etc), they're copied as-is.
+  */
+-int __init
+-spi_register_board_info(struct spi_board_info const *info, unsigned n)
++int spi_register_board_info(struct spi_board_info const *info, unsigned n)
+ {
+ 	struct boardinfo	*bi;
+ 
+--- a/drivers/spi/spi_stm.c	2014-05-19 22:57:35.000000000 +0200
++++ b/drivers/spi/spi_stm.c	2014-05-28 20:23:17.042798000 +0200
 @@ -338,7 +338,7 @@
  
  }
@@ -743,8 +765,8 @@
  {
  	struct stm_plat_ssc_data *plat_data = pdev->dev.platform_data;
  	struct spi_master *master;
---- linux-sh4-2.6.32.61_stm24_0212.org/drivers/stm/gpio.c	2014-03-05 08:32:56.000000000 +0100
-+++ linux-sh4-2.6.32.61_stm24_0212/drivers/stm/gpio.c	2014-03-05 08:53:35.000000000 +0100
+--- a/drivers/stm/gpio.c	2014-05-19 22:57:35.000000000 +0200
++++ b/drivers/stm/gpio.c	2014-05-28 20:23:17.042798000 +0200
 @@ -28,12 +28,17 @@
  #include <linux/stm/pad.h>
  #include <linux/stm/pio.h>
@@ -763,15 +785,7 @@
  	void (*func)(struct stpio_pin *pin, void *dev);
  	void* dev;
  	unsigned short port_no, pin_no;
-@@ -42,16 +47,16 @@
- 
- struct stm_gpio_pin {
- 	unsigned char flags;
--#define PIN_FAKE_EDGE		4
-+#define PIN_FAKE_EDGE			4
- #define PIN_IGNORE_EDGE_FLAG	2
- #define PIN_IGNORE_EDGE_VAL	1
- #define PIN_IGNORE_RISING_EDGE	(PIN_IGNORE_EDGE_FLAG | 0)
+@@ -49,9 +54,9 @@
  #define PIN_IGNORE_FALLING_EDGE	(PIN_IGNORE_EDGE_FLAG | 1)
  #define PIN_IGNORE_EDGE_MASK	(PIN_IGNORE_EDGE_FLAG | PIN_IGNORE_EDGE_VAL)
  
@@ -945,8 +959,8 @@
  	ret = platform_driver_register(&stm_gpio_driver);
  	if (ret)
  		return ret;
---- linux-sh4-2.6.32.61_stm24_0212.org/drivers/stm/miphy365x.c	2014-03-05 08:32:56.000000000 +0100
-+++ linux-sh4-2.6.32.61_stm24_0212/drivers/stm/miphy365x.c	2014-03-05 08:53:35.000000000 +0100
+--- a/drivers/stm/miphy365x.c	2014-05-19 22:57:35.000000000 +0200
++++ b/drivers/stm/miphy365x.c	2014-05-28 20:23:17.042798000 +0200
 @@ -99,6 +99,7 @@
  
  static void miphy365x_tap_start_port0(const struct stm_miphy_device *miphy_dev)
@@ -972,8 +986,37 @@
  
  	/* Enable macro1 to use rx_lspd  & tx_lspd from link interface */
  	reg_write(0, 0x10, 0x00);
---- linux-sh4-2.6.32.61_stm24_0212.org/drivers/stm/stx7105_comms.c	2014-03-05 08:32:56.000000000 +0100
-+++ linux-sh4-2.6.32.61_stm24_0212/drivers/stm/stx7105_comms.c	2014-03-05 08:53:35.000000000 +0100
+--- a/drivers/stm/pad.c	2014-05-19 22:57:35.000000000 +0200
++++ b/drivers/stm/pad.c	2014-05-28 20:23:17.050798000 +0200
+@@ -790,7 +790,7 @@
+ 	struct stm_pad_config config;
+ };
+ 
+-struct stm_pad_config * __init stm_pad_config_alloc(int gpios_num,
++struct stm_pad_config * stm_pad_config_alloc(int gpios_num,
+ 		int sysconfs_num)
+ {
+ 	struct stm_pad_config *config;
+@@ -825,7 +825,7 @@
+ 	return config;
+ }
+ 
+-int __init stm_pad_config_add_sysconf(struct stm_pad_config *config,
++int stm_pad_config_add_sysconf(struct stm_pad_config *config,
+ 		int regtype, int regnum, int lsb, int msb, int value)
+ {
+ 	int result = -ENOMEM;
+@@ -852,7 +852,7 @@
+ 	return result;
+ }
+ 
+-int __init stm_pad_config_add_gpio_named(struct stm_pad_config *config,
++int stm_pad_config_add_gpio_named(struct stm_pad_config *config,
+ 		unsigned gpio, enum stm_pad_gpio_direction direction,
+ 		int out_value, int function, const char *name)
+ {
+--- a/drivers/stm/stx7105_comms.c	2014-05-19 22:57:35.000000000 +0200
++++ b/drivers/stm/stx7105_comms.c	2014-05-28 20:23:17.046798000 +0200
 @@ -344,11 +344,27 @@
  			/* .pad_config_* set in stx7105_configure_ssc_*() */
  		},
@@ -1211,8 +1254,8 @@
  	case 2:
  		pad_config = stm_pad_config_alloc(3, 2);
  
---- linux-sh4-2.6.32.61_stm24_0212.org/include/linux/stm/stx7105.h	2014-03-05 08:32:56.000000000 +0100
-+++ linux-sh4-2.6.32.61_stm24_0212/include/linux/stm/stx7105.h	2014-03-05 08:53:35.000000000 +0100
+--- a/include/linux/stm/stx7105.h	2014-05-19 22:57:35.000000000 +0200
++++ b/include/linux/stm/stx7105.h	2014-05-28 20:23:17.046798000 +0200
 @@ -113,6 +113,7 @@
  };
  /* SSC configure functions return I2C/SPI bus number */
@@ -1221,3 +1264,4 @@
  int stx7105_configure_ssc_spi(int ssc, struct stx7105_ssc_config *config);
  
  
+
