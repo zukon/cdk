@@ -1351,7 +1351,7 @@ $(D)/pyopenssl: $(D)/bootstrap $(D)/setuptools @DEPENDS_pyopenssl@
 #
 # python
 #
-$(D)/python: $(D)/bootstrap $(D)/host_python $(D)/libcrypto $(D)/sqlite $(D)/libreadline $(D)/bzip2 @DEPENDS_python@
+$(D)/python: $(D)/bootstrap $(D)/host_python $(D)/libncurses $(D)/libcrypto $(D)/sqlite $(D)/libreadline $(D)/bzip2 @DEPENDS_python@
 	@PREPARE_python@
 	( cd @DIR_python@ && \
 		CONFIG_SITE= \
@@ -1517,7 +1517,6 @@ $(D)/gst_plugins_bad: $(D)/bootstrap $(D)/gstreamer $(D)/gst_plugins_base libmod
 			--disable-mplex \
 			--disable-vdpau \
 			--disable-apexsink \
-			--disable-dvdnav \
 			--disable-cdaudio \
 			--disable-mpeg2enc \
 			--disable-mplex \
@@ -1700,37 +1699,26 @@ $(D)/graphlcd: $(D)/bootstrap $(D)/libfreetype $(D)/libusb @DEPENDS_graphlcd@
 #
 # LCD4LINUX
 #--with-python
-$(D)/lcd4_linux.do_prepare: bootstrap libusbcompat libgd2 libusb libdpf @DEPENDS_lcd4_linux@
+$(D)/lcd4_linux: $(D)/bootstrap $(D)/libusbcompat $(D)/libgd2 $(D)/libusb @DEPENDS_lcd4_linux@
 	@PREPARE_lcd4_linux@
-	touch $@
-
-$(D)/lcd4_linux.do_compile: $(D)/lcd4_linux.do_prepare
 	cd @DIR_lcd4_linux@ && \
 		aclocal && \
 		libtoolize -f -c && \
 		autoheader && \
-		automake --foreign && \
+		automake --add-missing --copy --foreign && \
 		autoconf && \
 		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--libdir=$(targetprefix)/usr/lib \
-			--includedir=$(targetprefix)/usr/include \
-			--oldincludedir=$(targetprefix)/usr/include \
 			--prefix=/usr \
 			--with-drivers='DPF,SamsungSPF' \
-			--with-plugins='all,!dbus,!mpris_dbus,!asterisk,!isdn,!pop3,!ppp,!seti,!huawei,!imon,!kvv,!sample,!w1retap,!wireless,!xmms,!gps,!mpd,!mysql,!qnaplog' \
+			--with-plugins='all,!apm,!asterisk,!dbus,!dvb,!gps,!hddtemp,!huawei,!imon,!isdn,!kvv,!mpd,!mpris_dbus,!mysql,!pop3,!ppp,!python,!qnaplog,!raspi,!sample,!seti,!w1retap,!wireless,!xmms' \
 			--without-ncurses && \
-		$(MAKE) all
-	touch $@
-
-$(D)/lcd4_linux: \
-$(D)/%lcd4_linux: $(D)/lcd4_linux.do_compile
-	cd @DIR_lcd4_linux@ && \
+		$(MAKE) all && \
 		@INSTALL_lcd4_linux@
 	@CLEANUP_lcd4_linux@
-	[ "x$*" = "x" ] && touch $@
+	touch $@
 
 #
 # libdpfax
@@ -1762,7 +1750,7 @@ $(D)/libdpf: bootstrap libusbcompat @DEPENDS_libdpf@
 #
 # libgd2
 #
-$(D)/libgd2: bootstrap libpng libjpeg libfreetype @DEPENDS_libgd2@
+$(D)/libgd2: $(D)/bootstrap $(D)/libpng $(D)/libjpeg $(D)/libfreetype @DEPENDS_libgd2@
 	@PREPARE_libgd2@
 	cd @DIR_libgd2@ && \
 		$(BUILDENV) \
