@@ -96,18 +96,6 @@ diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/configure.ac enigma
  lib/python/Tools/Makefile
  po/Makefile
  main/Makefile
-diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/base/eptrlist.h enigma2-nightly/lib/base/eptrlist.h
---- enigma2-nightly.org/lib/base/eptrlist.h	2014-03-25 21:34:35.212596944 +0100
-+++ enigma2-nightly/lib/base/eptrlist.h	2014-03-26 02:23:54.215866921 +0100
-@@ -175,7 +175,7 @@
- 	{
- 		// added a new item to the list... in order
- 		// returns a iterator to the new item
--		return insert( std::lower_bound( std::list<T*>::begin(), std::list<T*>::end(), e, less()), e );
-+		return this->insert( std::lower_bound( std::list<T*>::begin(), std::list<T*>::end(), e, less()), e );
- 	}
- 
- };
 diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/base/etpm.cpp enigma2-nightly/lib/base/etpm.cpp
 --- enigma2-nightly.org/lib/base/etpm.cpp	2014-03-25 21:34:35.212596944 +0100
 +++ enigma2-nightly/lib/base/etpm.cpp	2014-03-26 02:23:54.215866921 +0100
@@ -308,61 +296,6 @@ diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/base/filepush.h
  };
  
  class eFilePushThread: public eThread, public Object
-diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/base/freesatv2.cpp enigma2-nightly/lib/base/freesatv2.cpp
---- enigma2-nightly.org/lib/base/freesatv2.cpp	2014-03-25 21:34:35.216596944 +0100
-+++ enigma2-nightly/lib/base/freesatv2.cpp	2014-03-26 02:23:54.219866921 +0100
-@@ -84,27 +84,32 @@
- */
- static unsigned char resolveChar(const char *str)
- {
--	const unsigned char*p = str;
--	unsigned c0 = *p++, c1 = *p++;
--	if (c1)
--		switch(c0|c1<<8)
-+	if (str[1] == 0)
-+		return str[0];
-+
-+	switch(str[0])
-+	{
-+		case '0':
- 		{
--			case '0'|'x'<<8:
--				if ( sscanf(p,"%02x", &c1) == 1 )
--					c0 = c1;
--				break;
--			case 'E'|'S'<<8:
--				if ( !strcmp(p,"CAPE") )
--					c0 = ESCAPE;
--				break;
--			case 'S'|'T'<<8:
--				if ( !strcmp(p,"OP") )
--					c0 = STOP;
--				else if ( !strcmp(p,"ART") )
--					c0 = START;
--				break;
-+			int val;
-+			if ( sscanf(str,"0x%02x", &val) == 1 )
-+			{
-+				return val;
-+			}
- 		}
--	return c0;
-+		break;
-+		case 'E':
-+			if ( strcmp(str,"ESCAPE") == 0 )
-+				return ESCAPE;
-+			break;
-+		case 'S':
-+			if ( strcmp(str,"STOP") == 0 )
-+				return STOP;
-+			if ( strcmp(str,"START") == 0 )
-+				return START;
-+			break;
-+	}
-+	return str[0];
- }
- 
- 
 diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/base/ioprio.cpp enigma2-nightly/lib/base/ioprio.cpp
 --- enigma2-nightly.org/lib/base/ioprio.cpp	2014-03-25 21:34:35.216596944 +0100
 +++ enigma2-nightly/lib/base/ioprio.cpp	2014-03-26 02:23:54.219866921 +0100
