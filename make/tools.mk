@@ -1,5 +1,5 @@
 #
-# misc/tools
+# tools
 #
 tools-clean:
 	-$(MAKE) -C $(appsdir)/tools distclean
