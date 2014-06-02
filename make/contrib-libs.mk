@@ -2156,14 +2156,15 @@ $(D)/libexif: $(D)/bootstrap @DEPENDS_libexif@
 #
 # minidlna
 #
-$(D)/minidlna: $(D)/bootstrap $(D)/ffmpeg $(D)/libflac $(D)/libogg $(D)/libvorbis $(D)/libid3tag $(D)/sqlite $(D)/libexif $(D)/libjpeg @DEPENDS_minidlna@
+$(D)/minidlna: $(D)/bootstrap $(D)/libz $(D)/sqlite $(D)/libexif $(D)/libjpeg $(D)/libid3tag $(D)/libogg $(D)/libvorbis $(D)/libflac $(D)/ffmpeg @DEPENDS_minidlna@
 	@PREPARE_minidlna@
 	cd @DIR_minidlna@ && \
-		libtoolize -f -c && \
 		$(BUILDENV) \
-			$(MAKE) DESTDIR=$(prefix)/cdkroot \
-			PAM_CAP=no \
-			LIBATTR=no && \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=/usr && \
+			$(MAKE) && \
 		@INSTALL_minidlna@
 	@CLEANUP_minidlna@
 	touch $@
