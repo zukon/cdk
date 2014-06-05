@@ -173,3 +173,3176 @@ diff -Nur stx7105_audio.c.orig stx7105_audio.c
  
  	unsigned char fdma_initiator;
  	unsigned int fdma_request_line;
+diff -Nur /dev/null common.c
+--- a/dev/null
++++ b/sound/stm/common.c
+@@ -0,0 +1,774 @@
++/*
++ *   Helpful ;-) routines for STMicroelectronics' SoCs audio drivers
++ *
++ *   Copyright (c) 2005-2007 STMicroelectronics Limited
++ *
++ *   Author: Pawel Moll <pawel.moll@st.com>
++ *
++ *   This program is free software; you can redistribute it and/or modify
++ *   it under the terms of the GNU General Public License as published by
++ *   the Free Software Foundation; either version 2 of the License, or
++ *   (at your option) any later version.
++ *
++ *   This program is distributed in the hope that it will be useful,
++ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *   GNU General Public License for more details.
++ *
++ *   You should have received a copy of the GNU General Public License
++ *   along with this program; if not, write to the Free Software
++ *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
++ *
++ */
++
++#include <linux/init.h>
++#include <linux/io.h>
++#include <linux/mm.h>
++#include <linux/platform_device.h>
++#include <linux/bpa2.h>
++#include <linux/stm/stm-dma.h>
++#include <sound/core.h>
++#include <sound/pcm.h>
++#include <sound/info.h>
++#include <sound/pcm_params.h>
++#include <sound/asoundef.h>
++
++#define COMPONENT common
++#include "common.h"
++
++
++
++/*
++ * Cards management
++ */
++
++static struct snd_card *snd_stm_card;
++static int snd_stm_card_registered;
++
++struct snd_card *snd_stm_card_new(int index, const char *id,
++		struct module *module)
++{
++	int err;
++
++	if (snd_BUG_ON(snd_stm_card != NULL))
++		return NULL;
++	if (snd_BUG_ON(snd_stm_card_registered))
++		return NULL;
++
++	err = snd_card_create(index, id, module, 0, &snd_stm_card);
++	if (err)
++		return NULL;
++
++	return snd_stm_card;
++}
++EXPORT_SYMBOL(snd_stm_card_new);
++
++int snd_stm_card_register(void)
++{
++	int result;
++
++	if (snd_BUG_ON(snd_stm_card == NULL))
++		return -EINVAL;
++	if (snd_BUG_ON(snd_stm_card_registered))
++		return -EINVAL;
++
++	result = snd_card_register(snd_stm_card);
++
++	if (result == 0)
++		snd_stm_card_registered = 1;
++
++	return result;
++}
++EXPORT_SYMBOL(snd_stm_card_register);
++
++int snd_stm_card_is_registered(void)
++{
++	if (snd_BUG_ON(snd_stm_card == NULL))
++		return -EINVAL;
++
++	return snd_stm_card_registered;
++}
++EXPORT_SYMBOL(snd_stm_card_is_registered);
++
++void snd_stm_card_free(void)
++{
++	if (snd_BUG_ON(snd_stm_card == NULL))
++		return;
++	if (snd_BUG_ON(!snd_stm_card_registered))
++		return;
++
++	snd_card_free(snd_stm_card);
++
++	snd_stm_card_registered = 0;
++	snd_stm_card = NULL;
++}
++EXPORT_SYMBOL(snd_stm_card_free);
++
++struct snd_card *snd_stm_card_get(void)
++{
++	if (snd_BUG_ON(snd_stm_card == NULL))
++		return NULL;
++
++	return snd_stm_card;
++}
++EXPORT_SYMBOL(snd_stm_card_get);
++
++
++
++/*
++ * Resources management
++ */
++
++int snd_stm_memory_request(struct platform_device *pdev,
++		struct resource **mem_region, void **base_address)
++{
++	struct resource *resource;
++
++	resource = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!resource) {
++		snd_stm_printe("Failed to"
++				" platform_get_resource(IORESOURCE_MEM)!\n");
++		return -ENODEV;
++	}
++
++	*mem_region = request_mem_region(resource->start,
++			resource->end - resource->start + 1, pdev->name);
++	if (!*mem_region) {
++		snd_stm_printe("Failed request_mem_region(0x%08x,"
++				" 0x%08x, '%s')!\n", resource->start,
++				resource->end - resource->start + 1,
++				pdev->name);
++		return -EBUSY;
++	}
++	snd_stm_printd(0, "Memory region: 0x%08x-0x%08x\n",
++			(*mem_region)->start, (*mem_region)->end);
++
++	*base_address = ioremap(resource->start,
++			resource->end - resource->start + 1);
++	if (!*base_address) {
++		release_resource(*mem_region);
++		snd_stm_printe("Failed ioremap!\n");
++		return -EINVAL;
++	}
++
++	snd_stm_printd(0, "Base address is 0x%p.\n", *base_address);
++
++	return 0;
++}
++EXPORT_SYMBOL(snd_stm_memory_request);
++
++void snd_stm_memory_release(struct resource *mem_region,
++		void *base_address)
++{
++	iounmap(base_address);
++	release_resource(mem_region);
++}
++EXPORT_SYMBOL(snd_stm_memory_release);
++
++int snd_stm_irq_request(struct platform_device *pdev,
++		unsigned int *irq, irq_handler_t handler, void *dev_id)
++{
++	struct resource *resource;
++	int result;
++
++	resource = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
++	if (!resource) {
++		snd_stm_printe("Failed to "
++				"platform_get_resource(IORESOURCE_IRQ)!\n");
++		return -ENODEV;
++	}
++	snd_stm_printd(0, "IRQ: %u\n", resource->start);
++
++	*irq = resource->start;
++
++	result = request_irq(*irq, handler, IRQF_DISABLED, pdev->name, dev_id);
++	if (result != 0) {
++		snd_stm_printe("Failed request_irq!\n");
++		return -EINVAL;
++	}
++
++	/* request_irq() enables the interrupt immediately; as it is
++	 * lethal in concurrent audio environment, we want to have
++	 * it disabled for most of the time... */
++	disable_irq(*irq);
++
++	return 0;
++}
++
++int snd_stm_fdma_request(struct platform_device *pdev, int *channel)
++{
++	static const char *fdmac_id[] = { STM_DMAC_ID, NULL };
++	static const char *fdma_cap_lb[] = { STM_DMA_CAP_LOW_BW, NULL };
++	static const char *fdma_cap_hb[] = { STM_DMA_CAP_HIGH_BW, NULL };
++
++	*channel = request_dma_bycap(fdmac_id, fdma_cap_lb, pdev->name);
++	if (*channel < 0) {
++		*channel = request_dma_bycap(fdmac_id, fdma_cap_hb, pdev->name);
++		if (*channel < 0) {
++			snd_stm_printe("Failed to request_dma_bycap()==%d!\n",
++					*channel);
++			return -ENODEV;
++		}
++	}
++	snd_stm_printd(0, "FDMA channel: %d\n", *channel);
++
++	return 0;
++}
++
++
++
++/*
++ * ALSA procfs additional entries
++ */
++
++static struct snd_info_entry *snd_stm_info_root;
++
++int snd_stm_info_create(void)
++{
++	int result = 0;
++
++	snd_stm_info_root = snd_info_create_module_entry(THIS_MODULE,
++			"stm", NULL);
++	if (snd_stm_info_root) {
++		snd_stm_info_root->mode = S_IFDIR | S_IRUGO | S_IXUGO;
++		if (snd_info_register(snd_stm_info_root) < 0) {
++			result = -EINVAL;
++			snd_info_free_entry(snd_stm_info_root);
++		}
++	} else {
++		result = -ENOMEM;
++	}
++
++	return result;
++}
++
++void snd_stm_info_dispose(void)
++{
++	if (snd_stm_info_root)
++		snd_info_free_entry(snd_stm_info_root);
++}
++
++int snd_stm_info_register(struct snd_info_entry **entry,
++		const char *name,
++		void (read)(struct snd_info_entry *, struct snd_info_buffer *),
++		void *private_data)
++{
++	int result = 0;
++
++	/* Skip the "snd_" prefix, if bus_id has been simply given */
++	if (strncmp(name, "snd_", 4) == 0)
++		name += 4;
++
++	*entry = snd_info_create_module_entry(THIS_MODULE, name,
++			snd_stm_info_root);
++	if (*entry) {
++		(*entry)->c.text.read = read;
++		(*entry)->private_data = private_data;
++		if (snd_info_register(*entry) < 0) {
++			result = -EINVAL;
++			snd_info_free_entry(*entry);
++		}
++	} else {
++		result = -EINVAL;
++	}
++	return result;
++}
++EXPORT_SYMBOL(snd_stm_info_register);
++
++void snd_stm_info_unregister(struct snd_info_entry *entry)
++{
++	if (entry)
++		snd_info_free_entry(entry);
++}
++EXPORT_SYMBOL(snd_stm_info_unregister);
++
++
++
++/*
++ * PCM buffer memory management
++ */
++
++struct snd_stm_buffer {
++	struct snd_pcm *pcm;
++
++	struct bpa2_part *bpa2_part;
++
++	int allocated;
++	struct snd_pcm_substream *substream;
++
++	snd_stm_magic_field;
++};
++
++#if defined(CONFIG_BPA2)
++static char *bpa2_part = CONFIG_SND_STM_BPA2_PARTITION_NAME;
++#else
++static char *bpa2_part = "";
++#endif
++module_param(bpa2_part, charp, S_IRUGO);
++
++struct snd_stm_buffer *snd_stm_buffer_create(struct snd_pcm *pcm,
++		struct device *device, int prealloc_size)
++{
++	struct snd_stm_buffer *buffer;
++
++	snd_stm_printd(1, "snd_stm_buffer_init(pcm=%p, prealloc_size=%d)\n",
++			pcm, prealloc_size);
++
++	if (snd_BUG_ON(!pcm))
++		return NULL;
++
++	buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
++	if (!buffer) {
++		snd_stm_printe("Can't allocate memory for a buffer "
++				"description!\n");
++		return NULL;
++	}
++	snd_stm_magic_set(buffer);
++	buffer->pcm = pcm;
++
++#if defined(CONFIG_BPA2)
++	buffer->bpa2_part = bpa2_find_part(bpa2_part);
++	if (buffer->bpa2_part) {
++		snd_stm_printd(0, "Using BPA2 partition '%s'...\n", bpa2_part);
++		return buffer;
++	}
++
++	buffer->bpa2_part = bpa2_find_part("bigphysarea");
++	if (buffer->bpa2_part) {
++		snd_stm_printd(0, "Using legacy 'bigphysarea' BPA2 "
++				"partition...\n");
++		return buffer;
++	}
++#endif
++
++	if (snd_pcm_lib_preallocate_pages_for_all(pcm,
++			SNDRV_DMA_TYPE_DEV, device,
++			prealloc_size, prealloc_size) == 0) {
++		snd_stm_printd(0, "Using pcm_lib's preallocated buffer "
++				"(%d bytes)...\n", prealloc_size);
++		return buffer;
++	}
++
++	snd_stm_printe("Can't provide any memory for buffers!\n");
++	kfree(buffer);
++	return NULL;
++}
++
++void snd_stm_buffer_dispose(struct snd_stm_buffer *buffer)
++{
++	snd_stm_printd(1, "snd_stm_buffer_dispose(buffer=%p)\n", buffer);
++
++	if (snd_BUG_ON(!buffer))
++		return;
++	if (snd_BUG_ON(!snd_stm_magic_valid(buffer)))
++		return;
++	if (snd_BUG_ON(buffer->allocated))
++		return;
++
++	/* snd_pcm_lib__preallocate*-ed buffer is freed automagically */
++
++	snd_stm_magic_clear(buffer);
++	kfree(buffer);
++}
++
++int snd_stm_buffer_is_allocated(struct snd_stm_buffer *buffer)
++{
++	snd_stm_printd(1, "snd_stm_buffer_is_allocated(buffer=%p)\n",
++			buffer);
++
++	if (snd_BUG_ON(!buffer))
++		return -EINVAL;
++	if (snd_BUG_ON(!snd_stm_magic_valid(buffer)))
++		return -EINVAL;
++
++	return buffer->allocated;
++}
++
++int snd_stm_buffer_alloc(struct snd_stm_buffer *buffer,
++		struct snd_pcm_substream *substream, int size)
++{
++	snd_stm_printd(1, "snd_stm_buffer_alloc(buffer=%p, substream=%p, "
++			"size=%d)\n", buffer, substream, size);
++
++	if (snd_BUG_ON(!buffer))
++		return -EINVAL;
++	if (snd_BUG_ON(!snd_stm_magic_valid(buffer)))
++		return -EINVAL;
++	if (snd_BUG_ON(buffer->allocated))
++		return -EINVAL;
++	if (snd_BUG_ON(size <= 0))
++		return -EINVAL;
++
++	if (buffer->bpa2_part) {
++#if defined(CONFIG_BPA2)
++		struct snd_pcm_runtime *runtime = substream->runtime;
++		int pages = (size + PAGE_SIZE - 1) / PAGE_SIZE;
++
++		runtime->dma_addr = bpa2_alloc_pages(buffer->bpa2_part, pages,
++				0, GFP_KERNEL);
++		if (runtime->dma_addr == 0) {
++			snd_stm_printe("Can't get %d pages from BPA2!\n",
++					pages);
++			return -ENOMEM;
++		}
++		runtime->dma_bytes = size;
++		runtime->dma_area = ioremap_nocache(runtime->dma_addr, size);
++#else
++		snd_BUG();
++#endif
++	} else {
++		if (snd_pcm_lib_malloc_pages(substream, size) < 0) {
++			snd_stm_printe("Can't allocate pages using pcm_lib!\n");
++			return -ENOMEM;
++		}
++		/* runtime->dma_* are set by snd_pcm_lib_malloc_pages()
++		 * (by snd_pcm_set_runtime_buffer() to be more specific.) */
++	}
++
++	snd_stm_printd(1, "Allocated memory: dma_addr=0x%08x, dma_area=0x%p, "
++			"dma_bytes=%u\n", substream->runtime->dma_addr,
++			substream->runtime->dma_area,
++			substream->runtime->dma_bytes);
++
++	buffer->substream = substream;
++	buffer->allocated = 1;
++
++	return 0;
++}
++
++void snd_stm_buffer_free(struct snd_stm_buffer *buffer)
++{
++	struct snd_pcm_runtime *runtime;
++
++	snd_stm_printd(1, "snd_stm_buffer_free(buffer=%p)\n", buffer);
++
++	if (snd_BUG_ON(!buffer))
++		return;
++	if (snd_BUG_ON(!snd_stm_magic_valid(buffer)))
++		return;
++	if (snd_BUG_ON(!buffer->allocated))
++		return;
++
++	runtime = buffer->substream->runtime;
++
++	snd_stm_printd(1, "Freeing dma_addr=0x%08x, dma_area=0x%p, "
++			"dma_bytes=%u\n", runtime->dma_addr,
++			runtime->dma_area, runtime->dma_bytes);
++
++	if (buffer->bpa2_part) {
++#if defined(CONFIG_BPA2)
++		iounmap(runtime->dma_area);
++
++		bpa2_free_pages(buffer->bpa2_part, runtime->dma_addr);
++		runtime->dma_area = NULL;
++		runtime->dma_addr = 0;
++		runtime->dma_bytes = 0;
++#else
++		snd_BUG();
++#endif
++	} else {
++		snd_pcm_lib_free_pages(buffer->substream);
++		/* runtime->dma_* are cleared by snd_pcm_lib_free_pages()
++		 * (by snd_pcm_set_runtime_buffer() to be more specific.) */
++	}
++
++	buffer->allocated = 0;
++	buffer->substream = NULL;
++}
++
++static int snd_stm_buffer_mmap_fault(struct vm_area_struct *area,
++				     struct vm_fault *vmf)
++{
++	/* No VMA expanding here! */
++	return VM_FAULT_SIGBUS;
++}
++
++static struct vm_operations_struct snd_stm_buffer_mmap_vm_ops = {
++	.open =   snd_pcm_mmap_data_open,
++	.close =  snd_pcm_mmap_data_close,
++	.fault =  snd_stm_buffer_mmap_fault,
++};
++
++int snd_stm_buffer_mmap(struct snd_pcm_substream *substream,
++		struct vm_area_struct *area)
++{
++	struct snd_pcm_runtime *runtime = substream->runtime;
++	unsigned long map_offset = area->vm_pgoff << PAGE_SHIFT;
++	unsigned long phys_addr = runtime->dma_addr + map_offset;
++	unsigned long map_size = area->vm_end - area->vm_start;
++	unsigned long phys_size = runtime->dma_bytes + PAGE_SIZE -
++			runtime->dma_bytes % PAGE_SIZE;
++
++	snd_stm_printd(1, "snd_stm_buffer_mmap(substream=%p, area=%p)\n",
++			substream, area);
++
++	snd_stm_printd(1, "Mmaping %lu bytes starting from 0x%08lx "
++			"(dma_addr=0x%08x, dma_size=%u, vm_pgoff=%lu, "
++			"vm_start=0x%lx, vm_end=0x%lx)...\n", map_size,
++			phys_addr, runtime->dma_addr, runtime->dma_bytes,
++			area->vm_pgoff, area->vm_start, area->vm_end);
++
++	if (map_size > phys_size) {
++		snd_stm_printe("Trying to perform mmap larger than buffer!\n");
++		return -EINVAL;
++	}
++
++	area->vm_ops = &snd_stm_buffer_mmap_vm_ops;
++	area->vm_private_data = substream;
++	area->vm_flags |= VM_RESERVED;
++	area->vm_page_prot = pgprot_noncached(area->vm_page_prot);
++
++	if (remap_pfn_range(area, area->vm_start, phys_addr >> PAGE_SHIFT,
++			map_size, area->vm_page_prot) != 0) {
++		snd_stm_printe("Can't remap buffer!\n");
++		return -EAGAIN;
++	}
++
++	/* Must be called implicitly here... */
++	snd_pcm_mmap_data_open(area);
++
++	return 0;
++}
++
++
++
++/*
++ * Common ALSA parameters constraints
++ */
++
++/*
++#define FIXED_TRANSFER_BYTES max_transfer_bytes > 16 ? 16 : max_transfer_bytes
++#define FIXED_TRANSFER_BYTES max_transfer_bytes
++*/
++
++#if defined(FIXED_TRANSFER_BYTES)
++
++int snd_stm_pcm_transfer_bytes(unsigned int bytes_per_frame,
++		unsigned int max_transfer_bytes)
++{
++	int transfer_bytes = FIXED_TRANSFER_BYTES;
++
++	snd_stm_printd(1, "snd_stm_pcm_transfer_bytes(bytes_per_frame=%u, "
++			"max_transfer_bytes=%u) = %u (FIXED)\n",
++			bytes_per_frame, max_transfer_bytes, transfer_bytes);
++
++	return transfer_bytes;
++}
++
++int snd_stm_pcm_hw_constraint_transfer_bytes(struct snd_pcm_runtime *runtime,
++		unsigned int max_transfer_bytes)
++{
++	return snd_pcm_hw_constraint_step(runtime, 0,
++			SNDRV_PCM_HW_PARAM_PERIOD_BYTES,
++			snd_stm_pcm_transfer_bytes(0, max_transfer_bytes));
++}
++
++#else
++
++int snd_stm_pcm_transfer_bytes(unsigned int bytes_per_frame,
++		unsigned int max_transfer_bytes)
++{
++	unsigned int transfer_bytes;
++
++	for (transfer_bytes = bytes_per_frame;
++			transfer_bytes * 2 < max_transfer_bytes;
++			transfer_bytes *= 2)
++		;
++
++	snd_stm_printd(2, "snd_stm_pcm_transfer_bytes(bytes_per_frame=%u, "
++			"max_transfer_bytes=%u) = %u\n", bytes_per_frame,
++			max_transfer_bytes, transfer_bytes);
++
++	return transfer_bytes;
++}
++
++static int snd_stm_pcm_hw_rule_transfer_bytes(struct snd_pcm_hw_params *params,
++		struct snd_pcm_hw_rule *rule)
++{
++	int changed = 0;
++	unsigned int max_transfer_bytes = (unsigned int)rule->private;
++	struct snd_interval *period_bytes = hw_param_interval(params,
++			SNDRV_PCM_HW_PARAM_PERIOD_BYTES);
++	struct snd_interval *frame_bits = hw_param_interval(params,
++			SNDRV_PCM_HW_PARAM_FRAME_BITS);
++	unsigned int transfer_bytes, n;
++
++	transfer_bytes = snd_stm_pcm_transfer_bytes(frame_bits->min / 8,
++			max_transfer_bytes);
++	n = period_bytes->min % transfer_bytes;
++	if (n != 0 || period_bytes->openmin) {
++		period_bytes->min += transfer_bytes - n;
++		changed = 1;
++	}
++
++	transfer_bytes = snd_stm_pcm_transfer_bytes(frame_bits->max / 8,
++			max_transfer_bytes);
++	n = period_bytes->max % transfer_bytes;
++	if (n != 0 || period_bytes->openmax) {
++		period_bytes->max -= n;
++		changed = 1;
++	}
++
++	if (snd_interval_checkempty(period_bytes)) {
++		period_bytes->empty = 1;
++		return -EINVAL;
++	}
++
++	return changed;
++}
++
++int snd_stm_pcm_hw_constraint_transfer_bytes(struct snd_pcm_runtime *runtime,
++		unsigned int max_transfer_bytes)
++{
++	return snd_pcm_hw_rule_add(runtime, 0, SNDRV_PCM_HW_PARAM_PERIOD_BYTES,
++			snd_stm_pcm_hw_rule_transfer_bytes,
++			(void *)max_transfer_bytes,
++			SNDRV_PCM_HW_PARAM_PERIOD_BYTES,
++			SNDRV_PCM_HW_PARAM_FRAME_BITS, -1);
++}
++
++#endif
++
++
++
++/*
++ * Common ALSA controls routines
++ */
++
++int snd_stm_ctl_boolean_info(struct snd_kcontrol *kcontrol,
++		struct snd_ctl_elem_info *uinfo)
++{
++	uinfo->type = SNDRV_CTL_ELEM_TYPE_BOOLEAN;
++	uinfo->count = 1;
++	uinfo->value.integer.min = 0;
++	uinfo->value.integer.max = 1;
++
++	return 0;
++}
++EXPORT_SYMBOL(snd_stm_ctl_boolean_info);
++
++int snd_stm_ctl_iec958_info(struct snd_kcontrol *kcontrol,
++		struct snd_ctl_elem_info *uinfo)
++{
++	uinfo->type = SNDRV_CTL_ELEM_TYPE_IEC958;
++	uinfo->count = 1;
++
++	return 0;
++}
++
++
++int snd_stm_ctl_iec958_mask_get_con(struct snd_kcontrol *kcontrol,
++		struct snd_ctl_elem_value *ucontrol)
++{
++	ucontrol->value.iec958.status[0] = IEC958_AES0_PROFESSIONAL |
++			IEC958_AES0_NONAUDIO |
++			IEC958_AES0_CON_NOT_COPYRIGHT |
++			IEC958_AES0_CON_EMPHASIS |
++			IEC958_AES0_CON_MODE;
++	ucontrol->value.iec958.status[1] = IEC958_AES1_CON_CATEGORY |
++			IEC958_AES1_CON_ORIGINAL;
++	ucontrol->value.iec958.status[2] = IEC958_AES2_CON_SOURCE |
++			IEC958_AES2_CON_CHANNEL;
++	ucontrol->value.iec958.status[3] = IEC958_AES3_CON_FS |
++			IEC958_AES3_CON_CLOCK;
++	ucontrol->value.iec958.status[4] = IEC958_AES4_CON_MAX_WORDLEN_24 |
++			IEC958_AES4_CON_WORDLEN;
++
++	return 0;
++}
++
++int snd_stm_ctl_iec958_mask_get_pro(struct snd_kcontrol *kcontrol,
++		struct snd_ctl_elem_value *ucontrol)
++{
++	ucontrol->value.iec958.status[0] = IEC958_AES0_PROFESSIONAL |
++			IEC958_AES0_NONAUDIO |
++			IEC958_AES0_PRO_EMPHASIS |
++			IEC958_AES0_PRO_FREQ_UNLOCKED |
++			IEC958_AES0_PRO_FS;
++	ucontrol->value.iec958.status[1] = IEC958_AES1_PRO_MODE |
++			IEC958_AES1_PRO_USERBITS;
++	ucontrol->value.iec958.status[2] = IEC958_AES2_PRO_SBITS |
++			IEC958_AES2_PRO_WORDLEN;
++
++	return 0;
++}
++
++int snd_stm_iec958_cmp(const struct snd_aes_iec958 *a,
++		const struct snd_aes_iec958 *b)
++{
++	int result;
++
++	if (snd_BUG_ON(a == NULL))
++		return -EINVAL;
++	if (snd_BUG_ON(b == NULL))
++		return -EINVAL;
++
++	result = memcmp(a->status, b->status, sizeof(a->status));
++	if (result == 0)
++		result = memcmp(a->subcode, b->subcode, sizeof(a->subcode));
++	if (result == 0)
++		result = memcmp(a->dig_subframe, b->dig_subframe,
++				sizeof(a->dig_subframe));
++
++	return result;
++}
++
++
++/*
++ * Debug features
++ */
++
++/* Memory dump function */
++
++void snd_stm_hex_dump(void *data, int size)
++{
++	unsigned char *buffer = data;
++	char line[57];
++	int i;
++
++	for (i = 0; i < size; i++) {
++		if (i % 16 == 0)
++			sprintf(line, "%p", data + i);
++		sprintf(line + 8 + ((i % 16) * 3), " %02x", *buffer++);
++		if (i % 16 == 15 || i == size - 1)
++			printk(KERN_DEBUG "%s\n", line);
++	}
++}
++
++/* IEC958 structure dump */
++void snd_stm_iec958_dump(const struct snd_aes_iec958 *vuc)
++{
++	int i;
++	char line[54];
++	const unsigned char *data;
++
++	printk(KERN_DEBUG "                        "
++			"0  1  2  3  4  5  6  7  8  9\n");
++	data = vuc->status;
++	for (i = 0; i < 24; i++) {
++		if (i % 10 == 0)
++			sprintf(line, "%p status    %02d:",
++					(unsigned char *)vuc + i, i);
++		sprintf(line + 22 + ((i % 10) * 3), " %02x", *data++);
++		if (i % 10 == 9 || i == 23)
++			printk(KERN_DEBUG "%s\n", line);
++	}
++
++	data = vuc->subcode;
++	for (i = 0; i < 147; i++) {
++		if (i % 10 == 0)
++			sprintf(line, "%p subcode  %03d:",
++					(unsigned char *)vuc +
++					offsetof(struct snd_aes_iec958,
++					dig_subframe) + i, i);
++		sprintf(line + 22 + ((i % 10) * 3), " %02x", *data++);
++		if (i % 10 == 9 || i == 146)
++			printk(KERN_DEBUG "%s\n", line);
++	}
++
++	printk(KERN_DEBUG "%p dig_subframe: %02x %02x %02x %02x\n",
++			(unsigned char *)vuc +
++			offsetof(struct snd_aes_iec958, dig_subframe),
++			vuc->dig_subframe[0], vuc->dig_subframe[1],
++			vuc->dig_subframe[2], vuc->dig_subframe[3]);
++}
+diff -Nur ./sound/stm/common.h.orig ./sound/stm/common.h
+--- a/sound/stm/common.h.orig	2014-05-24 09:34:26.000000000 +0200
++++ b/sound/stm/common.h	2012-10-11 20:51:57.000000000 +0200
+@@ -19,12 +19,29 @@
+ 
+ 
+ /*
+- * ALSA card management
++ * Drivers initialization/cleanup
+  */
+ 
+-int snd_stm_card_register(void);
+-int snd_stm_card_is_registered(void);
+-struct snd_card *snd_stm_card_get(void);
++int snd_stm_drivers_register(void);
++void snd_stm_drivers_unregister(void);
++
++
++
++/*
++ * Frequency synthesizers control interface
++ */
++
++struct snd_stm_fsynth_channel;
++
++struct snd_stm_fsynth_channel *snd_stm_fsynth_get_channel(const char *bus_id,
++		int output);
++
++int snd_stm_fsynth_add_adjustement_ctl(
++		struct snd_stm_fsynth_channel *fsynth_channel,
++		struct snd_card *card, int card_device);
++
++int snd_stm_fsynth_set_frequency(struct snd_stm_fsynth_channel *fsynth_channel,
++		int frequency);
+ 
+ 
+ 
+@@ -56,19 +73,8 @@
+ int snd_stm_conv_disable(struct snd_stm_conv_group *group);
+ int snd_stm_conv_mute(struct snd_stm_conv_group *group);
+ int snd_stm_conv_unmute(struct snd_stm_conv_group *group);
+-int snd_stm_conv_init(void);
+-void snd_stm_conv_exit(void);
+ 
+ 
+-/*
+- * Clocks control interface
+- */
+-
+-struct clk *snd_stm_clk_get(struct device *dev, const char *id,
+-		struct snd_card *card, int card_device);
+-void snd_stm_clk_put(struct clk *clk);
+-
+-
+ 
+ /*
+  * PCM buffer memory management
+@@ -125,9 +130,26 @@
+ 
+ 
+ /*
++ * ALSA card management
++ */
++
++struct snd_card *snd_stm_card_new(int index, const char *id,
++		struct module *module);
++int snd_stm_card_register(void);
++int snd_stm_card_is_registered(void);
++void snd_stm_card_free(void);
++
++struct snd_card *snd_stm_card_get(void);
++
++
++
++/*
+  * ALSA procfs additional entries
+  */
+ 
++int snd_stm_info_create(void);
++void snd_stm_info_dispose(void);
++
+ int snd_stm_info_register(struct snd_info_entry **entry,
+ 		const char *name,
+ 		void (read)(struct snd_info_entry *, struct snd_info_buffer *),
+@@ -155,6 +177,36 @@
+ 
+ 
+ /*
++ * Core drivers initialization/exit
++ */
++
++int snd_stm_fsynth_init(void);
++void snd_stm_fsynth_exit(void);
++
++int snd_stm_conv_init(void);
++void snd_stm_conv_exit(void);
++
++int snd_stm_conv_int_dac_init(void);
++void snd_stm_conv_int_dac_exit(void);
++
++int snd_stm_conv_i2sspdif_init(void);
++void snd_stm_conv_i2sspdif_exit(void);
++
++int snd_stm_pcm_player_init(void);
++void snd_stm_pcm_player_exit(void);
++
++int snd_stm_pcm_reader_init(void);
++void snd_stm_pcm_reader_exit(void);
++
++int snd_stm_spdif_player_init(void);
++void snd_stm_spdif_player_exit(void);
++
++int snd_stm_synchro_init(void);
++void snd_stm_synchro_exit(void);
++
++
++
++/*
+  * Debug features
+  */
+ 
+@@ -163,15 +215,52 @@
+ void snd_stm_hex_dump(void *data, int size);
+ void snd_stm_iec958_dump(const struct snd_aes_iec958 *vuc);
+ 
++/* Component name */
++
++#if !defined(COMPONENT)
++#error Please define COMPONENT name before including "common.h" !
++#endif
++static const char __maybe_unused *__snd_stm_component = __stringify(COMPONENT);
++
+ /* Debug messages */
+ 
+ #if defined(CONFIG_SND_DEBUG) || defined(DEBUG)
+ 
++#define ___concat(a, b) a##b
++#define __concat(a, b) ___concat(a, b)
++
++#if defined(DEBUG)
++static int __concat(debug_, COMPONENT) = DEBUG;
++#else
++static int __concat(debug_, COMPONENT) = -1;
++#endif
++module_param(__concat(debug_, COMPONENT), int, S_IRUGO | S_IWUSR);
++
++#if defined(CONFIG_SND_STM_DEBUG_LEVEL)
++extern int *snd_stm_debug_level;
++#define verbosity max(*snd_stm_debug_level, __concat(debug_, COMPONENT))
++#else
++#define verbosity __concat(debug_, COMPONENT)
++#endif
++
++#if defined(CONFIG_SND_VERBOSE_PRINTK)
++
+ #define snd_stm_printd(level, format, args...) \
+ 		do { \
+-			if (level <= snd_stm_debug_level) \
+-				printk(KERN_DEBUG "%s:%d: " format, \
+-						__FILE__, __LINE__, ##args); \
++			if (level <= verbosity) \
++				snd_printk(KERN_INFO format, ## args); \
++		} while (0)
++
++#define snd_stm_assert snd_assert
++
++#else
++
++#define snd_stm_printd(level, format, args...) \
++		do { \
++			if (level <= verbosity) \
++				printk(KERN_INFO "snd-stm:%s:%d: " format, \
++						__snd_stm_component, \
++						__LINE__, ## args); \
+ 		} while (0)
+ 
+ #define snd_stm_assert(expr, args...) \
+@@ -186,47 +275,51 @@
+ 				args; \
+ 			} \
+ 		} while (0)
++#endif
+ 
+ #else
+ 
+ #define snd_stm_printd(...) /* nothing */
++
+ #define snd_stm_assert snd_assert
+ 
+ #endif
+ 
+ /* Error messages */
+ 
++#if defined(CONFIG_SND_VERBOSE_PRINTK)
++#define snd_stm_printe(format, args...) \
++		snd_printk(KERN_ERR format, ## args)
++#else
+ #define snd_stm_printe(format, args...) \
+-		printk(KERN_ERR "%s:%d: " format, __FILE__, __LINE__, ##args)
++		printk(KERN_ERR "snd-stm:%s:%d: " format, \
++				__snd_stm_component, __LINE__, ## args)
++#endif
+ 
+ /* Magic value checking in device structures */
+ 
+ #if defined(CONFIG_SND_DEBUG) || defined(DEBUG)
+ 
+-#ifndef snd_stm_magic
+-#define snd_stm_magic 0xf00d
+-#endif
+-
+-enum snd_stm_magic_enum {
+-	snd_stm_magic_good = 0x600d0000 | snd_stm_magic,
+-	snd_stm_magic_bad = 0xbaad0000 | snd_stm_magic,
+-};
+-
+-#define snd_stm_magic_field \
+-		enum snd_stm_magic_enum __snd_stm_magic
++#define snd_stm_magic \
++		(((unsigned)(&__snd_stm_component) & 0xffff0000) >> 16 ^ \
++		((unsigned)(&__snd_stm_component) & 0xffff))
++#define snd_stm_magic_good (0x600d0000 | snd_stm_magic)
++#define snd_stm_magic_bad (0xbaad0000 | snd_stm_magic)
++#define snd_stm_magic_field unsigned __snd_stm_magic
+ #define snd_stm_magic_set(object) \
+-		((object)->__snd_stm_magic) = snd_stm_magic_good
++		(object)->__snd_stm_magic = snd_stm_magic_good
+ #define snd_stm_magic_clear(object) \
+-		((object)->__snd_stm_magic) = snd_stm_magic_bad
++		(object)->__snd_stm_magic = snd_stm_magic_bad
+ #define snd_stm_magic_valid(object) \
+-		((object)->__snd_stm_magic == snd_stm_magic_good)
++		snd_BUG_ON((object)->__snd_stm_magic == \
++			       snd_stm_magic_good)
+ 
+ #else
+ 
+-#define snd_stm_magic_field
+-#define snd_stm_magic_set(object)
+-#define snd_stm_magic_clear(object)
+-#define snd_stm_magic_valid(object) 1
++#	define snd_stm_magic_field /* nothing */
++#	define snd_stm_magic_set(object) /* nothing */
++#	define snd_stm_magic_clear(object) /* nothing */
++#	define snd_stm_magic_valid(object) 1
+ 
+ #endif
+ 
+diff -Nur /dev/null ./sound/stm/conv_int_dac.c
+--- a/dev/null
++++ b/sound/stm/conv_int_dac.c
+@@ -0,0 +1,361 @@
++/*
++ *   STMicroelectronics System-on-Chips' internal audio DAC driver
++ *
++ *   Copyright (c) 2005-2007 STMicroelectronics Limited
++ *
++ *   Author: Pawel Moll <pawel.moll@st.com>
++ *
++ *   This program is free software; you can redistribute it and/or modify
++ *   it under the terms of the GNU General Public License as published by
++ *   the Free Software Foundation; either version 2 of the License, or
++ *   (at your option) any later version.
++ *
++ *   This program is distributed in the hope that it will be useful,
++ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *   GNU General Public License for more details.
++ *
++ *   You should have received a copy of the GNU General Public License
++ *   along with this program; if not, write to the Free Software
++ *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
++ *
++ */
++
++#include <linux/init.h>
++#include <linux/io.h>
++#include <linux/platform_device.h>
++#include <linux/list.h>
++#include <linux/spinlock.h>
++#include <sound/core.h>
++#include <sound/info.h>
++#include <sound/stm.h>
++
++#define COMPONENT conv_int_dac
++#include "common.h"
++#include "reg_audcfg_adac.h"
++
++
++
++/*
++ * Hardware-related definitions
++ */
++
++#define FORMAT (SND_STM_FORMAT__I2S | SND_STM_FORMAT__SUBFRAME_32_BITS)
++#define OVERSAMPLING 256
++
++
++
++/*
++ * Internal DAC instance structure
++ */
++
++struct snd_stm_conv_int_dac {
++	/* System informations */
++	struct snd_stm_conv_converter *converter;
++	const char *bus_id;
++	int ver; /* IP version, used by register access macros */
++
++	/* Resources */
++	struct resource *mem_region;
++	void *base;
++
++	struct snd_info_entry *proc_entry;
++
++	snd_stm_magic_field;
++};
++
++
++
++/*
++ * Converter interface implementation
++ */
++
++static unsigned int snd_stm_conv_int_dac_get_format(void *priv)
++{
++	snd_stm_printd(1, "snd_stm_conv_int_dac_get_format(priv=%p)\n", priv);
++
++	return FORMAT;
++}
++
++static int snd_stm_conv_int_dac_get_oversampling(void *priv)
++{
++	snd_stm_printd(1, "snd_stm_conv_int_dac_get_oversampling(priv=%p)\n",
++			priv);
++
++	return OVERSAMPLING;
++}
++
++static int snd_stm_conv_int_dac_set_enabled(int enabled, void *priv)
++{
++	struct snd_stm_conv_int_dac *conv_int_dac = priv;
++
++	snd_stm_printd(1, "snd_stm_conv_int_dac_set_enabled(enabled=%d, "
++			"priv=%p)\n", enabled, priv);
++
++	if (snd_BUG_ON(!conv_int_dac))
++		return -EINVAL;
++	if (snd_BUG_ON(!snd_stm_magic_valid(conv_int_dac)))
++		return -EINVAL;
++
++	snd_stm_printd(1, "%sabling DAC %s's digital part.\n",
++			enabled ? "En" : "Dis", conv_int_dac->bus_id);
++
++	if (enabled) {
++		set__AUDCFG_ADAC_CTRL__NSB__NORMAL(conv_int_dac);
++		set__AUDCFG_ADAC_CTRL__NRST__NORMAL(conv_int_dac);
++	} else {
++		set__AUDCFG_ADAC_CTRL__NRST__RESET(conv_int_dac);
++		set__AUDCFG_ADAC_CTRL__NSB__POWER_DOWN(conv_int_dac);
++	}
++
++	return 0;
++}
++
++static int snd_stm_conv_int_dac_set_muted(int muted, void *priv)
++{
++	struct snd_stm_conv_int_dac *conv_int_dac = priv;
++
++	snd_stm_printd(1, "snd_stm_conv_int_dac_set_muted(muted=%d, priv=%p)\n",
++		       muted, priv);
++
++	if (snd_BUG_ON(!conv_int_dac))
++		return -EINVAL;
++	if (snd_BUG_ON(!snd_stm_magic_valid(conv_int_dac)))
++		return -EINVAL;
++
++	snd_stm_printd(1, "%suting DAC %s.\n", muted ? "M" : "Unm",
++			conv_int_dac->bus_id);
++
++	if (muted)
++		set__AUDCFG_ADAC_CTRL__SOFTMUTE__MUTE(conv_int_dac);
++	else
++		set__AUDCFG_ADAC_CTRL__SOFTMUTE__NORMAL(conv_int_dac);
++
++	return 0;
++}
++
++static struct snd_stm_conv_ops snd_stm_conv_int_dac_ops = {
++	.get_format = snd_stm_conv_int_dac_get_format,
++	.get_oversampling = snd_stm_conv_int_dac_get_oversampling,
++	.set_enabled = snd_stm_conv_int_dac_set_enabled,
++	.set_muted = snd_stm_conv_int_dac_set_muted,
++};
++
++
++
++/*
++ * ALSA lowlevel device implementation
++ */
++
++static void snd_stm_conv_int_dac_read_info(struct snd_info_entry *entry,
++		struct snd_info_buffer *buffer)
++{
++	struct snd_stm_conv_int_dac *conv_int_dac =
++		entry->private_data;
++
++	if (snd_BUG_ON(!conv_int_dac))
++		return;
++	if (snd_BUG_ON(!snd_stm_magic_valid(conv_int_dac)))
++		return;
++
++	snd_iprintf(buffer, "--- %s ---\n", conv_int_dac->bus_id);
++	snd_iprintf(buffer, "base = 0x%p\n", conv_int_dac->base);
++
++	snd_iprintf(buffer, "AUDCFG_ADAC_CTRL (offset 0x00) = 0x%08x\n",
++			get__AUDCFG_ADAC_CTRL(conv_int_dac));
++
++	snd_iprintf(buffer, "\n");
++}
++
++static int snd_stm_conv_int_dac_register(struct snd_device *snd_device)
++{
++	struct snd_stm_conv_int_dac *conv_int_dac =
++			snd_device->device_data;
++
++	if (snd_BUG_ON(!conv_int_dac))
++		return -EINVAL;
++	if (snd_BUG_ON(!snd_stm_magic_valid(conv_int_dac)))
++		return -EINVAL;
++
++	/* Initialize DAC with digital part down, analog up and muted */
++
++	set__AUDCFG_ADAC_CTRL(conv_int_dac,
++			mask__AUDCFG_ADAC_CTRL__NRST__RESET(conv_int_dac) |
++			mask__AUDCFG_ADAC_CTRL__MODE__DEFAULT(conv_int_dac) |
++			mask__AUDCFG_ADAC_CTRL__NSB__POWER_DOWN(conv_int_dac) |
++			mask__AUDCFG_ADAC_CTRL__SOFTMUTE__MUTE(conv_int_dac) |
++			mask__AUDCFG_ADAC_CTRL__PDNANA__NORMAL(conv_int_dac) |
++			mask__AUDCFG_ADAC_CTRL__PDNBG__NORMAL(conv_int_dac));
++
++	/* Additional procfs info */
++
++	snd_stm_info_register(&conv_int_dac->proc_entry,
++			conv_int_dac->bus_id,
++			snd_stm_conv_int_dac_read_info,
++			conv_int_dac);
++
++	return 0;
++}
++
++static int __exit snd_stm_conv_int_dac_disconnect(struct snd_device *snd_device)
++{
++	struct snd_stm_conv_int_dac *conv_int_dac =
++			snd_device->device_data;
++
++	if (snd_BUG_ON(!conv_int_dac))
++		return -EINVAL;
++	if (snd_BUG_ON(!snd_stm_magic_valid(conv_int_dac)))
++		return -EINVAL;
++
++	/* Remove procfs entry */
++
++	snd_stm_info_unregister(conv_int_dac->proc_entry);
++
++	/* Global power done & mute mode */
++
++	set__AUDCFG_ADAC_CTRL(conv_int_dac,
++		mask__AUDCFG_ADAC_CTRL__NRST__RESET(conv_int_dac) |
++		mask__AUDCFG_ADAC_CTRL__MODE__DEFAULT(conv_int_dac) |
++		mask__AUDCFG_ADAC_CTRL__NSB__POWER_DOWN(conv_int_dac) |
++		mask__AUDCFG_ADAC_CTRL__SOFTMUTE__MUTE(conv_int_dac) |
++		mask__AUDCFG_ADAC_CTRL__PDNANA__POWER_DOWN(conv_int_dac) |
++		mask__AUDCFG_ADAC_CTRL__PDNBG__POWER_DOWN(conv_int_dac));
++
++	return 0;
++}
++
++static struct snd_device_ops snd_stm_conv_int_dac_snd_device_ops = {
++	.dev_register = snd_stm_conv_int_dac_register,
++	.dev_disconnect = snd_stm_conv_int_dac_disconnect,
++};
++
++
++
++/*
++ * Platform driver routines
++ */
++
++static int snd_stm_conv_int_dac_probe(struct platform_device *pdev)
++{
++	int result = 0;
++	struct snd_stm_conv_int_dac_info *conv_int_dac_info =
++			pdev->dev.platform_data;
++	struct snd_stm_conv_int_dac *conv_int_dac;
++	struct snd_card *card = snd_stm_card_get();
++
++	snd_stm_printd(0, "--- Probing device '%s'...\n", dev_name(&pdev->dev));
++
++	if (snd_BUG_ON(card == NULL))
++		return -EINVAL;
++	if (snd_BUG_ON(conv_int_dac_info == NULL))
++		return -EINVAL;
++
++	conv_int_dac = kzalloc(sizeof(*conv_int_dac), GFP_KERNEL);
++	if (!conv_int_dac) {
++		snd_stm_printe("Can't allocate memory "
++				"for a device description!\n");
++		result = -ENOMEM;
++		goto error_alloc;
++	}
++	snd_stm_magic_set(conv_int_dac);
++	conv_int_dac->ver = conv_int_dac_info->ver;
++	if (snd_BUG_ON(conv_int_dac->ver <= 0))
++		return -EINVAL;
++	conv_int_dac->bus_id = dev_name(&pdev->dev);
++
++	/* Get resources */
++
++	result = snd_stm_memory_request(pdev, &conv_int_dac->mem_region,
++			&conv_int_dac->base);
++	if (result < 0) {
++		snd_stm_printe("Memory region request failed!\n");
++		goto error_memory_request;
++	}
++
++	/* Get connections */
++
++	if (snd_BUG_ON(conv_int_dac_info->source_bus_id == NULL))
++		return -EINVAL;
++	snd_stm_printd(0, "This DAC is attached to PCM player '%s'.\n",
++			conv_int_dac_info->source_bus_id);
++	conv_int_dac->converter = snd_stm_conv_register_converter(
++			"Analog Output",
++			&snd_stm_conv_int_dac_ops, conv_int_dac,
++			&platform_bus_type, conv_int_dac_info->source_bus_id,
++			conv_int_dac_info->channel_from,
++			conv_int_dac_info->channel_to, NULL);
++	if (!conv_int_dac->converter) {
++		snd_stm_printe("Can't attach to PCM player!\n");
++		goto error_attach;
++	}
++
++	/* Create ALSA lowlevel device*/
++
++	result = snd_device_new(card, SNDRV_DEV_LOWLEVEL, conv_int_dac,
++			&snd_stm_conv_int_dac_snd_device_ops);
++	if (result < 0) {
++		snd_stm_printe("ALSA low level device creation failed!\n");
++		goto error_device;
++	}
++
++	/* Done now */
++
++	platform_set_drvdata(pdev, conv_int_dac);
++
++	snd_stm_printd(0, "--- Probed successfully!\n");
++
++	return 0;
++
++error_device:
++error_attach:
++	snd_stm_memory_release(conv_int_dac->mem_region,
++			conv_int_dac->base);
++error_memory_request:
++	snd_stm_magic_clear(conv_int_dac);
++	kfree(conv_int_dac);
++error_alloc:
++	return result;
++}
++
++static int snd_stm_conv_int_dac_remove(struct platform_device *pdev)
++{
++	struct snd_stm_conv_int_dac *conv_int_dac = platform_get_drvdata(pdev);
++
++	if (snd_BUG_ON(!conv_int_dac))
++		return -EINVAL;
++	if (snd_BUG_ON(!snd_stm_magic_valid(conv_int_dac)))
++		return -EINVAL;
++
++	snd_stm_conv_unregister_converter(conv_int_dac->converter);
++	snd_stm_memory_release(conv_int_dac->mem_region,
++			conv_int_dac->base);
++
++	snd_stm_magic_clear(conv_int_dac);
++	kfree(conv_int_dac);
++
++	return 0;
++}
++
++static struct platform_driver snd_stm_conv_int_dac_driver = {
++	.driver = {
++		.name = "snd_conv_int_dac",
++	},
++	.probe = snd_stm_conv_int_dac_probe,
++	.remove = snd_stm_conv_int_dac_remove,
++};
++
++
++
++/*
++ * Initialization
++ */
++
++int snd_stm_conv_int_dac_init(void)
++{
++	return platform_driver_register(&snd_stm_conv_int_dac_driver);
++}
++
++void snd_stm_conv_int_dac_exit(void)
++{
++	platform_driver_unregister(&snd_stm_conv_int_dac_driver);
++}
+diff -Nur /dev/null ./sound/stm/fsynth.c
+--- a/dev/null
++++ b/sound/stm/fsynth.c
+@@ -0,0 +1,813 @@
++/*
++ *   STMicroelectronics System-on-Chips' audio oversampling frequency
++ *   synthesizers driver
++ *
++ *   Copyright (c) 2005-2007 STMicroelectronics Limited
++ *
++ *   Authors: Pawel Moll <pawel.moll@st.com>
++ *            Daniel Thompson <daniel.thompson@st.com>
++ *
++ *   This program is free software; you can redistribute it and/or modify
++ *   it under the terms of the GNU General Public License as published by
++ *   the Free Software Foundation; either version 2 of the License, or
++ *   (at your option) any later version.
++ *
++ *   This program is distributed in the hope that it will be useful,
++ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *   GNU General Public License for more details.
++ *
++ *   You should have received a copy of the GNU General Public License
++ *   along with this program; if not, write to the Free Software
++ *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
++ *
++ */
++
++#include <linux/init.h>
++#include <linux/io.h>
++#include <linux/platform_device.h>
++#include <linux/math64.h>
++#include <sound/core.h>
++#include <sound/info.h>
++
++#define COMPONENT fsynth
++#include "common.h"
++#include "reg_audcfg_fsyn.h"
++
++
++
++/*
++ * Hardware constants
++ */
++
++/* PLL inside the synthesizer multiplies input frequency
++ * (which is 30MHz in our case) by 8... */
++#define PLL_FREQ 8 * 30 * 1000 * 1000
++
++
++
++/*
++ * Audio frequency synthesizer structures
++ */
++
++struct snd_stm_fsynth_channel {
++	struct snd_stm_fsynth *fsynth;
++
++	int frequency;  /* Nominal */
++	int adjustment; /* Actual (achieved) */
++
++	snd_stm_magic_field;
++};
++
++struct snd_stm_fsynth {
++	/* System informations */
++	const char *bus_id;
++	int ver; /* IP version, used by register access macros */
++	int channels_max;
++
++	/* Resources */
++	struct resource *mem_region;
++	void *base;
++
++	/* Environment settings */
++	int channels_from, channels_to;
++
++	/* Runtime data */
++	struct snd_stm_fsynth_channel *channels;
++
++	struct snd_info_entry *proc_entry;
++
++	snd_stm_magic_field;
++};
++
++
++
++/*
++ * Toolbox
++ */
++
++/* Return the number of set bits in x. */
++static unsigned int population(unsigned int x)
++{
++	/* This is the traditional branch-less algorithm for population count */
++	x = x - ((x >> 1) & 0x55555555);
++	x = (x & 0x33333333) + ((x >> 2) & 0x33333333);
++	x = (x + (x >> 4)) & 0x0f0f0f0f;
++	x = x + (x << 8);
++	x = x + (x << 16);
++
++	return x >> 24;
++}
++
++/* Return the index of the most significant set in x.
++ * The results are 'undefined' is x is 0 (0xffffffff as it happens
++ * but this is a mere side effect of the algorithm. */
++static unsigned int most_significant_set_bit(unsigned int x)
++{
++	/* propagate the MSSB right until all bits smaller than MSSB are set */
++	x = x | (x >> 1);
++	x = x | (x >> 2);
++	x = x | (x >> 4);
++	x = x | (x >> 8);
++	x = x | (x >> 16);
++
++	/* now count the number of set bits [clz is population(~x)] */
++	return population(x) - 1;
++}
++
++/* Solve the frequency synthesiser equations to provide a specified output
++ * frequency.
++ *
++ * The approach taken to solve the equation is to solve for sdiv assuming
++ * maximal values for md and one greater than maximal pe (-16 and 32768
++ * respectively) before rounding down. Once sdiv is selected we can
++ * solve for md by assuming maximal pe and rounding down. With these
++ * values pe can trivially be calculated.
++ *
++ * The function is implemented entirely with integer calculations making
++ * it suitable for use within the Linux kernel.
++ *
++ * The magic numbers within the function are derived from the Fsynth equation
++ * which is as follows:
++ *
++ * <pre>
++ *                                  32768*Fpll
++ * #1: Fout = ------------------------------------------------------
++ *                            md                        (md + 1)
++ *            (sdiv*((pe*(1 + --)) - ((pe - 32768)*(1 + --------))))
++ *                            32                           32
++ * </pre>
++ *
++ * Where:
++ *
++ *  - Fpll and Fout are frequencies in Hz
++ *  - sdiv is power of 2 between 1 and 8
++ *  - md is an integer between -1 and -16
++ *  - pe is an integer between 0 and 32767
++ *
++ * This simplifies to:
++ *
++ * <pre>
++ *                       1048576*Fpll
++ * #2: Fout = ----------------------------------
++ *            (sdiv*(1081344 - pe + (32768*md)))
++ * </pre>
++ *
++ * Rearranging:
++ *
++ * <pre>
++ *                 1048576*Fpll
++ * #3: predivide = ------------ = (sdiv*(1081344 - pe + (32768*md)))
++ *                     Fout
++ * </pre>
++ *
++ * If solve for sdiv and let pe = 32768 and md = -16 we get:
++ *
++ * <pre>
++ *                     predivide            predivide
++ * #4: sdiv = --------------------------- = ---------
++ *            (1081344 - pe + (32768*md))     524288
++ * </pre>
++ *
++ * Returning to eqn. #3, solving for md and let pe = 32768 we get:
++ *
++ * <pre>
++ *           predivide                    predivide
++ *          (--------- - 1081344 + pe)   (--------- - 1048576)
++ *             sdiv                         sdiv
++ * #5: md = -------------------------- = ---------------------
++ *                    32768                      32768
++
++ * </pre>
++ *
++ * Finally we return to #3 and rearrange for pe:
++ *
++ * <pre>
++ *              predivide
++ * #6: pe = -1*(--------- - 1081344 - (32768*md))
++ *                sdiv
++ * </pre>
++ *
++ */
++static int solve_fsynth_eqn(unsigned int Fpll, unsigned int Fout,
++		unsigned int *sdivp, int *mdp, unsigned int *pep)
++{
++	unsigned long long p, q;
++	unsigned int predivide;
++	int preshift; /* always +ve but used in subtraction */
++	unsigned int sdiv;
++	int md;
++	unsigned int pe = 1 << 14;
++
++	/* pre-divide the frequencies */
++	p = 1048576ull * Fpll;		/* <<20? */
++	q = Fout;
++
++	predivide = (unsigned int)div64_u64(p, q);
++
++	/* determine an appropriate value for the output divider using eqn. #4
++	 * with md = -16 and pe = 32768 (and round down) */
++	sdiv = predivide / 524288;
++	if (sdiv > 1) {
++		/* sdiv = fls(sdiv) - 1; // this doesn't work
++		 * for some unknown reason */
++		sdiv = most_significant_set_bit(sdiv);
++	} else
++		sdiv = 1;
++
++	/* pre-shift a common sub-expression of later calculations */
++	preshift = predivide >> sdiv;
++
++	/* determine an appropriate value for the coarse selection using eqn. #5
++	 * with pe = 32768 (and round down which for signed values means away
++	 * from zero) */
++	md = ((preshift - 1048576) / 32768) - 1;	/* >>15? */
++
++	/* calculate a value for pe that meets the output target */
++	pe = -1 * (preshift - 1081344 - (32768 * md));	/* <<15? */
++
++	/* finally give sdiv its true hardware form */
++	sdiv--;
++
++	/* special case for 58593.75Hz and harmonics...
++	 * can't quite seem to get the rounding right */
++	if (md == -17 && pe == 0) {
++		md = -16;
++		pe = 32767;
++	}
++
++	/* update the outgoing arguments */
++	*sdivp = sdiv;
++	*mdp = md;
++	*pep = pe;
++
++	snd_stm_printd(1, "SDIV == %u, MD == %d, PE == %u\n", sdiv, md, pe);
++
++	/* return 0 if all variables meet their contraints */
++	return (sdiv <= 7 && -16 <= md && md <= -1 && pe <= 32767) ? 0 : -1;
++}
++
++/*
++ *                   1048576*Fpll
++ * Fout = ----------------------------------
++ *        (sdiv*(1081344 - pe + (32768*md)))
++ *
++ * Fpll is premultiplied by 8
++ * Fout needs dividing by 256 to get real frequency
++ *
++ * small error compared to double based original
++ * i.e. for 44100 (11289600) it reports 11289610 instead of 11289610.36
++ */
++static int get_fsynth_output(unsigned int Fpll,
++		unsigned int sdiv, int md, unsigned int pe)
++{
++	long long p, q, r, s, t, u;
++
++	p = 1048576ll * Fpll;
++	q = 32768 * md;
++	r = 1081344 - pe;
++	s = r + q;
++	t = (1 << (sdiv + 1)) * s;
++	u = div64_u64(p, t);
++
++	return (int)u;
++}
++
++static int snd_stm_fsynth_channel_configure(struct snd_stm_fsynth *fsynth,
++		int channel, int frequency, int adjustment)
++{
++	int result;
++	unsigned int sdiv;
++	int md;
++	unsigned int pe;
++	int frequency_adjusted, frequency_achieved, adjustment_achieved;
++	int delta;
++
++	snd_stm_printd(1, "snd_stm_fsynth_configure(fsynth=%p, channel=%d, "
++			"frequency=%d, adjustment=%d)\n", fsynth, channel,
++			frequency, adjustment);
++
++	if (snd_BUG_ON(!fsynth))
++		return -EINVAL;
++	if (snd_BUG_ON(!snd_stm_magic_valid(fsynth)))
++		return -EINVAL;
++	if (snd_BUG_ON((channel < fsynth->channels_from) ||
++		       channel > fsynth->channels_to))
++		return -EINVAL;
++
++	/*             a
++	 * F = f + --------- * f = f + d
++	 *          1000000
++	 *
++	 *         a
++	 * d = --------- * f
++	 *      1000000
++	 *
++	 * where:
++	 *   f - nominal frequency
++	 *   a - adjustment in ppm (parts per milion)
++	 *   F - frequency to be set in synthesizer
++	 *   d - delta (difference) between f and F
++	 */
++	if (adjustment < 0) {
++		/* div64_u64 operates on unsigned values... */
++		delta = -1;
++		adjustment = -adjustment;
++	} else {
++		delta = 1;
++	}
++	/* 500000 ppm is 0.5, which is used to round up values */
++	delta *= (int)div64_u64((uint64_t)frequency * (uint64_t)adjustment +
++			500000, 1000000);
++	frequency_adjusted = frequency + delta;
++
++	snd_stm_printd(1, "Setting %s channel %d to frequency %d.\n",
++			fsynth->bus_id, channel,
++			frequency_adjusted);
++
++	result = solve_fsynth_eqn(PLL_FREQ, frequency_adjusted,
++			&sdiv, &md, &pe);
++	if (result < 0) {
++		snd_stm_printe("Frequency %d can't be generated!\n",
++				frequency_adjusted);
++		return -EINVAL;
++	}
++
++	snd_stm_printd(1, "SDIV == 0x%x, MD == 0x%x, PE == 0x%x\n", sdiv,
++			(unsigned int)md & mask__AUDCFG_FSYN_MD__MD(fsynth),
++			pe);
++	set__AUDCFG_FSYN_PROGEN__PROG_EN__PE0_MD0_IGNORED(fsynth, channel);
++	set__AUDCFG_FSYN_SDIV__SDIV(fsynth, channel, sdiv);
++	set__AUDCFG_FSYN_MD__MD(fsynth, channel, (unsigned int)md &
++			mask__AUDCFG_FSYN_MD__MD(fsynth));
++	set__AUDCFG_FSYN_PE__PE(fsynth, channel, pe);
++	set__AUDCFG_FSYN_PROGEN__PROG_EN__PE0_MD0_USED(fsynth, channel);
++	set__AUDCFG_FSYN_PROGEN__PROG_EN__PE0_MD0_IGNORED(fsynth, channel);
++
++	/*             a                    a
++	 * F = f + --------- * f   =>   --------- * f = F - f   ==>
++	 *          1000000              1000000
++	 *
++	 *           a        F - f               F - f
++	 * ==>   --------- = -------   ==>   a = ------- * 1000000
++	 *        1000000       f                   f
++	 *
++	 * F = f + d   ==>   d = F - f
++	 *
++	 *      f + d - f               d
++	 * a = ----------- * 1000000 = --- * 1000000
++	 *          f                   f
++	 * where:
++	 *   f - nominal frequency
++	 *   a - adjustment in ppm (parts per milion)
++	 *   F - frequency actually being generated by fsynch
++	 *   d - delta between F and f
++	 */
++	frequency_achieved = get_fsynth_output(PLL_FREQ, sdiv, md, pe);
++	delta = frequency_achieved - frequency;
++	if (delta < 0) {
++		/* div64_u64 operates on unsigned values... */
++		delta = -delta;
++		adjustment_achieved = -1;
++	} else {
++		adjustment_achieved = 1;
++	}
++	/* frequency/2 is added to round up result */
++	adjustment_achieved *= (int)div64_u64((uint64_t)delta * 1000000 +
++			frequency / 2, frequency);
++
++	snd_stm_printd(1, "Nominal frequency is %d, actual frequency is %d, "
++			"(%d ppm difference).\n", frequency,
++			frequency_achieved, adjustment_achieved);
++
++	/* Save this informations for future generations ;-) */
++	fsynth->channels[channel].frequency = frequency;
++	fsynth->channels[channel].adjustment = adjustment_achieved;
++
++	return 0;
++}
++
++
++
++/*
++ * ALSA controls
++ */
++
++static int snd_stm_fsynth_adjustment_info(struct snd_kcontrol *kcontrol,
++		struct snd_ctl_elem_info *uinfo)
++{
++	uinfo->type = SNDRV_CTL_ELEM_TYPE_INTEGER;
++	uinfo->count = 1;
++	uinfo->value.integer.min = -1000000;
++	uinfo->value.integer.max = 1000000;
++
++	return 0;
++}
++
++static int snd_stm_fsynth_adjustment_get(struct snd_kcontrol *kcontrol,
++		struct snd_ctl_elem_value *ucontrol)
++{
++	struct snd_stm_fsynth_channel *fsynth_channel =
++		snd_kcontrol_chip(kcontrol);
++
++	snd_stm_printd(1, "snd_stm_fsynth_adjustment_get(kcontrol=0x%p, "
++			"ucontrol=0x%p)\n", kcontrol, ucontrol);
++
++	if (snd_BUG_ON(!fsynth_channel))
++		return -EINVAL;
++	if (snd_BUG_ON(!snd_stm_magic_valid(fsynth_channel)))
++		return -EINVAL;
++	if (snd_BUG_ON(!fsynth_channel->fsynth))
++		return -EINVAL;
++	if (snd_BUG_ON(!snd_stm_magic_valid(fsynth_channel->fsynth)))
++		return -EINVAL;
++
++	ucontrol->value.integer.value[0] = fsynth_channel->adjustment;
++
++	return 0;
++}
++
++static int snd_stm_fsynth_adjustment_put(struct snd_kcontrol *kcontrol,
++		struct snd_ctl_elem_value *ucontrol)
++{
++	struct snd_stm_fsynth_channel *fsynth_channel =
++		snd_kcontrol_chip(kcontrol);
++	struct snd_stm_fsynth *fsynth;
++	int channel;
++	int old_adjustement;
++
++	snd_stm_printd(1, "snd_stm_fsynth_clock_adjustment_put(kcontrol=0x%p,"
++			" ucontrol=0x%p)\n", kcontrol, ucontrol);
++
++	if (snd_BUG_ON(!fsynth_channel))
++		return -EINVAL;
++	if (snd_BUG_ON(!snd_stm_magic_valid(fsynth_channel)))
++		return -EINVAL;
++
++	fsynth = fsynth_channel->fsynth;
++
++	if (snd_BUG_ON(!fsynth))
++		return -EINVAL;
++	if (snd_BUG_ON(!snd_stm_magic_valid(fsynth)))
++		return -EINVAL;
++
++	channel = fsynth_channel - fsynth_channel->fsynth->channels;
++	old_adjustement = fsynth_channel->adjustment;
++
++	/* If the synthesizer hasn't been configured yet... */
++	if (fsynth_channel->frequency == 0)
++		fsynth_channel->adjustment = ucontrol->value.integer.value[0];
++	else if (snd_stm_fsynth_channel_configure(fsynth, channel,
++			fsynth_channel->frequency,
++			ucontrol->value.integer.value[0]) < 0)
++		return -EINVAL;
++
++	return old_adjustement != fsynth_channel->adjustment;
++}
++
++static struct snd_kcontrol_new snd_stm_fsynth_adjustment_ctl = {
++	.iface = SNDRV_CTL_ELEM_IFACE_PCM,
++	.name = "PCM Playback Oversampling Freq. Adjustment",
++	.info = snd_stm_fsynth_adjustment_info,
++	.get = snd_stm_fsynth_adjustment_get,
++	.put = snd_stm_fsynth_adjustment_put,
++};
++
++
++
++/*
++ * Audio frequency synthesizer public interface implementation
++ */
++static int snd_stm_fsynth_bus_id_match(struct device *device, void *bus_id)
++{
++	return strcmp(dev_name(device), bus_id) == 0;
++}
++
++struct snd_stm_fsynth_channel *snd_stm_fsynth_get_channel(const char *bus_id,
++		int output)
++{
++	struct device *device;
++
++	snd_stm_printd(1, "snd_stm_fsynth_get_channel(bus_id='%s', output=%d)"
++			"\n", bus_id, output);
++
++	device = bus_find_device(&platform_bus_type, NULL, (void *)bus_id,
++			snd_stm_fsynth_bus_id_match);
++	if (device) {
++		struct snd_stm_fsynth *fsynth = dev_get_drvdata(device);
++
++		if (snd_BUG_ON(!snd_stm_magic_valid(fsynth)))
++			return NULL;
++		if (snd_BUG_ON((output < fsynth->channels_from) ||
++			       (output > fsynth->channels_to)))
++		    return NULL;
++
++		return &fsynth->channels[output];
++	}
++
++	snd_stm_printe("Can't find '%s' frequency synthesizer "
++			"device!\n", bus_id);
++
++	return NULL;
++}
++
++int snd_stm_fsynth_set_frequency(struct snd_stm_fsynth_channel *fsynth_channel,
++		int frequency)
++{
++	snd_stm_printd(1, "snd_stm_fsynth_set_frequency(fsynth_channel=%p, "
++			"frequency=%d)\n", fsynth_channel, frequency);
++
++	if (snd_BUG_ON(!fsynth_channel))
++		return -EINVAL;
++	if (snd_BUG_ON(!snd_stm_magic_valid(fsynth_channel)))
++		return -EINVAL;
++	if (snd_BUG_ON(!fsynth_channel->fsynth))
++		return -EINVAL;
++	if (snd_BUG_ON(!snd_stm_magic_valid(fsynth_channel->fsynth)))
++		return -EINVAL;
++
++	return snd_stm_fsynth_channel_configure(fsynth_channel->fsynth,
++			fsynth_channel - fsynth_channel->fsynth->channels,
++			frequency, fsynth_channel->adjustment);
++}
++
++int snd_stm_fsynth_add_adjustement_ctl(
++		struct snd_stm_fsynth_channel *fsynth_channel,
++		struct snd_card *card, int card_device)
++{
++	int result;
++
++	snd_stm_printd(1, "snd_stm_fsynth_add_control(fsynth_channel=%p, "
++			"card=%p, card_device=%d)\n", fsynth_channel,
++			card, card_device);
++
++	if (snd_BUG_ON(!fsynth_channel))
++		return -EINVAL;
++	if (snd_BUG_ON(!snd_stm_magic_valid(fsynth_channel)))
++		return -EINVAL;
++
++	snd_stm_fsynth_adjustment_ctl.device = card_device;
++	result = snd_ctl_add(card, snd_ctl_new1(&snd_stm_fsynth_adjustment_ctl,
++			fsynth_channel));
++	snd_stm_fsynth_adjustment_ctl.index++;
++
++	return result;
++}
++
++
++
++/*
++ * ALSA lowlevel device implementation
++ */
++
++#define DUMP_REGISTER(r, n) \
++		snd_iprintf(buffer, "AUDCFG_FSYN%d_%s (offset 0x%02x) " \
++				"= 0x%08x\n", n, __stringify(r), \
++				offset__AUDCFG_FSYN_##r(fsynth, n), \
++				get__AUDCFG_FSYN_##r(fsynth, n))
++
++static void snd_stm_fsynth_dump_registers(struct snd_info_entry *entry,
++		struct snd_info_buffer *buffer)
++{
++	struct snd_stm_fsynth *fsynth = entry->private_data;
++	int i;
++
++	if (snd_BUG_ON(!fsynth))
++		return;
++	if (snd_BUG_ON(!snd_stm_magic_valid(fsynth)))
++		return;
++
++	snd_iprintf(buffer, "--- %s ---\n", fsynth->bus_id);
++	snd_iprintf(buffer, "base = 0x%p\n", fsynth->base);
++
++	snd_iprintf(buffer, "AUDCFG_FSYN_CFG (offset 0x00) = 0x%08x\n",
++			get__AUDCFG_FSYN_CFG(fsynth));
++
++	for (i = 0; i < fsynth->channels_max; i++) {
++		DUMP_REGISTER(MD, i);
++		DUMP_REGISTER(PE, i);
++		DUMP_REGISTER(SDIV, i);
++		DUMP_REGISTER(PROGEN, i);
++	}
++
++	snd_iprintf(buffer, "\n");
++}
++
++static int snd_stm_fsynth_register(struct snd_device *snd_device)
++{
++	struct snd_stm_fsynth *fsynth = snd_device->device_data;
++	unsigned long value = 0;
++	int i;
++
++	if (snd_BUG_ON(!fsynth))
++		return -EINVAL;
++	if (snd_BUG_ON(!snd_stm_magic_valid(fsynth)))
++		return -EINVAL;
++
++	snd_stm_printd(0, "--- Registering frequency synthesizer '%s'...\n",
++			fsynth->bus_id);
++
++	/* Initialize & reset synthesizer */
++
++	value |= mask__AUDCFG_FSYN_CFG__RSTP__RESET(fsynth);
++	for (i = fsynth->channels_from; i <= fsynth->channels_to; i++) {
++		snd_stm_printd(0, "Enabling synthesizer '%s' channel %d\n",
++				fsynth->bus_id, i);
++		value |= mask__AUDCFG_FSYN_CFG__PCM_CLK_SEL__FSYNTH(fsynth, i);
++		if (fsynth->ver != ver__AUDCFG_FSYN__65_2_1_2 &&
++				fsynth->ver != ver__AUDCFG_FSYN__65_3_3)
++			value |= mask__AUDCFG_FSYN_CFG__FS_EN__ENABLED(fsynth,
++					i);
++		value |= mask__AUDCFG_FSYN_CFG__NSB__ACTIVE(fsynth, i);
++	}
++	value |= mask__AUDCFG_FSYN_CFG__NPDA__NORMAL(fsynth);
++	value |= mask__AUDCFG_FSYN_CFG__NDIV__27_30_MHZ(fsynth);
++	value |= mask__AUDCFG_FSYN_CFG__BW_SEL__GOOD_REFERENCE(fsynth);
++	value |= mask__AUDCFG_FSYN_CFG__REF_CLK_IN__30_MHZ_CLOCK(fsynth);
++
++	set__AUDCFG_FSYN_CFG(fsynth, value);
++	barrier();
++
++	/* Unreset ;-) it now */
++
++	set__AUDCFG_FSYN_CFG__RSTP__RUNNING(fsynth);
++
++	/* Additional procfs info */
++
++	snd_stm_info_register(&fsynth->proc_entry, fsynth->bus_id,
++			snd_stm_fsynth_dump_registers, fsynth);
++
++	snd_stm_printd(0, "--- Registered successfully!\n");
++
++	return 0;
++}
++
++static int snd_stm_fsynth_disconnect(struct snd_device *snd_device)
++{
++	struct snd_stm_fsynth *fsynth = snd_device->device_data;
++	unsigned long value = 0;
++	int i;
++
++	if (snd_BUG_ON(!fsynth))
++		return -EINVAL;
++	if (snd_BUG_ON(!snd_stm_magic_valid(fsynth)))
++		return -EINVAL;
++
++	/* Remove procfs entry */
++
++	snd_stm_info_unregister(fsynth->proc_entry);
++
++	/* Disable synthesizer */
++
++	value |= mask__AUDCFG_FSYN_CFG__RSTP__RESET(fsynth);
++	for (i = fsynth->channels_from; i <= fsynth->channels_to; i++) {
++		if (fsynth->ver != ver__AUDCFG_FSYN__65_2_1_2 &&
++				fsynth->ver != ver__AUDCFG_FSYN__65_3_3)
++			value |= mask__AUDCFG_FSYN_CFG__FS_EN__DISABLED(fsynth,
++					i);
++		value |= mask__AUDCFG_FSYN_CFG__NSB__STANDBY(fsynth, i);
++	}
++	value |= mask__AUDCFG_FSYN_CFG__NPDA__POWER_DOWN(fsynth);
++
++	set__AUDCFG_FSYN_CFG(fsynth, value);
++
++	return 0;
++}
++
++static struct snd_device_ops snd_stm_fsynth_snd_device_ops = {
++	.dev_register = snd_stm_fsynth_register,
++	.dev_disconnect = snd_stm_fsynth_disconnect,
++};
++
++
++
++/*
++ * Platform driver routines
++ */
++
++static int snd_stm_fsynth_probe(struct platform_device *pdev)
++{
++	int result = 0;
++	struct snd_stm_fsynth_info *fsynth_info = pdev->dev.platform_data;
++	struct snd_stm_fsynth *fsynth;
++	int channels_max;
++	int i;
++
++	snd_stm_printd(0, "--- Probing device '%s'...\n", dev_name(&pdev->dev));
++
++	if (snd_BUG_ON(fsynth_info == NULL))
++		return -EINVAL;
++
++	if (fsynth_info->ver < ver__AUDCFG_FSYN__65_2_1_2)
++		channels_max = 3;
++	else
++		channels_max = 4;
++
++	fsynth = kzalloc(sizeof(*fsynth) + (channels_max *
++			sizeof(*fsynth->channels)), GFP_KERNEL);
++	if (!fsynth) {
++		snd_stm_printe("Can't allocate memory "
++				"for a device description!\n");
++		result = -ENOMEM;
++		goto error_alloc;
++	}
++	snd_stm_magic_set(fsynth);
++	fsynth->ver = fsynth_info->ver;
++	if (snd_BUG_ON(fsynth->ver <= 0))
++		return -EINVAL;
++	fsynth->bus_id = dev_name(&pdev->dev);
++	fsynth->channels_max = channels_max;
++	fsynth->channels = (void *)fsynth + sizeof(*fsynth);
++	for (i = 0; i < channels_max; i++) {
++		fsynth->channels[i].fsynth = fsynth;
++		snd_stm_magic_set(&fsynth->channels[i]);
++	}
++
++	result = snd_stm_memory_request(pdev, &fsynth->mem_region,
++			&fsynth->base);
++	if (result < 0) {
++		snd_stm_printe("Memory region request failed!\n");
++		goto error_memory_request;
++	}
++
++	fsynth->channels_from = fsynth_info->channels_from;
++	fsynth->channels_to = fsynth_info->channels_to;
++	if (snd_BUG_ON((fsynth->channels_from >= fsynth->channels_to) ||
++		       (fsynth->channels_from < 0) ||
++		       (fsynth->channels_to >= channels_max)))
++		return -EINVAL;
++
++	snd_stm_printd(0, "Used synthesizer channels: %d to %d\n",
++			fsynth->channels_from, fsynth->channels_to);
++
++	/* ALSA component */
++
++	result = snd_device_new(snd_stm_card_get(), SNDRV_DEV_LOWLEVEL, fsynth,
++			&snd_stm_fsynth_snd_device_ops);
++	if (result < 0) {
++		snd_stm_printe("ALSA low level device creation failed!\n");
++		goto error_device;
++	}
++
++	/* Done now */
++
++	platform_set_drvdata(pdev, fsynth);
++
++	snd_stm_printd(0, "--- Probed successfully!\n");
++
++	return result;
++
++error_device:
++	snd_stm_memory_release(fsynth->mem_region, fsynth->base);
++error_memory_request:
++	snd_stm_magic_clear(fsynth);
++	kfree(fsynth);
++error_alloc:
++	return result;
++}
++
++static int snd_stm_fsynth_remove(struct platform_device *pdev)
++{
++	struct snd_stm_fsynth *fsynth = platform_get_drvdata(pdev);
++	int i;
++
++	if (snd_BUG_ON(!fsynth))
++		return -EINVAL;
++	if (snd_BUG_ON(!snd_stm_magic_valid(fsynth)))
++		return -EINVAL;
++
++	snd_stm_memory_release(fsynth->mem_region, fsynth->base);
++
++	for (i = 0; i < fsynth->channels_max; i++) {
++		fsynth->channels[i].fsynth = fsynth;
++		snd_stm_magic_clear(&fsynth->channels[i]);
++	}
++	snd_stm_magic_clear(fsynth);
++	kfree(fsynth);
++
++	return 0;
++}
++
++static struct platform_driver snd_stm_fsynth_driver = {
++	.driver = {
++		.name = "snd_fsynth",
++	},
++	.probe = snd_stm_fsynth_probe,
++	.remove = snd_stm_fsynth_remove,
++};
++
++
++
++/*
++ * Initialization
++ */
++
++int snd_stm_fsynth_init(void)
++{
++	return platform_driver_register(&snd_stm_fsynth_driver);
++}
++
++void snd_stm_fsynth_exit(void)
++{
++	platform_driver_unregister(&snd_stm_fsynth_driver);
++}
+diff -Nur /dev/null ./sound/stm/init.c
+--- a/dev/null
++++ b/sound/stm/init.c
+@@ -0,0 +1,139 @@
++/*
++ *   STMicrolectronics System-on-Chips' audio subsystem core driver
++ *
++ *   Copyright (c) 2005-2007 STMicroelectronics Limited
++ *
++ *   Author: Pawel Moll <pawel.moll@st.com>
++ *
++ *   This program is free software; you can redistribute it and/or modify
++ *   it under the terms of the GNU General Public License as published by
++ *   the Free Software Foundation; either version 2 of the License, or
++ *   (at your option) any later version.
++ *
++ *   This program is distributed in the hope that it will be useful,
++ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *   GNU General Public License for more details.
++ *
++ *   You should have received a copy of the GNU General Public License
++ *   along with this program; if not, write to the Free Software
++ *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
++ *
++ */
++
++#include <linux/init.h>
++#include <linux/module.h>
++#include <sound/core.h>
++
++#define COMPONENT init
++#include "common.h"
++
++/* General debug level */
++#if defined(CONFIG_SND_STM_DEBUG_LEVEL)
++static int debug = CONFIG_SND_STM_DEBUG_LEVEL;
++module_param(debug, int, S_IRUGO | S_IWUSR);
++int *snd_stm_debug_level = &debug;
++EXPORT_SYMBOL(snd_stm_debug_level);
++#endif
++
++int snd_stm_drivers_register(void)
++{
++	int result;
++
++	snd_stm_printd(0, "snd_stm_core_init()\n");
++
++	result = snd_stm_info_create();
++	if (result != 0) {
++		snd_stm_printe("Procfs info creation failed!\n");
++		goto error_info;
++	}
++	result = snd_stm_fsynth_init();
++	if (result != 0) {
++		snd_stm_printe("Frequency synthesizer driver initialization"
++				" failed!\n");
++		goto error_fsynth;
++	}
++	result = snd_stm_conv_init();
++	if (result != 0) {
++		snd_stm_printe("Converters infrastructure initialization"
++				" failed!\n");
++		goto error_conv;
++	}
++	result = snd_stm_conv_int_dac_init();
++	if (result != 0) {
++		snd_stm_printe("Internal DACs driver initialization failed!\n");
++		goto error_conv_int_dac;
++	}
++	result = snd_stm_conv_i2sspdif_init();
++	if (result != 0) {
++		snd_stm_printe("I2S to SPDIF converter driver initialization"
++				" failed!\n");
++		goto error_conv_i2sspdif;
++	}
++	result = snd_stm_pcm_player_init();
++	if (result != 0) {
++		snd_stm_printe("PCM player driver initialization failed!\n");
++		goto error_pcm_player;
++	}
++	result = snd_stm_pcm_reader_init();
++	if (result != 0) {
++		snd_stm_printe("PCM reader driver initialization failed!\n");
++		goto error_pcm_reader;
++	}
++	result = snd_stm_spdif_player_init();
++	if (result != 0) {
++		snd_stm_printe("SPDIF player driver initialization failed!\n");
++		goto error_spdif_player;
++	}
++
++	return result;
++
++error_spdif_player:
++	snd_stm_pcm_reader_exit();
++error_pcm_reader:
++	snd_stm_pcm_player_exit();
++error_pcm_player:
++	snd_stm_conv_i2sspdif_exit();
++error_conv_i2sspdif:
++	snd_stm_conv_int_dac_exit();
++error_conv_int_dac:
++	snd_stm_conv_exit();
++error_conv:
++	snd_stm_fsynth_exit();
++error_fsynth:
++	snd_stm_info_dispose();
++error_info:
++	return result;
++}
++
++void snd_stm_drivers_unregister(void)
++{
++	snd_stm_printd(0, "snd_stm_core_exit()\n");
++
++	snd_stm_spdif_player_exit();
++	snd_stm_pcm_reader_exit();
++	snd_stm_pcm_player_exit();
++	snd_stm_conv_i2sspdif_exit();
++	snd_stm_conv_int_dac_exit();
++	snd_stm_conv_exit();
++	snd_stm_fsynth_exit();
++	snd_stm_info_dispose();
++}
++
++
++
++static int __init snd_stm_init(void)
++{
++	return 0;
++}
++
++static void __exit snd_stm_exit(void)
++{
++}
++
++MODULE_AUTHOR("Pawel Moll <pawel.moll@st.com>");
++MODULE_DESCRIPTION("STMicroelectronics System-on-Chips' audio core driver");
++MODULE_LICENSE("GPL");
++
++module_init(snd_stm_init)
++module_exit(snd_stm_exit)
+diff -Nur /dev/null ./sound/stm/reg_7105_audcfg.h
+--- a/dev/null	2014-05-29 17:15:53.871772965 +0200
++++ b/sound/stm/reg_7105_audcfg.h	2012-10-11 20:46:27.000000000 +0200
+@@ -0,0 +1,154 @@
++#ifndef __SND_STM_7105_AUDCFG_H
++#define __SND_STM_7105_AUDCFG_H
++
++
++
++/*
++ * 7105_AUDCFG_IO_CTRL
++ */
++
++#define offset__7105_AUDCFG_IO_CTRL(ip) 0x00
++#define get__7105_AUDCFG_IO_CTRL(ip) readl(ip->base + \
++	offset__7105_AUDCFG_IO_CTRL(ip))
++#define set__7105_AUDCFG_IO_CTRL(ip, value) writel(value, ip->base + \
++	offset__7105_AUDCFG_IO_CTRL(ip))
++
++/* PCM_CLK_EN */
++
++#define shift__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip) 0
++#define mask__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip) 0x1
++#define get__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip) ((readl(ip->base + \
++	offset__7105_AUDCFG_IO_CTRL(ip)) >> \
++	shift__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip)) & \
++	mask__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip))
++#define set__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip, value) \
++	writel((readl(ip->base + offset__7105_AUDCFG_IO_CTRL(ip)) & \
++	~(mask__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip) << \
++	shift__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip))) | (((value) & \
++	mask__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip)) << \
++	shift__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip)), ip->base + \
++	offset__7105_AUDCFG_IO_CTRL(ip))
++
++#define value__7105_AUDCFG_IO_CTRL__PCM_CLK_EN__INPUT(ip) 0x0
++#define mask__7105_AUDCFG_IO_CTRL__PCM_CLK_EN__INPUT(ip) \
++	(value__7105_AUDCFG_IO_CTRL__PCM_CLK_EN__INPUT(ip) << \
++	shift__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip))
++#define set__7105_AUDCFG_IO_CTRL__PCM_CLK_EN__INPUT(ip) \
++	set__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip, \
++	value__7105_AUDCFG_IO_CTRL__PCM_CLK_EN__INPUT(ip))
++
++#define value__7105_AUDCFG_IO_CTRL__PCM_CLK_EN__OUTPUT(ip) 0x1
++#define mask__7105_AUDCFG_IO_CTRL__PCM_CLK_EN__OUTPUT(ip) \
++	(value__7105_AUDCFG_IO_CTRL__PCM_CLK_EN__OUTPUT(ip) << \
++	shift__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip))
++#define set__7105_AUDCFG_IO_CTRL__PCM_CLK_EN__OUTPUT(ip) \
++	set__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip, \
++	value__7105_AUDCFG_IO_CTRL__PCM_CLK_EN__OUTPUT(ip))
++
++/* SPDIFHDMI_EN */
++
++#define shift__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip) 3
++#define mask__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip) 0x1
++#define get__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip) ((readl(ip->base + \
++	offset__7105_AUDCFG_IO_CTRL(ip)) >> \
++	shift__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip)) & \
++	mask__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip))
++#define set__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip, value) \
++	writel((readl(ip->base + offset__7105_AUDCFG_IO_CTRL(ip)) & \
++	~(mask__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip) << \
++	shift__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip))) | (((value) & \
++	mask__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip)) << \
++	shift__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip)), ip->base + \
++	offset__7105_AUDCFG_IO_CTRL(ip))
++
++#define value__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN__INPUT(ip) 0x0
++#define mask__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN__INPUT(ip) \
++	(value__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN__INPUT(ip) << \
++	shift__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip))
++#define set__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN__INPUT(ip) \
++	set__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip, \
++	value__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN__INPUT(ip))
++
++#define value__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN__OUTPUT(ip) 0x1
++#define mask__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN__OUTPUT(ip) \
++	(value__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN__OUTPUT(ip) << \
++	shift__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip))
++#define set__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN__OUTPUT(ip) \
++	set__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip, \
++	value__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN__OUTPUT(ip))
++
++/* PCMPLHDMI_EN */
++
++#define shift__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip) 5
++#define mask__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip) 0x1
++#define get__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip) ((readl(ip->base + \
++	offset__7105_AUDCFG_IO_CTRL(ip)) >> \
++	shift__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip)) & \
++	mask__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip))
++#define set__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip, value) \
++	writel((readl(ip->base + offset__7105_AUDCFG_IO_CTRL(ip)) & \
++	~(mask__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip) << \
++	shift__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip))) | (((value) & \
++	mask__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip)) << \
++	shift__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip)), ip->base + \
++	offset__7105_AUDCFG_IO_CTRL(ip))
++
++#define value__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN__INPUT(ip) 0x0
++#define mask__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN__INPUT(ip) \
++	(value__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN__INPUT(ip) << \
++	shift__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip))
++#define set__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN__INPUT(ip) \
++	set__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip, \
++	value__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN__INPUT(ip))
++
++#define value__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN__OUTPUT(ip) 0x1
++#define mask__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN__OUTPUT(ip) \
++	(value__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN__OUTPUT(ip) << \
++	shift__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip))
++#define set__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN__OUTPUT(ip) \
++	set__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip, \
++	value__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN__OUTPUT(ip))
++
++/* CLKREC_SEL */
++
++#define shift__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip) 9
++#define mask__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip) 0x3
++#define get__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip) ((readl(ip->base + \
++	offset__7105_AUDCFG_IO_CTRL(ip)) >> \
++	shift__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip)) & \
++	mask__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip))
++#define set__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip, value) \
++	writel((readl(ip->base + offset__7105_AUDCFG_IO_CTRL(ip)) & \
++	~(mask__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip) << \
++	shift__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip))) | (((value) & \
++	mask__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip)) << \
++	shift__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip)), ip->base + \
++	offset__7105_AUDCFG_IO_CTRL(ip))
++
++#define value__7105_AUDCFG_IO_CTRL__CLKREC_SEL__PCMPLHDMI(ip) 0x0
++#define mask__7105_AUDCFG_IO_CTRL__CLKREC_SEL__PCMPLHDMI(ip) \
++	(value__7105_AUDCFG_IO_CTRL__CLKREC_SEL__PCMPLHDMI(ip) << \
++	shift__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip))
++#define set__7105_AUDCFG_IO_CTRL__CLKREC_SEL__PCMPLHDMI(ip) \
++	set__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip, \
++	value__7105_AUDCFG_IO_CTRL__CLKREC_SEL__PCMPLHDMI(ip))
++
++#define value__7105_AUDCFG_IO_CTRL__CLKREC_SEL__SPDIFHDMI(ip) 0x1
++#define mask__7105_AUDCFG_IO_CTRL__CLKREC_SEL__SPDIFHDMI(ip) \
++	(value__7105_AUDCFG_IO_CTRL__CLKREC_SEL__SPDIFHDMI(ip) << \
++	shift__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip))
++#define set__7105_AUDCFG_IO_CTRL__CLKREC_SEL__SPDIFHDMI(ip) \
++	set__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip, \
++	value__7105_AUDCFG_IO_CTRL__CLKREC_SEL__SPDIFHDMI(ip))
++
++#define value__7105_AUDCFG_IO_CTRL__CLKREC_SEL__PCMPL1(ip) 0x2
++#define mask__7105_AUDCFG_IO_CTRL__CLKREC_SEL__PCMPL1(ip) \
++	(value__7105_AUDCFG_IO_CTRL__CLKREC_SEL__PCMPL1(ip) << \
++	shift__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip))
++#define set__7105_AUDCFG_IO_CTRL__CLKREC_SEL__PCMPL1(ip) \
++	set__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip, \
++	value__7105_AUDCFG_IO_CTRL__CLKREC_SEL__PCMPL1(ip))
++
++
++
++#endif
+diff -Nur /dev/null ./sound/stm/reg_audcfg_adac.h
+--- a/dev/null	2014-05-29 17:15:53.871772965 +0200
++++ b/sound/stm/reg_audcfg_adac.h	2012-10-11 20:46:27.000000000 +0200
+@@ -0,0 +1,208 @@
++#ifndef __SND_STM_AUDCFG_ADAC_H
++#define __SND_STM_AUDCFG_ADAC_H
++
++/*
++ * IP versions
++ */
++
++/* 7100 2.0, 7100 3.0 */
++#define ver__AUDCFG_ADAC__90_1_0 1
++
++/* 7109 2.0, 7109 3.0 */
++#define ver__AUDCFG_ADAC__90_1_5_0 2
++
++/* 7200 1.0 */
++#define ver__AUDCFG_ADAC__65_3_0_0 3
++
++/* 7111, 7200 2.0 */
++#define ver__AUDCFG_ADAC__65_3_2_a 4
++
++
++
++/*
++ * AUDCFG_ADAC_CTRL
++ */
++
++#define offset__AUDCFG_ADAC_CTRL(ip) 0x00
++#define get__AUDCFG_ADAC_CTRL(ip) readl(ip->base + \
++	offset__AUDCFG_ADAC_CTRL(ip))
++#define set__AUDCFG_ADAC_CTRL(ip, value) writel(value, ip->base + \
++	offset__AUDCFG_ADAC_CTRL(ip))
++
++/* NRST */
++
++#define shift__AUDCFG_ADAC_CTRL__NRST(ip) 0
++#define mask__AUDCFG_ADAC_CTRL__NRST(ip) 0x1
++#define get__AUDCFG_ADAC_CTRL__NRST(ip) ((readl(ip->base + \
++	offset__AUDCFG_ADAC_CTRL(ip)) >> shift__AUDCFG_ADAC_CTRL__NRST(ip)) & \
++	mask__AUDCFG_ADAC_CTRL__NRST(ip))
++#define set__AUDCFG_ADAC_CTRL__NRST(ip, value) writel((readl(ip->base \
++	+ offset__AUDCFG_ADAC_CTRL(ip)) & ~(mask__AUDCFG_ADAC_CTRL__NRST(ip) \
++	<< shift__AUDCFG_ADAC_CTRL__NRST(ip))) | (((value) & \
++	mask__AUDCFG_ADAC_CTRL__NRST(ip)) << \
++	shift__AUDCFG_ADAC_CTRL__NRST(ip)), ip->base + \
++	offset__AUDCFG_ADAC_CTRL(ip))
++
++#define value__AUDCFG_ADAC_CTRL__NRST__RESET(ip) 0x0
++#define mask__AUDCFG_ADAC_CTRL__NRST__RESET(ip) \
++	(value__AUDCFG_ADAC_CTRL__NRST__RESET(ip) << \
++	shift__AUDCFG_ADAC_CTRL__NRST(ip))
++#define set__AUDCFG_ADAC_CTRL__NRST__RESET(ip) \
++	set__AUDCFG_ADAC_CTRL__NRST(ip, \
++	value__AUDCFG_ADAC_CTRL__NRST__RESET(ip))
++
++#define value__AUDCFG_ADAC_CTRL__NRST__NORMAL(ip) 0x1
++#define mask__AUDCFG_ADAC_CTRL__NRST__NORMAL(ip) \
++	(value__AUDCFG_ADAC_CTRL__NRST__NORMAL(ip) << \
++	shift__AUDCFG_ADAC_CTRL__NRST(ip))
++#define set__AUDCFG_ADAC_CTRL__NRST__NORMAL(ip) \
++	set__AUDCFG_ADAC_CTRL__NRST(ip, \
++	value__AUDCFG_ADAC_CTRL__NRST__NORMAL(ip))
++
++/* MODE */
++
++#define shift__AUDCFG_ADAC_CTRL__MODE(ip) 1
++#define mask__AUDCFG_ADAC_CTRL__MODE(ip) 0x3
++#define get__AUDCFG_ADAC_CTRL__MODE(ip) ((readl(ip->base + \
++	offset__AUDCFG_ADAC_CTRL(ip)) >> shift__AUDCFG_ADAC_CTRL__MODE(ip)) & \
++	mask__AUDCFG_ADAC_CTRL__MODE(ip))
++#define set__AUDCFG_ADAC_CTRL__MODE(ip, value) writel((readl(ip->base \
++	+ offset__AUDCFG_ADAC_CTRL(ip)) & ~(mask__AUDCFG_ADAC_CTRL__MODE(ip) \
++	<< shift__AUDCFG_ADAC_CTRL__MODE(ip))) | (((value) & \
++	mask__AUDCFG_ADAC_CTRL__MODE(ip)) << \
++	shift__AUDCFG_ADAC_CTRL__MODE(ip)), ip->base + \
++	offset__AUDCFG_ADAC_CTRL(ip))
++
++#define value__AUDCFG_ADAC_CTRL__MODE__DEFAULT(ip) 0x0
++#define mask__AUDCFG_ADAC_CTRL__MODE__DEFAULT(ip) \
++	(value__AUDCFG_ADAC_CTRL__MODE__DEFAULT(ip) << \
++	shift__AUDCFG_ADAC_CTRL__MODE(ip))
++#define set__AUDCFG_ADAC_CTRL__MODE__DEFAULT(ip) \
++	set__AUDCFG_ADAC_CTRL__MODE(ip, \
++	value__AUDCFG_ADAC_CTRL__MODE__DEFAULT(ip))
++
++/* NSB */
++
++#define shift__AUDCFG_ADAC_CTRL__NSB(ip) 3
++#define mask__AUDCFG_ADAC_CTRL__NSB(ip) 0x1
++#define get__AUDCFG_ADAC_CTRL__NSB(ip) ((readl(ip->base + \
++	offset__AUDCFG_ADAC_CTRL(ip)) >> shift__AUDCFG_ADAC_CTRL__NSB(ip)) & \
++	mask__AUDCFG_ADAC_CTRL__NSB(ip))
++#define set__AUDCFG_ADAC_CTRL__NSB(ip, value) writel((readl(ip->base + \
++	offset__AUDCFG_ADAC_CTRL(ip)) & ~(mask__AUDCFG_ADAC_CTRL__NSB(ip) << \
++	shift__AUDCFG_ADAC_CTRL__NSB(ip))) | (((value) & \
++	mask__AUDCFG_ADAC_CTRL__NSB(ip)) << shift__AUDCFG_ADAC_CTRL__NSB(ip)), \
++	ip->base + offset__AUDCFG_ADAC_CTRL(ip))
++
++#define value__AUDCFG_ADAC_CTRL__NSB__POWER_DOWN(ip) 0x0
++#define mask__AUDCFG_ADAC_CTRL__NSB__POWER_DOWN(ip) \
++	(value__AUDCFG_ADAC_CTRL__NSB__POWER_DOWN(ip) << \
++	shift__AUDCFG_ADAC_CTRL__NSB(ip))
++#define set__AUDCFG_ADAC_CTRL__NSB__POWER_DOWN(ip) \
++	set__AUDCFG_ADAC_CTRL__NSB(ip, \
++	value__AUDCFG_ADAC_CTRL__NSB__POWER_DOWN(ip))
++
++#define value__AUDCFG_ADAC_CTRL__NSB__NORMAL(ip) 0x1
++#define mask__AUDCFG_ADAC_CTRL__NSB__NORMAL(ip) \
++	(value__AUDCFG_ADAC_CTRL__NSB__NORMAL(ip) << \
++	shift__AUDCFG_ADAC_CTRL__NSB(ip))
++#define set__AUDCFG_ADAC_CTRL__NSB__NORMAL(ip) \
++	set__AUDCFG_ADAC_CTRL__NSB(ip, \
++	value__AUDCFG_ADAC_CTRL__NSB__NORMAL(ip))
++
++/* SOFTMUTE */
++
++#define shift__AUDCFG_ADAC_CTRL__SOFTMUTE(ip) 4
++#define mask__AUDCFG_ADAC_CTRL__SOFTMUTE(ip) 0x1
++#define get__AUDCFG_ADAC_CTRL__SOFTMUTE(ip) ((readl(ip->base + \
++	offset__AUDCFG_ADAC_CTRL(ip)) >> \
++	shift__AUDCFG_ADAC_CTRL__SOFTMUTE(ip)) & \
++	mask__AUDCFG_ADAC_CTRL__SOFTMUTE(ip))
++#define set__AUDCFG_ADAC_CTRL__SOFTMUTE(ip, value) \
++	writel((readl(ip->base + offset__AUDCFG_ADAC_CTRL(ip)) & \
++	~(mask__AUDCFG_ADAC_CTRL__SOFTMUTE(ip) << \
++	shift__AUDCFG_ADAC_CTRL__SOFTMUTE(ip))) | (((value) & \
++	mask__AUDCFG_ADAC_CTRL__SOFTMUTE(ip)) << \
++	shift__AUDCFG_ADAC_CTRL__SOFTMUTE(ip)), ip->base + \
++	offset__AUDCFG_ADAC_CTRL(ip))
++
++#define value__AUDCFG_ADAC_CTRL__SOFTMUTE__NORMAL(ip) 0x0
++#define mask__AUDCFG_ADAC_CTRL__SOFTMUTE__NORMAL(ip) \
++	(value__AUDCFG_ADAC_CTRL__SOFTMUTE__NORMAL(ip) << \
++	shift__AUDCFG_ADAC_CTRL__SOFTMUTE(ip))
++#define set__AUDCFG_ADAC_CTRL__SOFTMUTE__NORMAL(ip) \
++	set__AUDCFG_ADAC_CTRL__SOFTMUTE(ip, \
++	value__AUDCFG_ADAC_CTRL__SOFTMUTE__NORMAL(ip))
++
++#define value__AUDCFG_ADAC_CTRL__SOFTMUTE__MUTE(ip) 0x1
++#define mask__AUDCFG_ADAC_CTRL__SOFTMUTE__MUTE(ip) \
++	(value__AUDCFG_ADAC_CTRL__SOFTMUTE__MUTE(ip) << \
++	shift__AUDCFG_ADAC_CTRL__SOFTMUTE(ip))
++#define set__AUDCFG_ADAC_CTRL__SOFTMUTE__MUTE(ip) \
++	set__AUDCFG_ADAC_CTRL__SOFTMUTE(ip, \
++	value__AUDCFG_ADAC_CTRL__SOFTMUTE__MUTE(ip))
++
++/* PDNANA */
++
++#define shift__AUDCFG_ADAC_CTRL__PDNANA(ip) 5
++#define mask__AUDCFG_ADAC_CTRL__PDNANA(ip) 0x1
++#define get__AUDCFG_ADAC_CTRL__PDNANA(ip) ((readl(ip->base + \
++	offset__AUDCFG_ADAC_CTRL(ip)) >> shift__AUDCFG_ADAC_CTRL__PDNANA(ip)) \
++	& mask__AUDCFG_ADAC_CTRL__PDNANA(ip))
++#define set__AUDCFG_ADAC_CTRL__PDNANA(ip, value) \
++	writel((readl(ip->base + offset__AUDCFG_ADAC_CTRL(ip)) & \
++	~(mask__AUDCFG_ADAC_CTRL__PDNANA(ip) << \
++	shift__AUDCFG_ADAC_CTRL__PDNANA(ip))) | (((value) & \
++	mask__AUDCFG_ADAC_CTRL__PDNANA(ip)) << \
++	shift__AUDCFG_ADAC_CTRL__PDNANA(ip)), ip->base + \
++	offset__AUDCFG_ADAC_CTRL(ip))
++
++#define value__AUDCFG_ADAC_CTRL__PDNANA__POWER_DOWN(ip) 0x0
++#define mask__AUDCFG_ADAC_CTRL__PDNANA__POWER_DOWN(ip) \
++	(value__AUDCFG_ADAC_CTRL__PDNANA__POWER_DOWN(ip) << \
++	shift__AUDCFG_ADAC_CTRL__PDNANA(ip))
++#define set__AUDCFG_ADAC_CTRL__PDNANA__POWER_DOWN(ip) \
++	set__AUDCFG_ADAC_CTRL__PDNANA(ip, \
++	value__AUDCFG_ADAC_CTRL__PDNANA__POWER_DOWN(ip))
++
++#define value__AUDCFG_ADAC_CTRL__PDNANA__NORMAL(ip) 0x1
++#define mask__AUDCFG_ADAC_CTRL__PDNANA__NORMAL(ip) \
++	(value__AUDCFG_ADAC_CTRL__PDNANA__NORMAL(ip) << \
++	shift__AUDCFG_ADAC_CTRL__PDNANA(ip))
++#define set__AUDCFG_ADAC_CTRL__PDNANA__NORMAL(ip) \
++	set__AUDCFG_ADAC_CTRL__PDNANA(ip, \
++	value__AUDCFG_ADAC_CTRL__PDNANA__NORMAL(ip))
++
++/* PDNBG */
++
++#define shift__AUDCFG_ADAC_CTRL__PDNBG(ip) 6
++#define mask__AUDCFG_ADAC_CTRL__PDNBG(ip) 0x1
++#define get__AUDCFG_ADAC_CTRL__PDNBG(ip) ((readl(ip->base + \
++	offset__AUDCFG_ADAC_CTRL(ip)) >> shift__AUDCFG_ADAC_CTRL__PDNBG(ip)) & \
++	mask__AUDCFG_ADAC_CTRL__PDNBG(ip))
++#define set__AUDCFG_ADAC_CTRL__PDNBG(ip, value) writel((readl(ip->base \
++	+ offset__AUDCFG_ADAC_CTRL(ip)) & ~(mask__AUDCFG_ADAC_CTRL__PDNBG(ip) \
++	<< shift__AUDCFG_ADAC_CTRL__PDNBG(ip))) | (((value) & \
++	mask__AUDCFG_ADAC_CTRL__PDNBG(ip)) << \
++	shift__AUDCFG_ADAC_CTRL__PDNBG(ip)), ip->base + \
++	offset__AUDCFG_ADAC_CTRL(ip))
++
++#define value__AUDCFG_ADAC_CTRL__PDNBG__POWER_DOWN(ip) 0x0
++#define mask__AUDCFG_ADAC_CTRL__PDNBG__POWER_DOWN(ip) \
++	(value__AUDCFG_ADAC_CTRL__PDNBG__POWER_DOWN(ip) << \
++	shift__AUDCFG_ADAC_CTRL__PDNBG(ip))
++#define set__AUDCFG_ADAC_CTRL__PDNBG__POWER_DOWN(ip) \
++	set__AUDCFG_ADAC_CTRL__PDNBG(ip, \
++	value__AUDCFG_ADAC_CTRL__PDNBG__POWER_DOWN(ip))
++
++#define value__AUDCFG_ADAC_CTRL__PDNBG__NORMAL(ip) 0x1
++#define mask__AUDCFG_ADAC_CTRL__PDNBG__NORMAL(ip) \
++	(value__AUDCFG_ADAC_CTRL__PDNBG__NORMAL(ip) << \
++	shift__AUDCFG_ADAC_CTRL__PDNBG(ip))
++#define set__AUDCFG_ADAC_CTRL__PDNBG__NORMAL(ip) \
++	set__AUDCFG_ADAC_CTRL__PDNBG(ip, \
++	value__AUDCFG_ADAC_CTRL__PDNBG__NORMAL(ip))
++
++
++
++#endif
+diff -Nur /dev/null ./sound/stm/reg_audcfg_fsyn.h
+--- a/dev/null	2014-05-29 17:15:53.871772965 +0200
++++ b/sound/stm/reg_audcfg_fsyn.h	2012-10-11 20:46:27.000000000 +0200
+@@ -0,0 +1,448 @@
++#ifndef __SND_STM_AUDCFG_FSYN_H
++#define __SND_STM_AUDCFG_FSYN_H
++
++/*
++ * IP versions
++ */
++
++/* 7100 2.0, 7100 3.0 */
++#define ver__AUDCFG_FSYN__90_1_0_3 1
++
++/* 7109 2.0, 7109 3.0 */
++#define ver__AUDCFG_FSYN__90_2_3 2
++
++/* 7200 1.0 */
++#define ver__AUDCFG_FSYN__65_2_1_2 3
++
++/* 7111 */
++#define ver__AUDCFG_FSYN__65_3_1 4
++
++/* 7200 2.0 */
++#define ver__AUDCFG_FSYN__65_3_3 5
++
++
++
++/*
++ * AUDCFG_FSYN_CFG
++ */
++
++#define offset__AUDCFG_FSYN_CFG(ip) 0x00
++#define get__AUDCFG_FSYN_CFG(ip) readl(ip->base + \
++	offset__AUDCFG_FSYN_CFG(ip))
++#define set__AUDCFG_FSYN_CFG(ip, value) writel(value, ip->base + \
++	offset__AUDCFG_FSYN_CFG(ip))
++
++/* RSTP */
++
++#define shift__AUDCFG_FSYN_CFG__RSTP(ip) 0
++#define mask__AUDCFG_FSYN_CFG__RSTP(ip) 0x1
++#define get__AUDCFG_FSYN_CFG__RSTP(ip) ((readl(ip->base + \
++	offset__AUDCFG_FSYN_CFG(ip)) >> shift__AUDCFG_FSYN_CFG__RSTP(ip)) & \
++	mask__AUDCFG_FSYN_CFG__RSTP(ip))
++#define set__AUDCFG_FSYN_CFG__RSTP(ip, value) writel((readl(ip->base + \
++	offset__AUDCFG_FSYN_CFG(ip)) & ~(mask__AUDCFG_FSYN_CFG__RSTP(ip) << \
++	shift__AUDCFG_FSYN_CFG__RSTP(ip))) | (((value) & \
++	mask__AUDCFG_FSYN_CFG__RSTP(ip)) << shift__AUDCFG_FSYN_CFG__RSTP(ip)), \
++	ip->base + offset__AUDCFG_FSYN_CFG(ip))
++
++#define value__AUDCFG_FSYN_CFG__RSTP__RUNNING(ip) 0x0
++#define mask__AUDCFG_FSYN_CFG__RSTP__RUNNING(ip) \
++	(value__AUDCFG_FSYN_CFG__RSTP__RUNNING(ip) << \
++	shift__AUDCFG_FSYN_CFG__RSTP(ip))
++#define set__AUDCFG_FSYN_CFG__RSTP__RUNNING(ip) \
++	set__AUDCFG_FSYN_CFG__RSTP(ip, \
++	value__AUDCFG_FSYN_CFG__RSTP__RUNNING(ip))
++
++#define value__AUDCFG_FSYN_CFG__RSTP__RESET(ip) 0x1
++#define mask__AUDCFG_FSYN_CFG__RSTP__RESET(ip) \
++	(value__AUDCFG_FSYN_CFG__RSTP__RESET(ip) << \
++	shift__AUDCFG_FSYN_CFG__RSTP(ip))
++#define set__AUDCFG_FSYN_CFG__RSTP__RESET(ip) \
++	set__AUDCFG_FSYN_CFG__RSTP(ip, \
++	value__AUDCFG_FSYN_CFG__RSTP__RESET(ip))
++
++/* PCM_CLK_SEL */
++
++#define shift__AUDCFG_FSYN_CFG__PCM_CLK_SEL(ip) 2
++#define mask__AUDCFG_FSYN_CFG__PCM_CLK_SEL(ip) 0xf
++#define get__AUDCFG_FSYN_CFG__PCM_CLK_SEL(ip) ((readl(ip->base + \
++	offset__AUDCFG_FSYN_CFG(ip)) >> \
++	shift__AUDCFG_FSYN_CFG__PCM_CLK_SEL(ip)) & \
++	mask__AUDCFG_FSYN_CFG__PCM_CLK_SEL(ip))
++#define set__AUDCFG_FSYN_CFG__PCM_CLK_SEL(ip, value) \
++	writel((readl(ip->base + offset__AUDCFG_FSYN_CFG(ip)) & \
++	~(mask__AUDCFG_FSYN_CFG__PCM_CLK_SEL(ip) << \
++	shift__AUDCFG_FSYN_CFG__PCM_CLK_SEL(ip))) | (((value) & \
++	mask__AUDCFG_FSYN_CFG__PCM_CLK_SEL(ip)) << \
++	shift__AUDCFG_FSYN_CFG__PCM_CLK_SEL(ip)), ip->base + \
++	offset__AUDCFG_FSYN_CFG(ip))
++
++#define value__AUDCFG_FSYN_CFG__PCM_CLK_SEL__EXTCLK(ip, n) (ip->ver < \
++	ver__AUDCFG_FSYN__65_2_1_2 ? (0 << n) : (ip->ver < \
++	ver__AUDCFG_FSYN__65_3_1 ? (1 << n) : (ip->ver < \
++	ver__AUDCFG_FSYN__65_3_3 ? (0 << n) : (1 << n))))
++#define mask__AUDCFG_FSYN_CFG__PCM_CLK_SEL__EXTCLK(ip, n) \
++	(value__AUDCFG_FSYN_CFG__PCM_CLK_SEL__EXTCLK(ip, n) << \
++	shift__AUDCFG_FSYN_CFG__PCM_CLK_SEL(ip))
++#define set__AUDCFG_FSYN_CFG__PCM_CLK_SEL__EXTCLK(ip, n) \
++	set__AUDCFG_FSYN_CFG__PCM_CLK_SEL(ip, \
++	value__AUDCFG_FSYN_CFG__PCM_CLK_SEL__EXTCLK(ip, n))
++
++#define value__AUDCFG_FSYN_CFG__PCM_CLK_SEL__FSYNTH(ip, n) (ip->ver < \
++	ver__AUDCFG_FSYN__65_2_1_2 ? (1 << n) : (ip->ver < \
++	ver__AUDCFG_FSYN__65_3_1 ? (0 << n) : (ip->ver < \
++	ver__AUDCFG_FSYN__65_3_3 ? (1 << n) : (0 << n))))
++#define mask__AUDCFG_FSYN_CFG__PCM_CLK_SEL__FSYNTH(ip, n) \
++	(value__AUDCFG_FSYN_CFG__PCM_CLK_SEL__FSYNTH(ip, n) << \
++	shift__AUDCFG_FSYN_CFG__PCM_CLK_SEL(ip))
++#define set__AUDCFG_FSYN_CFG__PCM_CLK_SEL__FSYNTH(ip, n) \
++	set__AUDCFG_FSYN_CFG__PCM_CLK_SEL(ip, \
++	value__AUDCFG_FSYN_CFG__PCM_CLK_SEL__FSYNTH(ip, n))
++
++/* FS_EN */
++
++#define shift__AUDCFG_FSYN_CFG__FS_EN(ip) (ip->ver < \
++	ver__AUDCFG_FSYN__65_2_1_2 ? 6 : (ip->ver < ver__AUDCFG_FSYN__65_3_1 ? \
++	-1 : (ip->ver < ver__AUDCFG_FSYN__65_3_3 ? 6 : -1)))
++#define mask__AUDCFG_FSYN_CFG__FS_EN(ip) (ip->ver < \
++	ver__AUDCFG_FSYN__65_2_1_2 ? 0x7 : (ip->ver < ver__AUDCFG_FSYN__65_3_1 \
++	? -1 : (ip->ver < ver__AUDCFG_FSYN__65_3_3 ? 0xf : -1)))
++#define get__AUDCFG_FSYN_CFG__FS_EN(ip) ((readl(ip->base + \
++	offset__AUDCFG_FSYN_CFG(ip)) >> shift__AUDCFG_FSYN_CFG__FS_EN(ip)) & \
++	mask__AUDCFG_FSYN_CFG__FS_EN(ip))
++#define set__AUDCFG_FSYN_CFG__FS_EN(ip, value) writel((readl(ip->base \
++	+ offset__AUDCFG_FSYN_CFG(ip)) & ~(mask__AUDCFG_FSYN_CFG__FS_EN(ip) << \
++	shift__AUDCFG_FSYN_CFG__FS_EN(ip))) | (((value) & \
++	mask__AUDCFG_FSYN_CFG__FS_EN(ip)) << \
++	shift__AUDCFG_FSYN_CFG__FS_EN(ip)), ip->base + \
++	offset__AUDCFG_FSYN_CFG(ip))
++
++#define value__AUDCFG_FSYN_CFG__FS_EN__DISABLED(ip, n) (ip->ver < \
++	ver__AUDCFG_FSYN__65_2_1_2 ? (0 << n) : (ip->ver < \
++	ver__AUDCFG_FSYN__65_3_1 ? -1 : (ip->ver < ver__AUDCFG_FSYN__65_3_3 ? \
++	(0 << n) : -1)))
++#define mask__AUDCFG_FSYN_CFG__FS_EN__DISABLED(ip, n) \
++	(value__AUDCFG_FSYN_CFG__FS_EN__DISABLED(ip, n) << \
++	shift__AUDCFG_FSYN_CFG__FS_EN(ip))
++#define set__AUDCFG_FSYN_CFG__FS_EN__DISABLED(ip, n) \
++	set__AUDCFG_FSYN_CFG__FS_EN(ip, \
++	value__AUDCFG_FSYN_CFG__FS_EN__DISABLED(ip, n))
++
++#define value__AUDCFG_FSYN_CFG__FS_EN__ENABLED(ip, n) (ip->ver < \
++	ver__AUDCFG_FSYN__65_2_1_2 ? (1 << n) : (ip->ver < \
++	ver__AUDCFG_FSYN__65_3_1 ? -1 : (ip->ver < ver__AUDCFG_FSYN__65_3_3 ? \
++	(1 << n) : -1)))
++#define mask__AUDCFG_FSYN_CFG__FS_EN__ENABLED(ip, n) \
++	(value__AUDCFG_FSYN_CFG__FS_EN__ENABLED(ip, n) << \
++	shift__AUDCFG_FSYN_CFG__FS_EN(ip))
++#define set__AUDCFG_FSYN_CFG__FS_EN__ENABLED(ip, n) \
++	set__AUDCFG_FSYN_CFG__FS_EN(ip, \
++	value__AUDCFG_FSYN_CFG__FS_EN__ENABLED(ip, n))
++
++/* NSB */
++
++#define shift__AUDCFG_FSYN_CFG__NSB(ip) 10
++#define mask__AUDCFG_FSYN_CFG__NSB(ip) 0xf
++#define get__AUDCFG_FSYN_CFG__NSB(ip) ((readl(ip->base + \
++	offset__AUDCFG_FSYN_CFG(ip)) >> shift__AUDCFG_FSYN_CFG__NSB(ip)) & \
++	mask__AUDCFG_FSYN_CFG__NSB(ip))
++#define set__AUDCFG_FSYN_CFG__NSB(ip, value) writel((readl(ip->base + \
++	offset__AUDCFG_FSYN_CFG(ip)) & ~(mask__AUDCFG_FSYN_CFG__NSB(ip) << \
++	shift__AUDCFG_FSYN_CFG__NSB(ip))) | (((value) & \
++	mask__AUDCFG_FSYN_CFG__NSB(ip)) << shift__AUDCFG_FSYN_CFG__NSB(ip)), \
++	ip->base + offset__AUDCFG_FSYN_CFG(ip))
++
++#define value__AUDCFG_FSYN_CFG__NSB__STANDBY(ip, n) (0 << n)
++#define mask__AUDCFG_FSYN_CFG__NSB__STANDBY(ip, n) \
++	(value__AUDCFG_FSYN_CFG__NSB__STANDBY(ip, n) << \
++	shift__AUDCFG_FSYN_CFG__NSB(ip))
++#define set__AUDCFG_FSYN_CFG__NSB__STANDBY(ip, n) \
++	set__AUDCFG_FSYN_CFG__NSB(ip, value__AUDCFG_FSYN_CFG__NSB__STANDBY(ip, \
++	n))
++
++#define value__AUDCFG_FSYN_CFG__NSB__ACTIVE(ip, n) (1 << n)
++#define mask__AUDCFG_FSYN_CFG__NSB__ACTIVE(ip, n) \
++	(value__AUDCFG_FSYN_CFG__NSB__ACTIVE(ip, n) << \
++	shift__AUDCFG_FSYN_CFG__NSB(ip))
++#define set__AUDCFG_FSYN_CFG__NSB__ACTIVE(ip, n) \
++	set__AUDCFG_FSYN_CFG__NSB(ip, value__AUDCFG_FSYN_CFG__NSB__ACTIVE(ip, \
++	n))
++
++/* NPDA */
++
++#define shift__AUDCFG_FSYN_CFG__NPDA(ip) 14
++#define mask__AUDCFG_FSYN_CFG__NPDA(ip) 0x1
++#define get__AUDCFG_FSYN_CFG__NPDA(ip) ((readl(ip->base + \
++	offset__AUDCFG_FSYN_CFG(ip)) >> shift__AUDCFG_FSYN_CFG__NPDA(ip)) & \
++	mask__AUDCFG_FSYN_CFG__NPDA(ip))
++#define set__AUDCFG_FSYN_CFG__NPDA(ip, value) writel((readl(ip->base + \
++	offset__AUDCFG_FSYN_CFG(ip)) & ~(mask__AUDCFG_FSYN_CFG__NPDA(ip) << \
++	shift__AUDCFG_FSYN_CFG__NPDA(ip))) | (((value) & \
++	mask__AUDCFG_FSYN_CFG__NPDA(ip)) << shift__AUDCFG_FSYN_CFG__NPDA(ip)), \
++	ip->base + offset__AUDCFG_FSYN_CFG(ip))
++
++#define value__AUDCFG_FSYN_CFG__NPDA__POWER_DOWN(ip) 0x0
++#define mask__AUDCFG_FSYN_CFG__NPDA__POWER_DOWN(ip) \
++	(value__AUDCFG_FSYN_CFG__NPDA__POWER_DOWN(ip) << \
++	shift__AUDCFG_FSYN_CFG__NPDA(ip))
++#define set__AUDCFG_FSYN_CFG__NPDA__POWER_DOWN(ip) \
++	set__AUDCFG_FSYN_CFG__NPDA(ip, \
++	value__AUDCFG_FSYN_CFG__NPDA__POWER_DOWN(ip))
++
++#define value__AUDCFG_FSYN_CFG__NPDA__NORMAL(ip) 0x1
++#define mask__AUDCFG_FSYN_CFG__NPDA__NORMAL(ip) \
++	(value__AUDCFG_FSYN_CFG__NPDA__NORMAL(ip) << \
++	shift__AUDCFG_FSYN_CFG__NPDA(ip))
++#define set__AUDCFG_FSYN_CFG__NPDA__NORMAL(ip) \
++	set__AUDCFG_FSYN_CFG__NPDA(ip, \
++	value__AUDCFG_FSYN_CFG__NPDA__NORMAL(ip))
++
++/* NDIV */
++
++#define shift__AUDCFG_FSYN_CFG__NDIV(ip) 15
++#define mask__AUDCFG_FSYN_CFG__NDIV(ip) 0x1
++#define get__AUDCFG_FSYN_CFG__NDIV(ip) ((readl(ip->base + \
++	offset__AUDCFG_FSYN_CFG(ip)) >> shift__AUDCFG_FSYN_CFG__NDIV(ip)) & \
++	mask__AUDCFG_FSYN_CFG__NDIV(ip))
++#define set__AUDCFG_FSYN_CFG__NDIV(ip, value) writel((readl(ip->base + \
++	offset__AUDCFG_FSYN_CFG(ip)) & ~(mask__AUDCFG_FSYN_CFG__NDIV(ip) << \
++	shift__AUDCFG_FSYN_CFG__NDIV(ip))) | (((value) & \
++	mask__AUDCFG_FSYN_CFG__NDIV(ip)) << shift__AUDCFG_FSYN_CFG__NDIV(ip)), \
++	ip->base + offset__AUDCFG_FSYN_CFG(ip))
++
++#define value__AUDCFG_FSYN_CFG__NDIV__27_30_MHZ(ip) 0x0
++#define mask__AUDCFG_FSYN_CFG__NDIV__27_30_MHZ(ip) \
++	(value__AUDCFG_FSYN_CFG__NDIV__27_30_MHZ(ip) << \
++	shift__AUDCFG_FSYN_CFG__NDIV(ip))
++#define set__AUDCFG_FSYN_CFG__NDIV__27_30_MHZ(ip) \
++	set__AUDCFG_FSYN_CFG__NDIV(ip, \
++	value__AUDCFG_FSYN_CFG__NDIV__27_30_MHZ(ip))
++
++#define value__AUDCFG_FSYN_CFG__NDIV__54_60_MHZ(ip) 0x1
++#define mask__AUDCFG_FSYN_CFG__NDIV__54_60_MHZ(ip) \
++	(value__AUDCFG_FSYN_CFG__NDIV__54_60_MHZ(ip) << \
++	shift__AUDCFG_FSYN_CFG__NDIV(ip))
++#define set__AUDCFG_FSYN_CFG__NDIV__54_60_MHZ(ip) \
++	set__AUDCFG_FSYN_CFG__NDIV(ip, \
++	value__AUDCFG_FSYN_CFG__NDIV__54_60_MHZ(ip))
++
++/* BW_SEL */
++
++#define shift__AUDCFG_FSYN_CFG__BW_SEL(ip) 16
++#define mask__AUDCFG_FSYN_CFG__BW_SEL(ip) 0x3
++#define get__AUDCFG_FSYN_CFG__BW_SEL(ip) ((readl(ip->base + \
++	offset__AUDCFG_FSYN_CFG(ip)) >> shift__AUDCFG_FSYN_CFG__BW_SEL(ip)) & \
++	mask__AUDCFG_FSYN_CFG__BW_SEL(ip))
++#define set__AUDCFG_FSYN_CFG__BW_SEL(ip, value) writel((readl(ip->base \
++	+ offset__AUDCFG_FSYN_CFG(ip)) & ~(mask__AUDCFG_FSYN_CFG__BW_SEL(ip) \
++	<< shift__AUDCFG_FSYN_CFG__BW_SEL(ip))) | (((value) & \
++	mask__AUDCFG_FSYN_CFG__BW_SEL(ip)) << \
++	shift__AUDCFG_FSYN_CFG__BW_SEL(ip)), ip->base + \
++	offset__AUDCFG_FSYN_CFG(ip))
++
++#define value__AUDCFG_FSYN_CFG__BW_SEL__VERY_GOOD_REFERENCE(ip) 0x0
++#define mask__AUDCFG_FSYN_CFG__BW_SEL__VERY_GOOD_REFERENCE(ip) \
++	(value__AUDCFG_FSYN_CFG__BW_SEL__VERY_GOOD_REFERENCE(ip) << \
++	shift__AUDCFG_FSYN_CFG__BW_SEL(ip))
++#define set__AUDCFG_FSYN_CFG__BW_SEL__VERY_GOOD_REFERENCE(ip) \
++	set__AUDCFG_FSYN_CFG__BW_SEL(ip, \
++	value__AUDCFG_FSYN_CFG__BW_SEL__VERY_GOOD_REFERENCE(ip))
++
++#define value__AUDCFG_FSYN_CFG__BW_SEL__GOOD_REFERENCE(ip) 0x1
++#define mask__AUDCFG_FSYN_CFG__BW_SEL__GOOD_REFERENCE(ip) \
++	(value__AUDCFG_FSYN_CFG__BW_SEL__GOOD_REFERENCE(ip) << \
++	shift__AUDCFG_FSYN_CFG__BW_SEL(ip))
++#define set__AUDCFG_FSYN_CFG__BW_SEL__GOOD_REFERENCE(ip) \
++	set__AUDCFG_FSYN_CFG__BW_SEL(ip, \
++	value__AUDCFG_FSYN_CFG__BW_SEL__GOOD_REFERENCE(ip))
++
++#define value__AUDCFG_FSYN_CFG__BW_SEL__BAD_REFERENCE(ip) 0x2
++#define mask__AUDCFG_FSYN_CFG__BW_SEL__BAD_REFERENCE(ip) \
++	(value__AUDCFG_FSYN_CFG__BW_SEL__BAD_REFERENCE(ip) << \
++	shift__AUDCFG_FSYN_CFG__BW_SEL(ip))
++#define set__AUDCFG_FSYN_CFG__BW_SEL__BAD_REFERENCE(ip) \
++	set__AUDCFG_FSYN_CFG__BW_SEL(ip, \
++	value__AUDCFG_FSYN_CFG__BW_SEL__BAD_REFERENCE(ip))
++
++#define value__AUDCFG_FSYN_CFG__BW_SEL__VERY_BAD_REFERENCE(ip) 0x3
++#define mask__AUDCFG_FSYN_CFG__BW_SEL__VERY_BAD_REFERENCE(ip) \
++	(value__AUDCFG_FSYN_CFG__BW_SEL__VERY_BAD_REFERENCE(ip) << \
++	shift__AUDCFG_FSYN_CFG__BW_SEL(ip))
++#define set__AUDCFG_FSYN_CFG__BW_SEL__VERY_BAD_REFERENCE(ip) \
++	set__AUDCFG_FSYN_CFG__BW_SEL(ip, \
++	value__AUDCFG_FSYN_CFG__BW_SEL__VERY_BAD_REFERENCE(ip))
++
++/* REF_CLK_IN */
++
++#define shift__AUDCFG_FSYN_CFG__REF_CLK_IN(ip) (ip->ver < \
++	ver__AUDCFG_FSYN__65_2_1_2 ? 23 : (ip->ver < ver__AUDCFG_FSYN__65_3_1 \
++	? 24 : (ip->ver < ver__AUDCFG_FSYN__65_3_3 ? 23 : 24)))
++#define mask__AUDCFG_FSYN_CFG__REF_CLK_IN(ip) (ip->ver < \
++	ver__AUDCFG_FSYN__65_2_1_2 ? 0x1 : (ip->ver < ver__AUDCFG_FSYN__65_3_1 \
++	? 0x1 : (ip->ver < ver__AUDCFG_FSYN__65_3_3 ? 0x3 : 0x1)))
++#define get__AUDCFG_FSYN_CFG__REF_CLK_IN(ip) ((readl(ip->base + \
++	offset__AUDCFG_FSYN_CFG(ip)) >> \
++	shift__AUDCFG_FSYN_CFG__REF_CLK_IN(ip)) & \
++	mask__AUDCFG_FSYN_CFG__REF_CLK_IN(ip))
++#define set__AUDCFG_FSYN_CFG__REF_CLK_IN(ip, value) \
++	writel((readl(ip->base + offset__AUDCFG_FSYN_CFG(ip)) & \
++	~(mask__AUDCFG_FSYN_CFG__REF_CLK_IN(ip) << \
++	shift__AUDCFG_FSYN_CFG__REF_CLK_IN(ip))) | (((value) & \
++	mask__AUDCFG_FSYN_CFG__REF_CLK_IN(ip)) << \
++	shift__AUDCFG_FSYN_CFG__REF_CLK_IN(ip)), ip->base + \
++	offset__AUDCFG_FSYN_CFG(ip))
++
++#define value__AUDCFG_FSYN_CFG__REF_CLK_IN__FE900_CLOCK(ip) (ip->ver < \
++	ver__AUDCFG_FSYN__65_3_1 ? -1 : (ip->ver < ver__AUDCFG_FSYN__65_3_3 ? \
++	0x0 : -1))
++#define mask__AUDCFG_FSYN_CFG__REF_CLK_IN__FE900_CLOCK(ip) \
++	(value__AUDCFG_FSYN_CFG__REF_CLK_IN__FE900_CLOCK(ip) << \
++	shift__AUDCFG_FSYN_CFG__REF_CLK_IN(ip))
++#define set__AUDCFG_FSYN_CFG__REF_CLK_IN__FE900_CLOCK(ip) \
++	set__AUDCFG_FSYN_CFG__REF_CLK_IN(ip, \
++	value__AUDCFG_FSYN_CFG__REF_CLK_IN__FE900_CLOCK(ip))
++
++#define value__AUDCFG_FSYN_CFG__REF_CLK_IN__30_MHZ_CLOCK(ip) (ip->ver \
++	< ver__AUDCFG_FSYN__65_3_1 ? 0x0 : (ip->ver < ver__AUDCFG_FSYN__65_3_3 \
++	? 0x1 : 0x0))
++#define mask__AUDCFG_FSYN_CFG__REF_CLK_IN__30_MHZ_CLOCK(ip) \
++	(value__AUDCFG_FSYN_CFG__REF_CLK_IN__30_MHZ_CLOCK(ip) << \
++	shift__AUDCFG_FSYN_CFG__REF_CLK_IN(ip))
++#define set__AUDCFG_FSYN_CFG__REF_CLK_IN__30_MHZ_CLOCK(ip) \
++	set__AUDCFG_FSYN_CFG__REF_CLK_IN(ip, \
++	value__AUDCFG_FSYN_CFG__REF_CLK_IN__30_MHZ_CLOCK(ip))
++
++#define value__AUDCFG_FSYN_CFG__REF_CLK_IN__SYSCLKINALT(ip) (ip->ver < \
++	ver__AUDCFG_FSYN__65_3_1 ? 0x1 : (ip->ver < ver__AUDCFG_FSYN__65_3_3 ? \
++	0x2 : 0x1))
++#define mask__AUDCFG_FSYN_CFG__REF_CLK_IN__SYSCLKINALT(ip) \
++	(value__AUDCFG_FSYN_CFG__REF_CLK_IN__SYSCLKINALT(ip) << \
++	shift__AUDCFG_FSYN_CFG__REF_CLK_IN(ip))
++#define set__AUDCFG_FSYN_CFG__REF_CLK_IN__SYSCLKINALT(ip) \
++	set__AUDCFG_FSYN_CFG__REF_CLK_IN(ip, \
++	value__AUDCFG_FSYN_CFG__REF_CLK_IN__SYSCLKINALT(ip))
++
++
++
++/*
++ * AUDCFG_FSYN_MD
++ */
++
++#define offset__AUDCFG_FSYN_MD(ip, n) ((n + 1) * 0x10 + 0x00)
++#define get__AUDCFG_FSYN_MD(ip, n) readl(ip->base + \
++	offset__AUDCFG_FSYN_MD(ip, n))
++#define set__AUDCFG_FSYN_MD(ip, n, value) writel(value, ip->base + \
++	offset__AUDCFG_FSYN_MD(ip, n))
++
++/* MD */
++
++#define shift__AUDCFG_FSYN_MD__MD(ip) 0
++#define mask__AUDCFG_FSYN_MD__MD(ip) 0x1f
++#define get__AUDCFG_FSYN_MD__MD(ip, n) ((readl(ip->base + \
++	offset__AUDCFG_FSYN_MD(ip, n)) >> shift__AUDCFG_FSYN_MD__MD(ip)) & \
++	mask__AUDCFG_FSYN_MD__MD(ip))
++#define set__AUDCFG_FSYN_MD__MD(ip, n, value) writel((readl(ip->base + \
++	offset__AUDCFG_FSYN_MD(ip, n)) & ~(mask__AUDCFG_FSYN_MD__MD(ip) << \
++	shift__AUDCFG_FSYN_MD__MD(ip))) | (((value) & \
++	mask__AUDCFG_FSYN_MD__MD(ip)) << shift__AUDCFG_FSYN_MD__MD(ip)), \
++	ip->base + offset__AUDCFG_FSYN_MD(ip, n))
++
++
++
++/*
++ * AUDCFG_FSYN_PE
++ */
++
++#define offset__AUDCFG_FSYN_PE(ip, n) ((n + 1) * 0x10 + 0x04)
++#define get__AUDCFG_FSYN_PE(ip, n) readl(ip->base + \
++	offset__AUDCFG_FSYN_PE(ip, n))
++#define set__AUDCFG_FSYN_PE(ip, n, value) writel(value, ip->base + \
++	offset__AUDCFG_FSYN_PE(ip, n))
++
++/* PE */
++
++#define shift__AUDCFG_FSYN_PE__PE(ip) 0
++#define mask__AUDCFG_FSYN_PE__PE(ip) 0xffff
++#define get__AUDCFG_FSYN_PE__PE(ip, n) ((readl(ip->base + \
++	offset__AUDCFG_FSYN_PE(ip, n)) >> shift__AUDCFG_FSYN_PE__PE(ip)) & \
++	mask__AUDCFG_FSYN_PE__PE(ip))
++#define set__AUDCFG_FSYN_PE__PE(ip, n, value) writel((readl(ip->base + \
++	offset__AUDCFG_FSYN_PE(ip, n)) & ~(mask__AUDCFG_FSYN_PE__PE(ip) << \
++	shift__AUDCFG_FSYN_PE__PE(ip))) | (((value) & \
++	mask__AUDCFG_FSYN_PE__PE(ip)) << shift__AUDCFG_FSYN_PE__PE(ip)), \
++	ip->base + offset__AUDCFG_FSYN_PE(ip, n))
++
++
++
++/*
++ * AUDCFG_FSYN_SDIV
++ */
++
++#define offset__AUDCFG_FSYN_SDIV(ip, n) ((n + 1) * 0x10 + 0x08)
++#define get__AUDCFG_FSYN_SDIV(ip, n) readl(ip->base + \
++	offset__AUDCFG_FSYN_SDIV(ip, n))
++#define set__AUDCFG_FSYN_SDIV(ip, n, value) writel(value, ip->base + \
++	offset__AUDCFG_FSYN_SDIV(ip, n))
++
++/* SDIV */
++
++#define shift__AUDCFG_FSYN_SDIV__SDIV(ip) 0
++#define mask__AUDCFG_FSYN_SDIV__SDIV(ip) 0x7
++#define get__AUDCFG_FSYN_SDIV__SDIV(ip, n) ((readl(ip->base + \
++	offset__AUDCFG_FSYN_SDIV(ip, n)) >> shift__AUDCFG_FSYN_SDIV__SDIV(ip)) \
++	& mask__AUDCFG_FSYN_SDIV__SDIV(ip))
++#define set__AUDCFG_FSYN_SDIV__SDIV(ip, n, value) \
++	writel((readl(ip->base + offset__AUDCFG_FSYN_SDIV(ip, n)) & \
++	~(mask__AUDCFG_FSYN_SDIV__SDIV(ip) << \
++	shift__AUDCFG_FSYN_SDIV__SDIV(ip))) | (((value) & \
++	mask__AUDCFG_FSYN_SDIV__SDIV(ip)) << \
++	shift__AUDCFG_FSYN_SDIV__SDIV(ip)), ip->base + \
++	offset__AUDCFG_FSYN_SDIV(ip, n))
++
++
++
++/*
++ * AUDCFG_FSYN_PROGEN
++ */
++
++#define offset__AUDCFG_FSYN_PROGEN(ip, n) ((n + 1) * 0x10 + 0x0c)
++#define get__AUDCFG_FSYN_PROGEN(ip, n) readl(ip->base + \
++	offset__AUDCFG_FSYN_PROGEN(ip, n))
++#define set__AUDCFG_FSYN_PROGEN(ip, n, value) writel(value, ip->base + \
++	offset__AUDCFG_FSYN_PROGEN(ip, n))
++
++/* PROG_EN */
++
++#define shift__AUDCFG_FSYN_PROGEN__PROG_EN(ip) 0
++#define mask__AUDCFG_FSYN_PROGEN__PROG_EN(ip) 0x1
++#define get__AUDCFG_FSYN_PROGEN__PROG_EN(ip, n) ((readl(ip->base + \
++	offset__AUDCFG_FSYN_PROGEN(ip, n)) >> \
++	shift__AUDCFG_FSYN_PROGEN__PROG_EN(ip)) & \
++	mask__AUDCFG_FSYN_PROGEN__PROG_EN(ip))
++#define set__AUDCFG_FSYN_PROGEN__PROG_EN(ip, n, value) \
++	writel((readl(ip->base + offset__AUDCFG_FSYN_PROGEN(ip, n)) & \
++	~(mask__AUDCFG_FSYN_PROGEN__PROG_EN(ip) << \
++	shift__AUDCFG_FSYN_PROGEN__PROG_EN(ip))) | (((value) & \
++	mask__AUDCFG_FSYN_PROGEN__PROG_EN(ip)) << \
++	shift__AUDCFG_FSYN_PROGEN__PROG_EN(ip)), ip->base + \
++	offset__AUDCFG_FSYN_PROGEN(ip, n))
++
++#define value__AUDCFG_FSYN_PROGEN__PROG_EN__PE0_MD0_IGNORED(ip) 0x0
++#define mask__AUDCFG_FSYN_PROGEN__PROG_EN__PE0_MD0_IGNORED(ip) \
++	(value__AUDCFG_FSYN_PROGEN__PROG_EN__PE0_MD0_IGNORED(ip) << \
++	shift__AUDCFG_FSYN_PROGEN__PROG_EN(ip))
++#define set__AUDCFG_FSYN_PROGEN__PROG_EN__PE0_MD0_IGNORED(ip, n) \
++	set__AUDCFG_FSYN_PROGEN__PROG_EN(ip, n, \
++	value__AUDCFG_FSYN_PROGEN__PROG_EN__PE0_MD0_IGNORED(ip))
++
++#define value__AUDCFG_FSYN_PROGEN__PROG_EN__PE0_MD0_USED(ip) 0x1
++#define mask__AUDCFG_FSYN_PROGEN__PROG_EN__PE0_MD0_USED(ip) \
++	(value__AUDCFG_FSYN_PROGEN__PROG_EN__PE0_MD0_USED(ip) << \
++	shift__AUDCFG_FSYN_PROGEN__PROG_EN(ip))
++#define set__AUDCFG_FSYN_PROGEN__PROG_EN__PE0_MD0_USED(ip, n) \
++	set__AUDCFG_FSYN_PROGEN__PROG_EN(ip, n, \
++	value__AUDCFG_FSYN_PROGEN__PROG_EN__PE0_MD0_USED(ip))
++
++
++
++#endif

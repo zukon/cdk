@@ -186,7 +186,8 @@ VITAMINHD5000PATCHES_24 = $(COMMONPATCHES_24) \
 SAGEMCOM88PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-sagemcom88_setup_stm24$(PATCH_STR).patch \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
-		linux-sh4-lmb_stm24$(PATCH_STR).patch
+		linux-sh4-lmb_stm24$(PATCH_STR).patch \
+		linux-sh4-sagemcom88_sound_stm24$(PATCH_STR).patch
 
 KERNELPATCHES_24 = \
 		$(if $(UFS910),$(UFS910PATCHES_24)) \
