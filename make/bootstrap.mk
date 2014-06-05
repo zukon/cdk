@@ -53,8 +53,8 @@ $(D)/gcc: @DEPENDS_gcc@ glibc
 	cp -Ppr @DIR_gcc@/opt/STM/STLinux-2.4/devkit/sh4/* $(hostprefix)/
 	ln -sf $(targetprefix)/target/etc $(targetprefix)/etc
 	ln -sf $(targetprefix)/target/lib $(targetprefix)/lib
-	ln -sf $(targetprefix)/target/usr/include $(targetprefix)/usr/include
-	ln -sf $(targetprefix)/target/usr/lib $(targetprefix)/usr/lib
+	ln -sf $(targetprefix)/target/sbin $(targetprefix)/sbin
+	ln -sf $(targetprefix)/target/usr $(targetprefix)/usr
 	ln -sf $(targetprefix)/target $(hostprefix)/target
 	sed -i "s,^libdir=.*,libdir='$(hostprefix)/sh4-linux/lib'," $(hostprefix)/sh4-linux/lib/lib{std,sup}c++.la
 	@CLEANUP_gcc@
@@ -99,7 +99,7 @@ host-filesystem:
 	touch .deps/$@
 
 $(D)/directories:
-	$(INSTALL) -d $(targetprefix)/{bin,boot,dev,dev.static,mnt,proc,root,sbin,sys,tmp,usr,var}
+	$(INSTALL) -d $(targetprefix)/{bin,boot,dev,dev.static,mnt,proc,root,sys,tmp,var}
 	$(INSTALL) -d $(targetprefix)/target/etc/rc.d/{rc0.d,rc1.d,rc2.d,rc3.d,rc4.d,rc5.d,rc6.d,rcS.d}
 	$(INSTALL) -d $(targetprefix)/target/etc/network
 	$(INSTALL) -d $(targetprefix)/var/etc
