@@ -534,8 +534,6 @@ release_neutrino_base:
 	$(INSTALL_DIR) $(prefix)/release_neutrino/var/tuxbox/{config,plugins} && \
 	$(INSTALL_DIR) $(prefix)/release_neutrino/var/tuxbox/config/{locale,zapit} && \
 	ln -sf /usr/share/tuxbox/neutrino/icons/logo $(prefix)/release_neutrino/var/httpd/logos && \
-	export CROSS_COMPILE=$(target)- && \
-		$(MAKE) install -C @DIR_busybox@ CONFIG_PREFIX=$(prefix)/release_neutrino && \
 	touch $(prefix)/release_neutrino/var/etc/.firstboot && \
 	cp -a $(targetprefix)/bin/* $(prefix)/release_neutrino/bin/ && \
 	ln -sf /bin/showiframe $(prefix)/release_neutrino/usr/bin/showiframe && \
@@ -592,11 +590,12 @@ release_neutrino_base:
 	echo "576i50" > $(prefix)/release_neutrino/etc/videomode && \
 	cp $(buildprefix)/root/release/rcS_neutrino$(if $(TF7700),_$(TF7700))$(if $(OCTAGON1008),_$(OCTAGON1008))$(if $(FORTIS_HDBOX),_$(FORTIS_HDBOX))$(if $(ATEVIO7500),_$(ATEVIO7500))$(if $(HS7810A),_$(HS7810A))$(if $(HS7110),_$(HS7110))$(if $(ATEMIO520),_$(ATEMIO520))$(if $(ATEMIO530),_$(ATEMIO530))$(if $(HL101),_$(HL101))$(if $(VIP1_V2),_$(VIP1_V2))$(if $(VIP2_V1),_$(VIP2_V1))$(if $(ADB_BOX),_$(ADB_BOX))$(if $(UFS910),_$(UFS910))$(if $(UFS912),_$(UFS912))$(if $(UFS913),_$(UFS913))$(if $(UFS922),_$(UFS922))$(if $(CUBEREVO),_$(CUBEREVO))$(if $(CUBEREVO_MINI),_$(CUBEREVO_MINI))$(if $(CUBEREVO_MINI2),_$(CUBEREVO_MINI2))$(if $(CUBEREVO_MINI_FTA),_$(CUBEREVO_MINI_FTA))$(if $(CUBEREVO_250HD),_$(CUBEREVO_250HD))$(if $(CUBEREVO_2000HD),_$(CUBEREVO_2000HD))$(if $(CUBEREVO_9500HD),_$(CUBEREVO_9500HD))$(if $(SPARK),_$(SPARK))$(if $(SPARK7162),_$(SPARK7162)) $(prefix)/release_neutrino/etc/init.d/rcS && \
 	chmod 755 $(prefix)/release_neutrino/etc/init.d/rcS && \
+	export CROSS_COMPILE=$(target)- && \
+		$(MAKE) install -C @DIR_busybox@ CONFIG_PREFIX=$(prefix)/release_neutrino && \
 	cp -dp $(targetprefix)/usr/sbin/vsftpd $(prefix)/release_neutrino/usr/bin/ && \
 	cp $(buildprefix)/root/bin/autologin $(prefix)/release_neutrino/bin/ && \
 	cp $(buildprefix)/root/usr/sbin/fw_printenv $(prefix)/release_neutrino/usr/sbin/ && \
 	ln -sf ../../usr/sbin/fw_printenv $(prefix)/release_neutrino/usr/sbin/fw_setenv && \
-	cp -p $(targetprefix)/usr/bin/killall $(prefix)/release_neutrino/usr/bin/ && \
 	cp -dp $(targetprefix)/bin/hotplug $(prefix)/release_neutrino/sbin/ && \
 	rm -f $(prefix)/release_neutrino/bin/hotplug && \
 	cp -dp $(targetprefix)/sbin/blkid $(prefix)/release_neutrino/sbin/ && \
@@ -790,13 +789,11 @@ endif
 	rm -rf $(prefix)/release_neutrino/lib/modules/$(KERNELVERSION)
 	rm -rf $(prefix)/release_neutrino/usr/lib/alsa-lib
 	rm -rf $(prefix)/release_neutrino/usr/lib/alsaplayer
+	rm -rf $(prefix)/release_neutrino/usr/lib/audit
+	rm -rf $(prefix)/release_neutrino/usr/lib/gcc
 	rm -rf $(prefix)/release_neutrino/usr/lib/gio
 	rm -rf $(prefix)/release_neutrino/usr/lib/glib-2.0
 	rm -rf $(prefix)/release_neutrino/usr/lib/libffi-3.0.10
-	rm -f $(prefix)/release_neutrino/usr/lib/libbfd*
-	rm -f $(prefix)/release_neutrino/usr/lib/libgmp*
-	rm -f $(prefix)/release_neutrino/usr/lib/libmpfr*
-	rm -f $(prefix)/release_neutrino/usr/lib/libmpc*
 	rm -f $(prefix)/release_neutrino/usr/lib/libexpat*
 	rm -f $(prefix)/release_neutrino/usr/lib/libfontconfig*
 	rm -f $(prefix)/release_neutrino/usr/lib/libtermcap*
@@ -805,16 +802,13 @@ endif
 	rm -f $(prefix)/release_neutrino/usr/lib/libdvdcss*
 	rm -f $(prefix)/release_neutrino/usr/lib/libdvdnav*
 	rm -f $(prefix)/release_neutrino/usr/lib/libdvdread*
-	rm -f $(prefix)/release_neutrino/lib/libncurses*
-	rm -f $(prefix)/release_neutrino/usr/lib/libopcodes*
+	rm -f $(prefix)/release_neutrino/usr/lib/libncurses*
 	rm -f $(prefix)/release_neutrino/lib/libSegFault*
 	rm -f $(prefix)/release_neutrino/lib/libthread_db*
 	rm -f $(prefix)/release_neutrino/usr/lib/libthread_db*
 	rm -f $(prefix)/release_neutrino/lib/libanl*
 	rm -f $(prefix)/release_neutrino/usr/lib/libanl*
 	rm -rf $(prefix)/release_neutrino/lib/m4-nofpu/
-	rm -f $(prefix)/release_neutrino/usr/lib/libcurses.so
-	rm -f $(prefix)/release_neutrino/usr/lib/libncurses.so
 	rm -f $(prefix)/release_neutrino/usr/lib/libopkg*
 	rm -f $(prefix)/release_neutrino/lib/modules/lzo*.ko
 	rm -f $(prefix)/release_neutrino/bin/gitVCInfo

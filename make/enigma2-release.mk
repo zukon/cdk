@@ -621,8 +621,6 @@ release_base:
 	ln -s /usr/local/share/keymaps $(prefix)/release/usr/share/keymaps
 	$(INSTALL_DIR) $(prefix)/release/usr/share/{fonts,zoneinfo,udhcpc} && \
 	$(INSTALL_DIR) $(prefix)/release/var/{etc,opkg} && \
-	export CROSS_COMPILE=$(target)- && \
-		$(MAKE) install -C @DIR_busybox@ CONFIG_PREFIX=$(prefix)/release && \
 	touch $(prefix)/release/var/etc/.firstboot && \
 	cp -a $(targetprefix)/bin/* $(prefix)/release/bin/ && \
 	ln -sf /bin/showiframe $(prefix)/release/usr/bin/showiframe && \
@@ -681,11 +679,12 @@ release_base:
 	echo "576i50" > $(prefix)/release/etc/videomode && \
 	cp $(buildprefix)/root/release/rcS$(if $(TF7700),_$(TF7700))$(if $(HL101),_$(HL101))$(if $(VIP1_V2),_$(VIP1_V2))$(if $(VIP2_V1),_$(VIP2_V1))$(if $(UFS910),_$(UFS910))$(if $(UFS912),_$(UFS912))$(if $(UFS913),_$(UFS913))$(if $(SPARK),_$(SPARK))$(if $(SPARK7162),_$(SPARK7162))$(if $(UFS922),_$(UFS922))$(if $(UFC960),_$(UFC960))$(if $(OCTAGON1008),_$(OCTAGON1008))$(if $(FORTIS_HDBOX),_$(FORTIS_HDBOX))$(if $(ATEVIO7500),_$(ATEVIO7500))$(if $(HS7810A),_$(HS7810A))$(if $(HS7110),_$(HS7110))$(if $(ATEMIO520),_$(ATEMIO520))$(if $(ATEMIO530),_$(ATEMIO530))$(if $(CUBEREVO),_$(CUBEREVO))$(if $(CUBEREVO_MINI),_$(CUBEREVO_MINI))$(if $(CUBEREVO_MINI2),_$(CUBEREVO_MINI2))$(if $(CUBEREVO_MINI_FTA),_$(CUBEREVO_MINI_FTA))$(if $(CUBEREVO_250HD),_$(CUBEREVO_250HD))$(if $(CUBEREVO_2000HD),_$(CUBEREVO_2000HD))$(if $(CUBEREVO_9500HD),_$(CUBEREVO_9500HD))$(if $(IPBOX9900),_$(IPBOX9900))$(if $(IPBOX99),_$(IPBOX99))$(if $(IPBOX55),_$(IPBOX55))$(if $(ADB_BOX),_$(ADB_BOX))$(if $(VITAMIN_HD5000),_$(VITAMIN_HD5000))$(if $(SAGEMCOM88),_$(SAGEMCOM88)) $(prefix)/release/etc/init.d/rcS && \
 	chmod 755 $(prefix)/release/etc/init.d/rcS && \
+	export CROSS_COMPILE=$(target)- && \
+		$(MAKE) install -C @DIR_busybox@ CONFIG_PREFIX=$(prefix)/release && \
 	cp -dp $(targetprefix)/usr/sbin/vsftpd $(prefix)/release/usr/bin/ && \
 	cp $(buildprefix)/root/bootscreen/bootlogo.mvi $(prefix)/release/boot/ && \
 	cp $(buildprefix)/root/bin/autologin $(prefix)/release/bin/ && \
 	cp $(buildprefix)/root/bin/vdstandby $(prefix)/release/bin/ && \
-	cp -p $(targetprefix)/usr/bin/killall $(prefix)/release/usr/bin/ && \
 	cp -dp $(targetprefix)/sbin/blkid $(prefix)/release/sbin/ && \
 	cp -p $(targetprefix)/usr/bin/ffmpeg $(prefix)/release/sbin/ && \
 	cp -p $(targetprefix)/usr/bin/opkg-cl $(prefix)/release/usr/bin/opkg && \
