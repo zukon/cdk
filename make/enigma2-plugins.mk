@@ -3,13 +3,12 @@
 #
 $(D)/tuxtxtlib: bootstrap @DEPENDS_tuxtxtlib@
 	@PREPARE_tuxtxtlib@
-	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd @DIR_tuxtxtlib@ && \
-		aclocal -I $(hostprefix)/share/aclocal && \
+		aclocal && \
 		autoheader && \
 		autoconf && \
-		automake --foreign && \
-		libtoolize --force && \
+		libtoolize --copy --ltdl && \
+		automake --foreign --add-missing && \
 		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
@@ -29,13 +28,12 @@ $(D)/tuxtxtlib: bootstrap @DEPENDS_tuxtxtlib@
 #
 $(D)/tuxtxt32bpp: tuxtxtlib @DEPENDS_tuxtxt32bpp@
 	@PREPARE_tuxtxt32bpp@
-	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd @DIR_tuxtxt32bpp@ && \
-		aclocal -I $(hostprefix)/share/aclocal && \
+		aclocal && \
 		autoheader && \
 		autoconf && \
+		libtoolize --copy --ltdl && \
 		automake --foreign --add-missing && \
-		libtoolize --force && \
 		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
