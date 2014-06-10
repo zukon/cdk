@@ -312,7 +312,6 @@ linux-kernel-distclean: $(KERNELHEADERS)-distclean
 
 $(D)/tfkernel.do_compile:
 	cd $(KERNEL_DIR) && \
-		export PATH=$(hostprefix)/bin:$(PATH) && \
 		$(MAKE) $(if $(TF7700),TF7700=y) ARCH=sh CROSS_COMPILE=$(target)- uImage
 	touch $@
 

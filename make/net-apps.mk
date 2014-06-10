@@ -91,7 +91,6 @@ $(D)/ethtool: $(D)/bootstrap @DEPENDS_ethtool@
 #
 $(D)/samba: $(D)/bootstrap $(SAMBA_ADAPTED_ETC_FILES:%=root/etc/%) @DEPENDS_samba@
 	@PREPARE_samba@
-	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd @DIR_samba@ && \
 		cd source3 && \
 		./autogen.sh && \
