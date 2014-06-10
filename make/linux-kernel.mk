@@ -25,7 +25,7 @@ COMMONPATCHES_24 = \
 		linux-sh4-mmap_stm24.patch \
 		$(if $(P0209),linux-sh4-dwmac_stm24_0209.patch) \
 		$(if $(P0209),linux-sh4-directfb_stm24$(PATCH_STR).patch) \
-		$(if $(P0211)$(P0214),linux-sh4-console_missing_argument_stm24$(PATCH_STR).patch)
+		$(if $(P0211)$(P0214)$(P0215),linux-sh4-console_missing_argument_stm24$(PATCH_STR).patch)
 
 
 #		$(if $(P0209)$(P0211),linux-sh4-remove_pcm_reader_stm24.patch)
@@ -131,8 +131,8 @@ SPARK_PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-spark_setup_stm24$(PATCH_STR).patch \
 		$(if $(P0209),linux-sh4-linux_yaffs2_stm24_0209.patch) \
 		$(if $(P0209),linux-sh4-lirc_stm.patch) \
-		$(if $(P0211)$(P0214),linux-sh4-lirc_stm_stm24$(PATCH_STR).patch) \
-		$(if $(P0211)$(P0214),linux-sh4-spark-af901x-NXP-TDA18218.patch) \
+		$(if $(P0211)$(P0214)$(P0215),linux-sh4-lirc_stm_stm24$(PATCH_STR).patch) \
+		$(if $(P0211)$(P0214)$(P0215),linux-sh4-spark-af901x-NXP-TDA18218.patch) \
 		linux-sh4-spark-dvb-as102.patch
 
 SPARK7162_PATCHES_24 = $(COMMONPATCHES_24) \
@@ -232,6 +232,9 @@ endif
 if ENABLE_P0214
 KERNELHEADERS_VERSION := 2.6.32.46-48
 endif
+if ENABLE_P0215
+KERNELHEADERS_VERSION := 2.6.32.46-48
+endif
 
 if DEBUG
 DEBUG_STR=.debug
@@ -251,6 +254,9 @@ if ENABLE_P0211
 HOST_KERNEL_VERSION = 2.6.32.59$(KERNELSTMLABEL)-$(KERNELLABEL)
 endif
 if ENABLE_P0214
+HOST_KERNEL_VERSION = 2.6.32.61$(KERNELSTMLABEL)-$(KERNELLABEL)
+endif
+if ENABLE_P0215
 HOST_KERNEL_VERSION = 2.6.32.61$(KERNELSTMLABEL)-$(KERNELLABEL)
 endif
 HOST_KERNEL_SPEC = stm-$(HOST_KERNEL)-sh4.spec

@@ -2,7 +2,7 @@
 
 if [ "$1" == -h ] || [ "$1" == --help ]; then
  echo "Parameter 1: target system (1-31)"
- echo "Parameter 2: kernel (1-3)"
+ echo "Parameter 2: kernel (1-4)"
  echo "Parameter 3: debug (y/N)"
  echo "Parameter 4: player (1-2)"
  echo "Parameter 5: Media Framework (1-4)"
@@ -160,18 +160,20 @@ echo -e "\nKernel:"
 echo "   1) STM 24 P0209"
 echo "   2) STM 24 P0211 (recommended)"
 echo "   3) STM 24 P0214 (experimental)"
+echo "   4) STM 24 P0215 (experimental)"
 case $2 in
-	[1-3]) REPLY=$2
+	[1-4]) REPLY=$2
 	echo -e "\nSelected kernel: $REPLY\n"
 	;;
 	*)
-	read -p "Select kernel (1-3)? ";;
+	read -p "Select kernel (1-4)? ";;
 esac
 
 case "$REPLY" in
 	1)  KERNEL="--enable-p0209";;
 	2)  KERNEL="--enable-p0211";;
 	3)  KERNEL="--enable-p0214";;
+	4)  KERNEL="--enable-p0215";;
 	*)  KERNEL="--enable-p0211";;
 esac
 CONFIGPARAM="$CONFIGPARAM $KERNEL"
