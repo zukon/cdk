@@ -6,10 +6,11 @@ $(D)/host_pkgconfig: @DEPENDS_host_pkgconfig@
 	cd @DIR_host_pkgconfig@ && \
 		./configure \
 			--prefix=$(hostprefix) \
+			--program-prefix=$(target)- \
+			--disable-host-tool \
 			--with-pc_path=$(targetprefix)/usr/lib/pkgconfig && \
 		$(MAKE) && \
 		@INSTALL_host_pkgconfig@
-		ln -sf $(hostprefix)/bin/pkg-config $(hostprefix)/bin/$(target)-pkg-config
 	@CLEANUP_host_pkgconfig@
 	touch $@
 
