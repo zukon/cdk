@@ -11,22 +11,6 @@ STM_SRC := $(STLINUX)
 STM_RELOCATE := /opt/STM/STLinux-2.4
 
 #
-# kernel dir
-#
-if ENABLE_P0209
-KERNEL_DIR = @DIR_linuxp0209@
-endif
-if ENABLE_P0211
-KERNEL_DIR = @DIR_linuxp0211@
-endif
-if ENABLE_P0214
-KERNEL_DIR = @DIR_linuxp0214@
-endif
-if ENABLE_P0215
-KERNEL_DIR = @DIR_linuxp0215@
-endif
-
-#
 # Python Version
 #
 PYTHON_VERSION = $(word 1,$(subst ., ,$(VERSION_python))).$(word 2,$(subst ., ,$(VERSION_python)))
@@ -36,10 +20,9 @@ PYTHON_INCLUDE_DIR = /usr/include/python$(PYTHON_VERSION)
 #
 # helper-"functions":
 #
-BASE_DIR := $(shell pwd)
-PATCHES   = $(BASE_DIR)/Patches
-TARGETLIB = $(targetprefix)/usr/lib
-PKG_CONFIG = $(crossprefix)/bin/$(target)-pkg-config
+PATCHES    = $(buildprefix)/Patches
+TARGETLIB  = $(targetprefix)/usr/lib
+PKG_CONFIG = $(hostprefix)/bin/$(target)-pkg-config
 PKG_CONFIG_LIBDIR = $(TARGETLIB)
 PKG_CONFIG_PATH = $(TARGETLIB)/pkgconfig
 REWRITE_LIBDIR = sed -i "s,^libdir=.*,libdir='$(TARGETLIB)'," $(TARGETLIB)
