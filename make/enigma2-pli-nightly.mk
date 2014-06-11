@@ -94,7 +94,6 @@ $(appsdir)/enigma2-pli-nightly/config.status:
 			--with-boxtype=none \
 			STAGING_INCDIR=$(hostprefix)/usr/include \
 			STAGING_LIBDIR=$(hostprefix)/usr/lib \
-			PKG_CONFIG=$(hostprefix)/bin/pkg-config \
 			PY_PATH=$(targetprefix)/usr \
 			$(PLATFORM_CPPFLAGS) \
 			$(E_CONFIG_OPTS)
