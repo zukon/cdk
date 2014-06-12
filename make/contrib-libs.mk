@@ -760,6 +760,10 @@ $(D)/libdreamdvd: $(D)/bootstrap $(D)/libdvdnav @DEPENDS_libdreamdvd@
 #
 # ffmpeg
 #
+if ENABLE_ENIGMA2
+FFMPEG_EXTRA = --enable-librtmp
+endif
+
 $(D)/ffmpeg: $(D)/bootstrap $(D)/libass @DEPENDS_ffmpeg@
 	@PREPARE_ffmpeg@
 	cd @DIR_ffmpeg@ && \
@@ -865,6 +869,8 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass @DEPENDS_ffmpeg@
 			--enable-pthreads \
 			--enable-bzlib \
 			--enable-zlib \
+			\
+			$(FFMPEG_EXTRA) \
 			\
 			--enable-cross-compile \
 			--enable-pthreads \
