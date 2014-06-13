@@ -1,9 +1,9 @@
 $(D)/bootstrap: \
 	$(CCACHE) \
-	host-rpmconfig \
 	host_pkgconfig \
+	host-filesystem \
+	crosstool \
 	host_module_init_tools \
-	gcc \
 	host_mtd_utils
 	touch $@
 

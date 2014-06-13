@@ -1,3 +1,29 @@
+$(D)/libncurses: $(D)/bootstrap @DEPENDS_libncurses@
+	@PREPARE_libncurses@
+	cd @DIR_libncurses@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--target=$(target) \
+			--prefix=/usr \
+			--with-terminfo-dirs=/usr/share/terminfo \
+			--disable-big-core \
+			--without-debug \
+			--without-progs \
+			--without-ada \
+			--without-profile \
+			--with-shared \
+			--disable-rpath \
+			--without-cxx-binding \
+			--with-fallbacks='linux vt100 xterm' && \
+		$(MAKE) libs HOSTCC=gcc \
+			HOSTCCFLAGS="$(CFLAGS) -DHAVE_CONFIG_H -I../ncurses -DNDEBUG -D_GNU_SOURCE -I../include" \
+			HOSTLDFLAGS="$(LDFLAGS)" && \
+			@INSTALL_libncurses@
+	@CLEANUP_libncurses@
+	touch $@
+
 #
 # bzip2
 #

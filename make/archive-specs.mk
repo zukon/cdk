@@ -50,6 +50,10 @@ $(archivedir)/stlinux24-host-%.i386.rpm:
 	[ ! -f $(archivedir)/$(notdir $@) ] && \
 	(cd $(archivedir) && $(WGET) $(URL4HU)/$(notdir $@)) || true
 
+$(archivedir)/stlinux24-host-%.noarch.rpm:
+	[ ! -f $(archivedir)/$(notdir $@) ] && \
+	(cd $(archivedir) && $(WGET) $(URL4HU)/$(notdir $@)) || true
+
 ################################
 # libffi
 LIBFFI_VER=3.0.11

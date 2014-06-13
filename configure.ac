@@ -452,6 +452,8 @@ AC_ARG_WITH(updatehttpprefix,
 	[updatehttpprefix="$with_updatehttpprefix"],[updatehttpprefix=])
 
 buildprefix=`pwd`
+kernelprefix=$buildprefix
+AC_SUBST(kernelprefix)
 AC_SUBST(targetprefix)
 AC_SUBST(hostprefix)
 AC_SUBST(buildprefix)
@@ -619,12 +621,6 @@ AC_SUBST(CLEANUP)
 DEPSCLEANUP="rm -f"
 AC_SUBST(DEPSCLEANUP)
 
-RPMDEPSCLEANUP="rm -f"
-AC_SUBST(RPMDEPSCLEANUP)
-
-DISTCLEANUP="rm -rf"
-AC_SUBST(DISTCLEANUP)
-
 #
 # core
 #
@@ -689,12 +685,7 @@ fi
 #
 # bootstrap sh4
 #
-TUXBOX_RULES_MAKE(linux_kernel_headers)
-TUXBOX_RULES_MAKE(binutils)
 TUXBOX_RULES_MAKE(host_u_boot_tools)
-TUXBOX_RULES_MAKE(glibc)
-TUXBOX_RULES_MAKE(gcc)
-TUXBOX_RULES_MAKE(libncurses)
 
 #
 # core
@@ -809,6 +800,7 @@ TUXBOX_RULES_MAKE(libplist)
 #
 # contrib apps
 #
+TUXBOX_RULES_MAKE(libncurses)
 TUXBOX_RULES_MAKE(bzip2)
 TUXBOX_RULES_MAKE(grep)
 TUXBOX_RULES_MAKE(openrdate)
@@ -923,72 +915,9 @@ TUXBOX_RULES_MAKE(ethtool)
 TUXBOX_RULES_MAKE(xupnpd)
 
 #
-# RPM stuff
-#
-crossprefix=$prefix/devkit/sh4
-configprefix=$prefix/config
-devkitprefix=$prefix/devkit
-rpmdbprefix=${targetprefix}-rpmdb
-kernelprefix=$buildprefix
-AC_SUBST(crossprefix)
-AC_SUBST(configprefix)
-AC_SUBST(devkitprefix)
-AC_SUBST(rpmdbprefix)
-AC_SUBST(kernelprefix)
-
-#
 # localmacros
 #
-$INSTALL -d SOURCES SPECS BUILD SRPMS RPMS/{noarch,${host_arch},sh4}
-##test -f config && rm config || true
-##ln -sf $configprefix/rpm config || true
-echo "%_topdir $buildprefix" >localmacros
-echo "%_specdir %_topdir/SPECS" >>localmacros
-echo "%_sourcedir %_topdir/SOURCES" >>localmacros
-echo "%_builddir %_topdir/BUILD" >>localmacros
-echo "%_buildrootdir %_topdir/BUILDROOT" >>localmacros
-echo "%buildroot %_topdir/BUILDROOT/%{name}-%{version}-%{release}.${host_arch}" >>localmacros
-echo "%_rpmdir %_topdir/RPMS" >>localmacros
-echo "%_srcrpmdir %_topdir/SRPMS" >>localmacros
-echo "%_stm_install_prefix $prefix/.." >>localmacros
-echo "%_stm_base_prefix $prefix" >>localmacros
-echo "%_stm_host_dir $hostprefix" >>localmacros
-echo "%_stm_cross_dir $crossprefix" >>localmacros
-echo "%_stm_config_dir $configprefix" >>localmacros
-echo "%_stm_devkit_dir $devkitprefix" >>localmacros
-echo "%_stm_cross_target_dir $targetprefix" >>localmacros
-echo "%_stm_kernel_dir $kernelprefix" >>localmacros
-echo "%_stm_sources_dir $kernelprefix" >>localmacros
-echo "%_stm_host_arch ${host_arch}" >>localmacros
-echo "%_stm_host_cpu ${host_cpu}" >>localmacros
-echo "%_stm_host_config ${host_alias:-${host}}" >>localmacros
-echo "%_dbpath $rpmdbprefix" >>localmacros
-echo "%__bzip2 $BZIP2" >>localmacros
-echo "%nohostbuilddeps 1" >> localmacros
-echo "%_default_patch_fuzz 2" >> localmacros
-
-# Determine how to pass options to rpm, depending on version and distribution
-macrofiles="/usr/lib/rpm/macros:$configprefix/rpm/targets/sh4-linux:$configprefix/rpm/common:$buildprefix/localmacros"
-
-RPMMAJOR=`rpm --version | awk '{print $NF}' | cut -d '.' -f 1`
-RPMMINOR=`rpm --version | awk '{print $NF}' | cut -d '.' -f 2`
-
-if test ${RPMMAJOR} -lt 4 -o ${RPMMAJOR} -eq 4 -a ${RPMMINOR} -lt 7 ; then
-	# RPM < 4.7
-	echo "macrofiles: ${macrofiles}" > localrc
-	DRPMBUILD="--rcfile /usr/lib/rpm/rpmrc:localrc"
-	DRPM=${DRPMBUILD}
-else
-	# RPM > 4.7
-	DRPMBUILD="--macros ${macrofiles}"
-	case `lsb_release -s -i` in
-		Ubuntu* | Debian* ) DRPM="--force-debian ${DRPMBUILD}" ;;
-		*) DRPM=${DRPMBUILD} ;;
-	esac
-fi
-
-AC_SUBST(DRPM)
-AC_SUBST(DRPMBUILD)
+$INSTALL -d BUILD
 
 #
 # mkdir archivedir

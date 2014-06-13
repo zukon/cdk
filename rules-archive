@@ -7,11 +7,6 @@
 #
 
 #
-# bootstrap sh4
-#
-ncurses-5.6.tar.gz;http://mirror.anl.gov/pub/gnu/ncurses/
-
-#
 # core
 #
 ccache-3.1.9.tar.gz;http://samba.org/ftp/ccache
@@ -125,6 +120,7 @@ libnfs.git;git://github.com/sahlberg/libnfs.git
 #
 # contrib apps
 #
+ncurses-5.6.tar.gz;http://mirror.anl.gov/pub/gnu/ncurses/
 bzip2-1.0.6.tar.gz;http://www.bzip.org/1.0.6
 grep-2.5.1.tar.bz2;ftp://mirrors.kernel.org/gnu/grep
 grep_2.5.1.ds2-6.diff.gz;http://64studio.hivelocity.net/apt/pool/main/g/grep

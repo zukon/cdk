@@ -9,13 +9,7 @@
 #
 # bootstrap sh4
 #
-linux_spark
-linux_kernel_headers
-binutils
 host_u_boot_tools
-glibc;rewrite-libtool:TARGETS/target/usr/lib/libstdc++.la:TARGETS/target/usr/lib/libsupc++.la
-gcc
-libncurses;make:install.libs:DESTDIR=TARGETS;archive:TARGETS/usr/lib/libncurses_pic.a:obj_s/*.o
 
 #
 # Core
@@ -130,6 +124,7 @@ taglib;make:install:DESTDIR=TARGETS
 #
 # contrib apps
 #
+libncurses;make:install.libs:DESTDIR=TARGETS;archive:TARGETS/usr/lib/libncurses_pic.a:obj_s/*.o
 bzip2;make:install:PREFIX=TARGETS/usr
 grep;make:install:DESTDIR=TARGETS
 openrdate;make:install:DESTDIR=TARGETS

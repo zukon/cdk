@@ -222,20 +222,6 @@ else
 BUILDCONFIG=build-neutrino
 endif
 
-KERNELHEADERS := linux-kernel-headers
-if ENABLE_P0209
-KERNELHEADERS_VERSION := 2.6.32.46-47
-endif
-if ENABLE_P0211
-KERNELHEADERS_VERSION := 2.6.32.46-47
-endif
-if ENABLE_P0214
-KERNELHEADERS_VERSION := 2.6.32.46-48
-endif
-if ENABLE_P0215
-KERNELHEADERS_VERSION := 2.6.32.46-48
-endif
-
 if DEBUG
 DEBUG_STR=.debug
 else !DEBUG
@@ -246,7 +232,6 @@ endif !DEBUG
 # HOST-KERNEL
 #
 HOST_KERNEL := host-kernel
-
 if ENABLE_P0209
 HOST_KERNEL_VERSION = 2.6.32.46$(KERNELSTMLABEL)-$(KERNELLABEL)
 endif
@@ -259,27 +244,18 @@ endif
 if ENABLE_P0215
 HOST_KERNEL_VERSION = 2.6.32.61$(KERNELSTMLABEL)-$(KERNELLABEL)
 endif
-HOST_KERNEL_SPEC = stm-$(HOST_KERNEL)-sh4.spec
-HOST_KERNEL_SPEC_PATCH =
 HOST_KERNEL_PATCHES = $(KERNELPATCHES_24)
 HOST_KERNEL_CONFIG = linux-sh4-$(subst _stm24_,-,$(KERNELVERSION))_$(MODNAME).config$(DEBUG_STR)
-HOST_KERNEL_SRC_RPM = $(STLINUX)-$(HOST_KERNEL)-source-sh4-$(HOST_KERNEL_VERSION).src.rpm
-HOST_KERNEL_RPM = RPMS/noarch/$(STLINUX)-$(HOST_KERNEL)-source-sh4-$(HOST_KERNEL_VERSION).noarch.rpm
-
-$(HOST_KERNEL_RPM): \
-		$(if $(HOST_KERNEL_SPEC_PATCH),Patches/$(HOST_KERNEL_SPEC_PATCH)) \
-		$(archivedir)/$(HOST_KERNEL_SRC_RPM)
-	rpm $(DRPM) --nosignature --nodeps -Uhv $(lastword $^) && \
-	$(if $(HOST_KERNEL_SPEC_PATCH),( cd SPECS; patch -p1 $(HOST_KERNEL_SPEC) < $(buildprefix)/Patches/$(HOST_KERNEL_SPEC_PATCH) ) &&) \
-	rpmbuild $(DRPMBUILD) -ba -v --clean --target=sh4-linux SPECS/$(HOST_KERNEL_SPEC)
+HOST_KERNEL_RPM = $(archivedir)/$(STLINUX)-$(HOST_KERNEL)-source-sh4-$(HOST_KERNEL_VERSION).noarch.rpm
 
 $(D)/linux-kernel.do_prepare: \
 		$(if $(HOST_KERNEL_PATCHES),$(HOST_KERNEL_PATCHES:%=Patches/$(BUILDCONFIG$)/%)) \
 		$(HOST_KERNEL_RPM)
 	rm -rf linux-sh4*
-	@rpm $(DRPM) --ignorearch --nodeps -Uhv $(lastword $^)
+	unpack-rpm.sh $(buildprefix)/BUILD $(STM_RELOCATE)/devkit/sources/kernel $(buildprefix) $(lastword $^)
 	$(if $(HOST_KERNEL_PATCHES),cd $(KERNEL_DIR) && cat $(HOST_KERNEL_PATCHES:%=$(buildprefix)/Patches/$(BUILDCONFIG$)/%) | patch -p1)
 	$(INSTALL) -m644 Patches/$(BUILDCONFIG)/$(HOST_KERNEL_CONFIG) $(KERNEL_DIR)/.config
+	ln -s $(KERNEL_DIR) $(buildprefix)/linux-sh4
 	-rm $(KERNEL_DIR)/localversion*
 	echo "$(KERNELSTMLABEL)" > $(KERNEL_DIR)/localversion-stm
 	$(MAKE) -C $(KERNEL_DIR) ARCH=sh oldconfig
@@ -296,7 +272,6 @@ $(D)/linux-kernel.do_compile: $(D)/linux-kernel.do_prepare Patches/$(BUILDCONFIG
 	touch $@
 
 $(D)/linux-kernel: $(D)/bootstrap $(D)/linux-kernel.do_compile
-	@$(INSTALL) -d $(prefix)/$*cdkroot/boot && \
 	$(INSTALL) -d $(prefix)/$*$(notdir $(bootprefix)) && \
 	$(INSTALL) -m644 $(KERNEL_DIR)/arch/sh/boot/uImage $(prefix)/$*$(notdir $(bootprefix))/vmlinux.ub && \
 	$(INSTALL) -m644 $(KERNEL_DIR)/vmlinux $(prefix)/$*cdkroot/boot/vmlinux-sh4-$(KERNELVERSION) && \
@@ -307,8 +282,6 @@ $(D)/linux-kernel: $(D)/bootstrap $(D)/linux-kernel.do_compile
 	rm $(prefix)/$*cdkroot/lib/modules/$(KERNELVERSION)/build || true && \
 	rm $(prefix)/$*cdkroot/lib/modules/$(KERNELVERSION)/source || true
 	touch $@
-
-linux-kernel-distclean: $(KERNELHEADERS)-distclean
 
 $(D)/tfkernel.do_compile:
 	cd $(KERNEL_DIR) && \

@@ -12,14 +12,7 @@
 #
 # bootstrap sh4
 #
-#linuxp0209;2.6.32.46;linux-2.6.32;stlinux24-host-kernel-source-sh4-2.6.32.46_stm24_0209-209.src.rpm;dirextract:stlinux24-host-kernel-source-sh4-2.6.32.46_stm24_0209-209.src.rpm
-#linuxp0211;2.6.32.59;linux-2.6.32;stlinux24-host-kernel-source-sh4-2.6.32.59_stm24_0211-211.src.rpm;dirextract:stlinux24-host-kernel-source-sh4-2.6.32.59_stm24_0211-211.src.rpm
-linux_kernel_headers;2.6.32.46-48;linux-2.6.32.46-48;stlinux24-sh4-linux-kernel-headers-2.6.32.46-48.noarch.rpm;dirextract:stlinux24-sh4-linux-kernel-headers-2.6.32.46-48.noarch.rpm
-binutils;2.23.2-72;binutils-2.23.2-72;stlinux24-cross-sh4-binutils-2.23.2-72.i386.rpm:stlinux24-cross-sh4-binutils-dev-2.23.2-72.i386.rpm;dirextract:stlinux24-cross-sh4-binutils-2.23.2-72.i386.rpm;dirextract:stlinux24-cross-sh4-binutils-dev-2.23.2-72.i386.rpm
 host_u_boot_tools;1.3.1;host-u-boot-tools-1.3.1;stlinux24-host-u-boot-tools-1.3.1_stm24-9.i386.rpm;dirextract:stlinux24-host-u-boot-tools-1.3.1_stm24-9.i386.rpm
-gcc;4.8.2-131;gcc-4.8.2-131;stlinux24-cross-sh4-cpp-4.8.2-131.i386.rpm:stlinux24-cross-sh4-gcc-4.8.2-131.i386.rpm:stlinux24-cross-sh4-g++-4.8.2-131.i386.rpm;dirextract:stlinux24-cross-sh4-cpp-4.8.2-131.i386.rpm;dirextract:stlinux24-cross-sh4-gcc-4.8.2-131.i386.rpm;dirextract:stlinux24-cross-sh4-g++-4.8.2-131.i386.rpm
-glibc;2.14.1-49;glibc-2.14.1-49;stlinux24-sh4-glibc-2.14.1-49.sh4.rpm:stlinux24-sh4-glibc-dev-2.14.1-49.sh4.rpm:stlinux24-sh4-libstdc++-4.8.2-137.sh4.rpm:stlinux24-sh4-libstdc++-dev-4.8.2-137.sh4.rpm:stlinux24-sh4-libgcc-4.8.2-137.sh4.rpm;dirextract:stlinux24-sh4-glibc-2.14.1-49.sh4.rpm;dirextract:stlinux24-sh4-glibc-dev-2.14.1-49.sh4.rpm;dirextract:stlinux24-sh4-libstdc++-4.8.2-137.sh4.rpm;dirextract:stlinux24-sh4-libstdc++-dev-4.8.2-137.sh4.rpm;dirextract:stlinux24-sh4-libgcc-4.8.2-137.sh4.rpm
-libncurses;5.6;ncurses-5.6;ncurses-5.6.tar.gz;extract:ncurses-5.6.tar.gz
 
 #
 # core
@@ -139,6 +132,7 @@ taglib;1.8;taglib-1.8;taglib-1.8.tar.gz;extract:taglib-1.8.tar.gz
 #
 # contrib apps
 #
+libncurses;5.6;ncurses-5.6;ncurses-5.6.tar.gz;extract:ncurses-5.6.tar.gz
 bzip2;1.0.6;bzip2-1.0.6;bzip2-1.0.6.tar.gz:bzip2.patch;extract:bzip2-1.0.6.tar.gz;patch:bzip2.patch
 grep;2.5.1;grep-2.5.1;grep-2.5.1.tar.bz2:grep_2.5.1.ds2-6.diff.gz;extract:grep-2.5.1.tar.bz2
 openrdate;1.1.2;openrdate-1.1.2;openrdate-1.1.2.tar.gz;extract:openrdate-1.1.2.tar.gz
