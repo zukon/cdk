@@ -696,6 +696,7 @@ TUXBOX_RULES_MAKE(cramfs)
 TUXBOX_RULES_MAKE(host_pkgconfig)
 TUXBOX_RULES_MAKE(host_module_init_tools)
 TUXBOX_RULES_MAKE(host_mtd_utils)
+TUXBOX_RULES_MAKE(uboot_tf7700)
 
 #
 # root
@@ -953,7 +954,6 @@ boot prefix                 : $bootprefix
 serversupport               : $serversupport
 host prefix                 : $hostprefix
 target prefix               : $targetprefix
-cross prefix                : $crossprefix
 build prefix                : $buildprefix
 target apps directory       : $appsdir
 driver directory            : $driverdir

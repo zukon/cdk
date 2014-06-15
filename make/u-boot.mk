@@ -8,3 +8,29 @@ $(D)/host_u_boot_tools: @DEPENDS_host_u_boot_tools@
 	@CLEANUP_host_u_boot_tools@
 	touch $@
 
+#
+# TF7700 installer
+#
+TFINSTALLER_DIR := tfinstaller
+
+tfinstaller:
+	$(MAKE) $(MAKE_OPTS) -C tfinstaller
+
+$(TFINSTALLER_DIR)/u-boot.ftfd: @DIR_uboot_tf7700@/u-boot.bin $(TFINSTALLER_DIR)/tfpacker
+	$(TFINSTALLER_DIR)/tfpacker $< $@
+	$(TFINSTALLER_DIR)/tfpacker -t $< $(@D)/Enigma_Installer.tfd
+
+$(TFINSTALLER_DIR)/tfpacker:
+	$(MAKE) -C $(TFINSTALLER_DIR) tfpacker
+
+$(D)/uboot_tf7700: bootstrap @DEPENDS_uboot_tf7700@
+	@PREPARE_uboot_tf7700@
+	cd @DIR_uboot_tf7700@ && \
+		$(MAKE) tf7700_config && \
+		$(MAKE)
+#	@CLEANUP_uboot_tf7700@
+	touch $@
+
+
+
+

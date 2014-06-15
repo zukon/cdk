@@ -67,11 +67,8 @@ OCTAGON1008PATCHES_24 = $(COMMONPATCHES_24) \
 ATEVIO7500PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-lmb_stm24$(PATCH_STR).patch \
 		linux-sh4-atevio7500_setup_stm24$(PATCH_STR).patch \
+		$(if $(ENIGMA2),linux-sh4-atevio7500_mtdconcat_stm24$(PATCH_STR).patch) \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch
-
-if ENABLE_ENIGMA2
-ATEVIO7500PATCHES_24 += linux-sh4-atevio7500_mtdconcat_stm24$(PATCH_STR).patch
-endif
 
 HS7810APATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-lmb_stm24$(PATCH_STR).patch \

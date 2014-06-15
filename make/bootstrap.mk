@@ -1,12 +1,24 @@
 #
 #
 #
+STMKERNEL_VER = 2.6.32.46-47
+
+# 4.7.2
+#BINUTILS_VER  = 2.23.2-68
+#GCC_VER       = 4.7.2-119
+#LIBGCC_VER    = 4.7.2-124
+#GLIBC_VER     = 2.10.2-43
+
+# 4.7.3
+#BINUTILS_VER  = 2.23.2-68
+#GCC_VER       = 4.7.3-124
+#LIBGCC_VER    = 4.7.3-129
+#GLIBC_VER     = 2.10.2-43
+
+# 4.8.2
 BINUTILS_VER  = 2.23.2-72
-STMKERNEL_VER = 2.6.32.46-48
 GCC_VER       = 4.8.2-131
-#LIBGCC_VER    = 4.8.2-136
 LIBGCC_VER    = 4.8.2-137
-#GLIBC_VER     = 2.14.1-48
 GLIBC_VER     = 2.14.1-49
 
 $(hostprefix)/bin/unpack-rpm.sh:
@@ -32,7 +44,7 @@ $(archivedir)/stlinux24-sh4-libstdc++-dev-$(LIBGCC_VER).sh4.rpm
 crosstool: host-filesystem \
 $(hostprefix)/bin/unpack-rpm.sh \
 crosstool-rpminstall
-	set -e; cd $(hostprefix); rm -f sh4-linux/sys-root; ln -s ../target sh4-linux/sys-root; ln -s ../host/target/* $(targetprefix)
+	set -e; cd $(hostprefix); ln -s ../host/target/* $(targetprefix)
 	touch .deps/$@
 
 #
