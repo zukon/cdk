@@ -22,9 +22,6 @@ PYTHON_INCLUDE_DIR = /usr/include/python$(PYTHON_VERSION)
 #
 PATCHES    = $(buildprefix)/Patches
 TARGETLIB  = $(targetprefix)/usr/lib
-PKG_CONFIG = $(hostprefix)/bin/$(target)-pkg-config
-PKG_CONFIG_LIBDIR = $(TARGETLIB)
-PKG_CONFIG_PATH = $(TARGETLIB)/pkgconfig
 REWRITE_LIBDIR = sed -i "s,^libdir=.*,libdir='$(TARGETLIB)'," $(TARGETLIB)
 REWRITE_LIBDEP = sed -i -e "s,\(^dependency_libs='\| \|-L\|^dependency_libs='\)/usr/lib,\$(TARGETLIB)," $(TARGETLIB)
 REWRITE_PKGCONF = sed -i "s,^prefix=.*,prefix=$(targetprefix)/usr,"

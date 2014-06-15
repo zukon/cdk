@@ -359,6 +359,7 @@ $(D)/libfribidi: $(D)/bootstrap @DEPENDS_libfribidi@
 			--build=$(build) \
 			--host=$(target) \
 			--disable-shared \
+			--with-glib=no \
 			--prefix=/usr && \
 		$(MAKE) all && \
 		@INSTALL_libfribidi@

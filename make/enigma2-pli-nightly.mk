@@ -82,6 +82,7 @@ $(appsdir)/enigma2-pli-nightly/config.status:
 	cd $(appsdir)/enigma2-nightly && \
 		./autogen.sh && \
 		sed -e 's|#!/usr/bin/python|#!$(hostprefix)/bin/python|' -i po/xml2po.py && \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -92,8 +93,8 @@ $(appsdir)/enigma2-pli-nightly/config.status:
 			--prefix=/usr \
 			--sysconfdir=/etc \
 			--with-boxtype=none \
-			STAGING_INCDIR=$(hostprefix)/usr/include \
-			STAGING_LIBDIR=$(hostprefix)/usr/lib \
+			PKG_CONFIG=$(hostprefix)/bin/$(target)-pkg-config \
+			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			PY_PATH=$(targetprefix)/usr \
 			$(PLATFORM_CPPFLAGS) \
 			$(E_CONFIG_OPTS)

@@ -80,6 +80,8 @@ $(appsdir)/libstb-hal-github/config.status: | $(NEUTRINO_DEPS)
 			--prefix= \
 			--with-target=cdk \
 			--with-boxtype=$(BOXTYPE) \
+			PKG_CONFIG=$(hostprefix)/bin/$(target)-pkg-config \
+			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			$(PLATFORM_CPPFLAGS) \
 			CFLAGS="$(N_CFLAGS)" CXXFLAGS="$(N_CFLAGS)" CPPFLAGS="$(N_CPPFLAGS)"
 
@@ -144,6 +146,8 @@ $(appsdir)/neutrino-mp-github/config.status:
 			--with-plugindir=/var/tuxbox/plugins \
 			--with-stb-hal-includes=$(appsdir)/libstb-hal-github/include \
 			--with-stb-hal-build=$(appsdir)/libstb-hal-github \
+			PKG_CONFIG=$(hostprefix)/bin/$(target)-pkg-config \
+			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			CFLAGS="$(N_CFLAGS)" CXXFLAGS="$(N_CFLAGS)" CPPFLAGS="$(N_CPPFLAGS)"
 
 $(D)/neutrino-mp-github.do_compile: $(appsdir)/neutrino-mp-github/config.status
@@ -218,6 +222,8 @@ $(appsdir)/neutrino-mp-martii-github/config.status:
 			--with-plugindir=/var/tuxbox/plugins \
 			--with-stb-hal-includes=$(appsdir)/libstb-hal-github/include \
 			--with-stb-hal-build=$(appsdir)/libstb-hal-github \
+			PKG_CONFIG=$(hostprefix)/bin/$(target)-pkg-config \
+			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			$(PLATFORM_CPPFLAGS) \
 			CFLAGS="$(N_CFLAGS)" CXXFLAGS="$(N_CFLAGS)" CPPFLAGS="$(N_CPPFLAGS)"
 
@@ -292,6 +298,8 @@ $(appsdir)/libstb-hal/config.status: bootstrap
 			--prefix= \
 			--with-target=cdk \
 			--with-boxtype=$(BOXTYPE) \
+			PKG_CONFIG=$(hostprefix)/bin/$(target)-pkg-config \
+			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			$(PLATFORM_CPPFLAGS) \
 			CPPFLAGS="$(N_CPPFLAGS)"
 
@@ -347,6 +355,8 @@ $(appsdir)/neutrino-mp/config.status:
 			--with-plugindir=/var/tuxbox/plugins \
 			--with-stb-hal-includes=$(appsdir)/libstb-hal/include \
 			--with-stb-hal-build=$(appsdir)/libstb-hal \
+			PKG_CONFIG=$(hostprefix)/bin/$(target)-pkg-config \
+			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			$(PLATFORM_CPPFLAGS) \
 			CPPFLAGS="$(N_CPPFLAGS)"
 
@@ -426,6 +436,8 @@ $(D)/libstb-hal-next.config.status: bootstrap
 			--prefix= \
 			--with-target=cdk \
 			--with-boxtype=$(BOXTYPE) \
+			PKG_CONFIG=$(hostprefix)/bin/$(target)-pkg-config \
+			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			$(PLATFORM_CPPFLAGS) \
 			CPPFLAGS="$(N_CPPFLAGS)"
 	touch $@
@@ -490,6 +502,8 @@ $(D)/neutrino-mp-next.config.status:
 			--with-plugindir=/var/tuxbox/plugins \
 			--with-stb-hal-includes=$(appsdir)/libstb-hal-next/include \
 			--with-stb-hal-build=$(LH_OBJDIR) \
+			PKG_CONFIG=$(hostprefix)/bin/$(target)-pkg-config \
+			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			$(PLATFORM_CPPFLAGS) \
 			CPPFLAGS="$(N_CPPFLAGS)"
 
@@ -588,6 +602,8 @@ $(appsdir)/nhd2-exp/config.status:
 			--enable-upnp \
 			--enable-scart \
 			--enable-ci \
+			PKG_CONFIG=$(hostprefix)/bin/$(target)-pkg-config \
+			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			$(PLATFORM_CPPFLAGS) \
 			CPPFLAGS="$(N_CPPFLAGS)"
 
