@@ -44,7 +44,7 @@ $(archivedir)/stlinux24-sh4-libstdc++-dev-$(LIBGCC_VER).sh4.rpm
 crosstool: host-filesystem \
 $(hostprefix)/bin/unpack-rpm.sh \
 crosstool-rpminstall
-	set -e; cd $(hostprefix); ln -s ../host/target/* $(targetprefix)
+	set -e; cd $(hostprefix); ln -sf ../host/target/* $(targetprefix)
 	touch .deps/$@
 
 #
