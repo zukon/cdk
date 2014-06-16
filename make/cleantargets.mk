@@ -23,6 +23,7 @@ cdk-clean:
 	-$(MAKE) -C $(appsdir)/tools distclean
 	-$(MAKE) -C $(appsdir)/libs/gst-plugins-dvbmediasink distclean
 	-$(MAKE) -C $(appsdir)/libs/libstgles distclean
+	-$(MAKE) -C $(TFINSTALLER_DIR) clean
 
 # Clean tuxbox source directories. Clean up in cdkroot as much as the
 # uninstall facilities of the components allow.

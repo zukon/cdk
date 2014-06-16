@@ -27,6 +27,8 @@ tfpacker: $(TFP_OBJS)
 clean:
 	rm -f $(TFP_OBJS)
 	rm -f uImage
+	rm -f u-boot.ftfd
+	rm -f tfpacker
 
 .c.o:
 	gcc -c $< -Wall
