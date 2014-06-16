@@ -2,3 +2,4 @@ Enigma_Installer.tfd
 tfpacker
 u-boot.ftfd
 uImage
+*.o
