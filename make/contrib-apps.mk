@@ -155,6 +155,7 @@ $(D)/openrdate: $(D)/bootstrap @DEPENDS_openrdate@ $(OPENRDATE_ADAPTED_ETC_FILES
 $(D)/e2fsprogs: $(D)/bootstrap $(D)/utillinux @DEPENDS_e2fsprogs@
 	@PREPARE_e2fsprogs@
 	cd @DIR_e2fsprogs@ && \
+		autoreconf -fi && \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CC=$(target)-gcc \
 		RANLIB=$(target)-ranlib \
