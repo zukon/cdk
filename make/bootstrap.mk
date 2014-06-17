@@ -45,6 +45,8 @@ crosstool: host-filesystem \
 $(hostprefix)/bin/unpack-rpm.sh \
 crosstool-rpminstall
 	set -e; cd $(hostprefix); ln -sf ../host/target/* $(targetprefix)
+	sed -i "s,^libdir=.*,libdir='$(hostprefix)/sh4-linux/lib'," $(hostprefix)/sh4-linux/lib/lib{std,sup}c++.la
+	sed -i "s,^libdir=.*,libdir='$(targetprefix)/usr/lib'," $(targetprefix)/usr/lib/lib{std,sup}c++.la
 	touch .deps/$@
 
 #
