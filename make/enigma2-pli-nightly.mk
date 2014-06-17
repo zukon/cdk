@@ -50,9 +50,9 @@ $(D)/enigma2-pli-nightly.do_prepare: | $(ENIGMA2_DEPS)
 	[ "$$REPLY" == "0" ] && DIFF="0"; \
 	[ "$$REPLY" == "1" ] && DIFF="1" && REVISION=""; \
 	[ "$$REPLY" == "2" ] && DIFF="2" && REVISION="b670ebecf90dc4651b2862ebf448bca370d69fef"; \
-	[ "$$REPLY" == "7" ] && DIFF="3" && REVISION="715a3024ad7ae3e89dad039bfb8ae49350552c39"; \
-	[ "$$REPLY" == "8" ] && DIFF="4" && REVISION="e858a47a49c4fd8cdf22b29ea7278e6b4a2bddae"; \
-	[ "$$REPLY" == "9" ] && DIFF="5" && REVISION="7272840d7db98a88f5c8b2882cc78d7ddc04e5e6"; \
+	[ "$$REPLY" == "3" ] && DIFF="3" && REVISION="715a3024ad7ae3e89dad039bfb8ae49350552c39"; \
+	[ "$$REPLY" == "4" ] && DIFF="4" && REVISION="e858a47a49c4fd8cdf22b29ea7278e6b4a2bddae"; \
+	[ "$$REPLY" == "5" ] && DIFF="5" && REVISION="7272840d7db98a88f5c8b2882cc78d7ddc04e5e6"; \
 	echo "Revision       : "$$REVISION; \
 	echo ""; \
 	if [ "$$REPLY" != "1" ]; then \
