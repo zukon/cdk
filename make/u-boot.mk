@@ -19,6 +19,7 @@ tfinstaller:
 $(TFINSTALLER_DIR)/u-boot.ftfd: @DIR_uboot_tf7700@/u-boot.bin $(TFINSTALLER_DIR)/tfpacker
 	$(TFINSTALLER_DIR)/tfpacker $< $@
 	$(TFINSTALLER_DIR)/tfpacker -t $< $(@D)/Enigma_Installer.tfd
+	@CLEANUP_uboot_tf7700@
 
 $(TFINSTALLER_DIR)/tfpacker:
 	$(MAKE) -C $(TFINSTALLER_DIR) tfpacker
