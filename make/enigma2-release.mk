@@ -684,6 +684,8 @@ release_base:
 	cp -dp $(targetprefix)/usr/sbin/vsftpd $(prefix)/release/usr/bin/ && \
 	cp $(buildprefix)/root/bootscreen/bootlogo.mvi $(prefix)/release/boot/ && \
 	cp $(buildprefix)/root/bin/autologin $(prefix)/release/bin/ && \
+	cp $(buildprefix)/root/usr/sbin/fw_printenv $(prefix)/release/usr/sbin/ && \
+	ln -sf ../../usr/sbin/fw_printenv $(prefix)/release/usr/sbin/fw_setenv && \
 	cp $(buildprefix)/root/bin/vdstandby $(prefix)/release/bin/ && \
 	cp -dp $(targetprefix)/sbin/blkid $(prefix)/release/sbin/ && \
 	cp -p $(targetprefix)/usr/bin/ffmpeg $(prefix)/release/sbin/ && \
