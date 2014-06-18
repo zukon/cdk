@@ -284,14 +284,12 @@ release_enigma2_spark: release_enigma2_common_utils
 #
 release_enigma2_spark7162: release_enigma2_common_utils
 	echo "spark7162" > $(prefix)/release/etc/hostname
-	cp $(buildprefix)/root/release/halt_spark $(prefix)/release/etc/init.d/halt
+	cp $(buildprefix)/root/release/halt_spark7162 $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/aotom_spark/aotom.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7105.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/*.ko $(prefix)/release/lib/modules/
-	if [ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/i2c_spi/i2s.ko ]; then \
-		cp -f $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/i2c_spi/i2s.ko $(prefix)/release/lib/modules/; \
-	fi
+	cp -f $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/i2c_spi/i2s.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/boot/video_7105.elf $(prefix)/release/boot/video.elf
 	cp $(targetprefix)/boot/audio_7105.elf $(prefix)/release/boot/audio.elf
 	mv $(prefix)/release/lib/firmware/component_7105_pdk7105.fw $(prefix)/release/lib/firmware/component.fw
@@ -742,8 +740,6 @@ endif
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/avs/avs.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/bpamem/bpamem.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/boxtype/boxtype.ko $(prefix)/release/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/compcache/lzo-kmod/lzo1x_compress.ko $(prefix)/release/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/compcache/lzo-kmod/lzo1x_decompress.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/compcache/ramzswap.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/e2_proc/e2_proc.ko $(prefix)/release/lib/modules/
 
@@ -813,7 +809,7 @@ endif
 	chmod 755 $(prefix)/release/lib/*
 
 	cp -R $(targetprefix)/usr/lib/* $(prefix)/release/usr/lib/
-	rm -rf $(prefix)/release/usr/lib/{engines,enigma2,gconv,ldscripts,libxslt-plugins,pkgconfig,python$(PYTHON_VERSION),sigc++-1.2,X11}
+	rm -rf $(prefix)/release/usr/lib/{engines,enigma2,gconv,ldscripts,libxslt-plugins,pkgconfig,python$(PYTHON_VERSION),sigc++-1.2,X11,lua}
 	rm -f $(prefix)/release/usr/lib/*.{a,o,la}
 	chmod 755 $(prefix)/release/usr/lib/*
 
@@ -842,8 +838,6 @@ endif
 	if [ -e $(targetprefix)/usr/local/bin/enigma2 ]; then \
 		cp -f $(targetprefix)/usr/local/bin/enigma2 $(prefix)/release/usr/local/bin/enigma2; \
 	fi
-
-	find $(prefix)/release/usr/local/bin/ -name enigma2 -exec sh4-linux-strip --strip-unneeded {} \;
 
 	cp -a $(targetprefix)/usr/local/share/enigma2/* $(prefix)/release/usr/local/share/enigma2
 	cp $(buildprefix)/root/root_enigma2/etc/enigma2/* $(prefix)/release/etc/enigma2
@@ -990,6 +984,7 @@ endif
 #
 # GSTREAMER
 #
+if ENABLE_MEDIAFWGSTREAMER
 	if [ -d $(prefix)/release/usr/lib/gstreamer-0.10 ]; then \
 		#removed rm \
 		rm -rf $(prefix)/release/usr/lib/libgstfft*; \
@@ -1047,6 +1042,7 @@ endif
 		fi; \
 		sh4-linux-strip --strip-unneeded $(prefix)/release/usr/lib/gstreamer-0.10/*; \
 	fi
+endif
 
 #
 # GRAPHLCD
