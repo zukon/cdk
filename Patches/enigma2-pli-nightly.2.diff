@@ -9026,12 +9026,26 @@ diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/mytest.py enigma2-n
 diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/skin.py enigma2-nightly/skin.py
 --- enigma2-nightly.org/skin.py	2014-06-13 21:45:21.888535785 +0200
 +++ enigma2-nightly/skin.py	2014-06-17 11:08:15.306431505 +0200
-@@ -68,7 +68,7 @@
+@@ -68,7 +68,9 @@
  
  # example: loadSkin("nemesis_greenline/skin.xml")
  config.skin = ConfigSubsection()
 -DEFAULT_SKIN = "PLi-HD/skin.xml"
 +DEFAULT_SKIN = "Nobile/skin.xml"
++if not fileExists(resolveFilename(SCOPE_SKIN, DEFAULT_SKIN)):
++	DEFAULT_SKIN = "PLi-HD/skin.xml"
  # on SD hardware, PLi-HD will not be available
  if not fileExists(resolveFilename(SCOPE_SKIN, DEFAULT_SKIN)):
  	# in that case, fallback to Magic (which is an SD skin)
+diff -Naur '--exclude-from=diff-ignore' enigma2-nightly.org/lib/python/Screens/ScanSetup.py enigma2-nightly/lib/python/Screens/ScanSetup.py
+--- enigma2-nightly.org/lib/python/Screens/ScanSetup.py
++++ enigma2-nightly/lib/python/Screens/ScanSetup.py
+@@ -746,7 +746,7 @@
+ 			self.scan_type = ConfigSelection(default = defaultSatSearchType, choices = [("single_transponder", _("User defined transponder")), ("predefined_transponder", _("Predefined transponder")), ("single_satellite", _("Single satellite")), ("multisat", _("Multisat")), ("multisat_yes", _("Multisat all select"))])
+ 			self.scan_typecable = ConfigSelection(default = "single_transponder", choices = [("single_transponder", _("Single transponder")), ("complete", _("Complete"))])
+ 			self.scan_typeterrestrial = ConfigSelection(default = "single_transponder", choices = [("single_transponder", _("User defined transponder")), ("predefined_transponder", _("Predefined transponder")), ("complete", _("Complete"))])
+-			self.scan_input_as = ConfigSelection(default = "channel", choices = [("frequency", _("Frequency")), ("channel", _("Channel"))])
++			self.scan_input_as = ConfigSelection(default = "frequency", choices = [("frequency", _("Frequency")), ("channel", _("Channel"))])
+ 			self.scan_clearallservices = ConfigSelection(default = "no", choices = [("no", _("no")), ("yes", _("yes")), ("yes_hold_feeds", _("yes (keep feeds)"))])
+ 			self.scan_onlyfree = ConfigYesNo(default = False)
+ 			self.scan_networkScan = ConfigYesNo(default = False)
