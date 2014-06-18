@@ -5,7 +5,7 @@
 #
 # release_common_utils
 #
-release_common_utils:
+release_enigma2_common_utils:
 #	remove the slink to busybox
 	rm -f $(prefix)/release/sbin/halt
 	cp -f $(targetprefix)/sbin/halt $(prefix)/release/sbin/
@@ -39,7 +39,7 @@ release_common_utils:
 #
 # release_cube_common
 #
-release_cube_common:
+release_enigma2_cube_common:
 	cp $(buildprefix)/root/release/halt_cuberevo $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
 	cp $(buildprefix)/root/release/reboot_cuberevo $(prefix)/release/etc/init.d/reboot
@@ -56,56 +56,56 @@ release_cube_common:
 #
 # release_cube_common_tunner
 #
-release_cube_common_tunner:
+release_enigma2_cube_common_tunner:
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/multituner/*.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends/dvb-pll.ko $(prefix)/release/lib/modules/
 
 #
 # release_cuberevo_9500hd
 #
-release_cuberevo_9500hd: release_common_utils release_cube_common release_cube_common_tunner
+release_enigma2_cuberevo_9500hd: release_enigma2_common_utils release_enigma2_cube_common release_enigma2_cube_common_tunner
 	echo "cuberevo-9500hd" > $(prefix)/release/etc/hostname
 
 #
 # release_cuberevo_2000hd
 #
-release_cuberevo_2000hd: release_common_utils release_cube_common release_cube_common_tunner
+release_enigma2_cuberevo_2000hd: release_enigma2_common_utils release_enigma2_cube_common release_enigma2_cube_common_tunner
 	echo "cuberevo-2000hd" > $(prefix)/release/etc/hostname
 
 #
 # release_cuberevo_250hd
 #
-release_cuberevo_250hd: release_common_utils release_cube_common release_cube_common_tunner
+release_enigma2_cuberevo_250hd: release_enigma2_common_utils release_enigma2_cube_common release_enigma2_cube_common_tunner
 	echo "cuberevo-250hd" > $(prefix)/release/etc/hostname
 
 #
 # release_cuberevo_mini_fta
 #
-release_cuberevo_mini_fta: release_common_utils release_cube_common release_cube_common_tunner
+release_enigma2_cuberevo_mini_fta: release_enigma2_common_utils release_enigma2_cube_common release_enigma2_cube_common_tunner
 	echo "cuberevo-mini-fta" > $(prefix)/release/etc/hostname
 
 #
 # release_cuberevo_mini2
 #
-release_cuberevo_mini2: release_common_utils release_cube_common release_cube_common_tunner
+release_enigma2_cuberevo_mini2: release_enigma2_common_utils release_enigma2_cube_common release_enigma2_cube_common_tunner
 	echo "cuberevo-mini2" > $(prefix)/release/etc/hostname
 
 #
 # release_cuberevo_mini
 #
-release_cuberevo_mini: release_common_utils release_cube_common release_cube_common_tunner
+release_cuberevo_mini: release_enigma2_common_utils release_enigma2_cube_common release_enigma2_cube_common_tunner
 	echo "cuberevo-mini" > $(prefix)/release/etc/hostname
 
 #
 # release_cuberevo
 #
-release_cuberevo: release_common_utils release_cube_common release_cube_common_tunner
+release_cuberevo: release_enigma2_common_utils release_enigma2_cube_common release_enigma2_cube_common_tunner
 	echo "cuberevo" > $(prefix)/release/etc/hostname
 
 #
 # release_common_ipbox
 #
-release_common_ipbox:
+release_enigma2_common_ipbox:
 	cp $(buildprefix)/root/release/halt_ipbox $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/*.ko $(prefix)/release/lib/modules/
@@ -131,7 +131,7 @@ release_common_ipbox:
 #
 # release_ipbox9900
 #
-release_ipbox9900: release_common_utils release_common_ipbox
+release_enigma2_ipbox9900: release_enigma2_common_utils release_enigma2_common_ipbox
 	echo "ipbox9900" > $(prefix)/release/etc/hostname
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/ipbox99xx/micom.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/rmu/rmu.ko $(prefix)/release/lib/modules/
@@ -142,7 +142,7 @@ release_ipbox9900: release_common_utils release_common_ipbox
 #
 # release_ipbox99
 #
-release_ipbox99: release_common_utils release_common_ipbox
+release_enigma2_ipbox99: release_enigma2_common_utils release_enigma2_common_ipbox
 	echo "ipbox99" > $(prefix)/release/etc/hostname
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/ipbox99xx/micom.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/ipbox99xx_fan/ipbox_fan.ko $(prefix)/release/lib/modules/
@@ -152,7 +152,7 @@ release_ipbox99: release_common_utils release_common_ipbox
 #
 # release_ipbox55
 #
-release_ipbox55: release_common_utils release_common_ipbox
+release_enigma2_ipbox55: release_enigma2_common_utils release_enigma2_common_ipbox
 	echo "ipbox55" > $(prefix)/release/etc/hostname
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/ipbox55/front.ko $(prefix)/release/lib/modules/
 	cp -f $(buildprefix)/root/root_enigma2/usr/local/share/enigma2/keymap_ipbox.xml $(prefix)/release/usr/local/share/enigma2/keymap.xml
@@ -161,7 +161,7 @@ release_ipbox55: release_common_utils release_common_ipbox
 #
 # release_ufs910
 #
-release_ufs910: release_common_utils
+release_enigma2_ufs910: release_enigma2_common_utils
 	echo "ufs910" > $(prefix)/release/etc/hostname
 	cp $(buildprefix)/root/release/halt_ufs $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
@@ -183,7 +183,7 @@ release_ufs910: release_common_utils
 #
 # release_ufs912
 #
-release_ufs912: release_common_utils
+release_enigma2_ufs912: release_enigma2_common_utils
 	echo "ufs912" > $(prefix)/release/etc/hostname
 	cp $(buildprefix)/root/release/halt_ufs912 $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
@@ -202,7 +202,7 @@ release_ufs912: release_common_utils
 #
 # release_ufs913
 #
-release_ufs913: release_common_utils
+release_enigma2_ufs913: release_enigma2_common_utils
 	echo "ufs913" > $(prefix)/release/etc/hostname
 	cp $(buildprefix)/root/release/halt_ufs912 $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
@@ -221,7 +221,7 @@ release_ufs913: release_common_utils
 #
 # release_ufs922
 #
-release_ufs922: release_common_utils
+release_enigma2_ufs922: release_enigma2_common_utils
 	echo "ufs922" > $(prefix)/release/etc/hostname
 	cp $(buildprefix)/root/release/halt_ufs $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
@@ -238,7 +238,7 @@ release_ufs922: release_common_utils
 #
 # release_ufc960
 #
-release_ufc960: release_common_utils
+release_enigma2_ufc960: release_enigma2_common_utils
 	echo "ufc960" > $(prefix)/release/etc/hostname
 	cp $(buildprefix)/root/release/halt_ufs $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
@@ -254,7 +254,7 @@ release_ufc960: release_common_utils
 #
 # release_spark
 #
-release_spark: release_common_utils
+release_enigma2_spark: release_enigma2_common_utils
 	echo "spark" > $(prefix)/release/etc/hostname
 	cp $(buildprefix)/root/release/halt_spark $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
@@ -282,7 +282,7 @@ release_spark: release_common_utils
 #
 # release_spark7162
 #
-release_spark7162: release_common_utils
+release_enigma2_spark7162: release_enigma2_common_utils
 	echo "spark7162" > $(prefix)/release/etc/hostname
 	cp $(buildprefix)/root/release/halt_spark $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
@@ -312,7 +312,7 @@ release_spark7162: release_common_utils
 #
 # release_fortis_hdbox
 #
-release_fortis_hdbox: release_common_utils
+release_enigma2_fortis_hdbox: release_enigma2_common_utils
 	echo "fortis" > $(prefix)/release/etc/hostname
 	cp $(buildprefix)/root/release/halt_fortis_hdbox $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
@@ -329,7 +329,7 @@ release_fortis_hdbox: release_common_utils
 #
 # release_atevio7500
 #
-release_atevio7500: release_common_utils
+release_enigma2_atevio7500: release_enigma2_common_utils
 	echo "atevio7500" > $(prefix)/release/etc/hostname
 	cp $(buildprefix)/root/release/halt_fortis_hdbox $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
@@ -351,7 +351,7 @@ release_atevio7500: release_common_utils
 #
 # release_octagon1008
 #
-release_octagon1008: release_common_utils
+release_enigma2_octagon1008: release_enigma2_common_utils
 	echo "octagon1008" > $(prefix)/release/etc/hostname
 	cp $(buildprefix)/root/release/halt_octagon1008 $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
@@ -370,7 +370,7 @@ release_octagon1008: release_common_utils
 #
 # release_hs7810a
 #
-release_hs7810a: release_common_utils
+release_enigma2_hs7810a: release_enigma2_common_utils
 	echo "hs7810a" > $(prefix)/release/etc/hostname
 	cp $(buildprefix)/root/release/halt_hs7810a $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
@@ -388,7 +388,7 @@ release_hs7810a: release_common_utils
 #
 # release_hs7110
 #
-release_hs7110: release_common_utils
+release_enigma2_hs7110: release_enigma2_common_utils
 	echo "hs7110" > $(prefix)/release/etc/hostname
 	cp $(buildprefix)/root/release/halt_hs7110 $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
@@ -406,7 +406,7 @@ release_hs7110: release_common_utils
 #
 # release_atemio520
 #
-release_atemio520: release_common_utils
+release_enigma2_atemio520: release_enigma2_common_utils
 	echo "atemio520" > $(prefix)/release/etc/hostname
 	cp $(buildprefix)/root/release/halt_atemio520 $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
@@ -424,7 +424,7 @@ release_atemio520: release_common_utils
 #
 # release_atemio530
 #
-release_atemio530: release_common_utils
+release_enigma2_atemio530: release_enigma2_common_utils
 	echo "atemio530" > $(prefix)/release/etc/hostname
 	cp $(buildprefix)/root/release/halt_atemio530 $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
@@ -442,7 +442,7 @@ release_atemio530: release_common_utils
 #
 # release_hl101
 #
-release_hl101: release_common_utils
+release_enigma2_hl101: release_enigma2_common_utils
 	echo "hl101" > $(prefix)/release/etc/hostname
 	cp $(buildprefix)/root/release/halt_hl101 $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
@@ -462,7 +462,7 @@ release_hl101: release_common_utils
 #
 # release_adb_box
 #
-release_adb_box: release_common_utils
+release_enigma2_adb_box: release_enigma2_common_utils
 	echo "Adb_Box" > $(prefix)/release/etc/hostname
 	cp $(buildprefix)/root/release/halt_adb_box $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
@@ -486,7 +486,7 @@ release_adb_box: release_common_utils
 #
 # release_vip1_v2
 #
-release_vip1_v2: release_common_utils
+release_enigma2_vip1_v2: release_enigma2_common_utils
 	echo "Edision-v2" > $(prefix)/release/etc/hostname
 	cp $(buildprefix)/root/release/halt_vip2 $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
@@ -506,7 +506,7 @@ release_vip1_v2: release_common_utils
 #
 # release_vip2_v1
 #
-release_vip2_v1: release_common_utils
+release_enigma2_vip2_v1: release_enigma2_common_utils
 	echo "Edision-v1" > $(prefix)/release/etc/hostname
 	cp $(buildprefix)/root/release/halt_vip2 $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
@@ -526,7 +526,7 @@ release_vip2_v1: release_common_utils
 #
 # release_hs5101
 #
-release_hs5101: release_common_utils
+release_enigma2_hs5101: release_enigma2_common_utils
 	echo "hs5101" > $(prefix)/release/etc/hostname
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/button_hs5101/button.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/vfd_hs5101/vfd.ko $(prefix)/release/lib/modules/
@@ -543,7 +543,7 @@ release_hs5101: release_common_utils
 #
 # release_tf7700
 #
-release_tf7700: release_common_utils
+release_enigma2_tf7700: release_enigma2_common_utils
 	echo "tf7700" > $(prefix)/release/etc/hostname
 	cp $(buildprefix)/root/release/halt_tf7700 $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release/etc/init.d/halt
@@ -559,7 +559,7 @@ release_tf7700: release_common_utils
 #
 # release_vitamin_hd5000
 #
-release_vitamin_hd5000:
+release_enigma2_vitamin_hd5000: release_enigma2_common_utils
 	echo "vitamin_hd5000" > $(prefix)/release/etc/hostname
 	cp $(buildprefix)/root/release/halt_ufs912 $(prefix)/release/etc/init.d/halt
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7111.ko $(prefix)/release/lib/modules/
@@ -575,15 +575,13 @@ release_vitamin_hd5000:
 #
 # release_SAGEMCOM88
 #
-release_sagemcom88:
+release_enigma2_sagemcom88: release_enigma2_common_utils
 	echo "sagemcom88" > $(prefix)/release/etc/hostname
-	rm -f $(prefix)/release/sbin/halt
 	cp $(buildprefix)/root/release/halt_ufs912 $(prefix)/release/etc/init.d/halt
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-sti7105.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/front_led/front_led.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/front_vfd/front_vfd.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/sagemcomtype/sagemcomtype.ko $(prefix)/release/lib/modules/
-	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/boot/video_7105.elf $(prefix)/release/boot/video.elf
 	cp $(targetprefix)/boot/audio_7105.elf $(prefix)/release/boot/audio.elf
 	cp -f $(buildprefix)/root/root_enigma2/usr/local/share/enigma2/keymap_sagemcom88.xml $(prefix)/release/usr/local/share/enigma2/keymap.xml
@@ -604,7 +602,7 @@ release_sagemcom88:
 # release_base
 #
 # the following target creates the common file base
-release_base:
+release_enigma2_base:
 	rm -rf $(prefix)/release || true
 	$(INSTALL_DIR) $(prefix)/release && \
 	$(INSTALL_DIR) $(prefix)/release/{bin,boot,dev,dev.static,etc,lib,media,mnt,proc,ram,root,sbin,share,sys,tmp,usr,var} && \
@@ -1098,8 +1096,8 @@ endif
 # The main target depends on the model.
 # IMPORTANT: it is assumed that only one variable is set. Otherwise the target name won't be resolved.
 #
-$(D)/release: \
-$(D)/%release: release_base release_$(TF7700)$(HL101)$(VIP1_V2)$(VIP2_V1)$(UFS910)$(UFS912)$(UFS913)$(UFS922)$(UFC960)$(SPARK)$(SPARK7162)$(OCTAGON1008)$(FORTIS_HDBOX)$(ATEVIO7500)$(HS7810A)$(HS7110)$(ATEMIO520)$(ATEMIO530)$(CUBEREVO)$(CUBEREVO_MINI)$(CUBEREVO_MINI2)$(CUBEREVO_MINI_FTA)$(CUBEREVO_250HD)$(CUBEREVO_2000HD)$(CUBEREVO_9500HD)$(HOMECAST5101)$(IPBOX9900)$(IPBOX99)$(IPBOX55)$(ADB_BOX)$(VITAMIN_HD5000)$(SAGEMCOM88)
+$(D)/release_enigma2: \
+$(D)/%release_enigma2: release_enigma2_base release_enigma2_$(TF7700)$(HL101)$(VIP1_V2)$(VIP2_V1)$(UFS910)$(UFS912)$(UFS913)$(UFS922)$(UFC960)$(SPARK)$(SPARK7162)$(OCTAGON1008)$(FORTIS_HDBOX)$(ATEVIO7500)$(HS7810A)$(HS7110)$(ATEMIO520)$(ATEMIO530)$(CUBEREVO)$(CUBEREVO_MINI)$(CUBEREVO_MINI2)$(CUBEREVO_MINI_FTA)$(CUBEREVO_250HD)$(CUBEREVO_2000HD)$(CUBEREVO_9500HD)$(HOMECAST5101)$(IPBOX9900)$(IPBOX99)$(IPBOX55)$(ADB_BOX)$(VITAMIN_HD5000)$(SAGEMCOM88)
 	touch $@
 
 #
@@ -1119,5 +1117,5 @@ $(D)/%release: release_base release_$(TF7700)$(HL101)$(VIP1_V2)$(VIP2_V1)$(UFS91
 #
 # release-clean
 #
-release-clean:
+release-enigma2-clean:
 	rm -f $(D)/release

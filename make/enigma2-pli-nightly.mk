@@ -2,7 +2,7 @@
 # yaud-enigma2-pli-nightly
 #
 yaud-enigma2-pli-nightly: yaud-none host_python lirc \
-		boot-elf enigma2-pli-nightly enigma2-plugins release
+		boot-elf enigma2-pli-nightly enigma2-plugins release_enigma2
 	@TUXBOX_YAUD_CUSTOMIZE@
 
 #
