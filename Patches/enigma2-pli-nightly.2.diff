@@ -1,3 +1,166 @@
+diff --git enigma2-nightly.org/lib/base/smartptr.h enigma2-nightly/lib/base/smartptr.h
+index 4b7401c..7d25250 100644
+--- enigma2-nightly.org/lib/base/smartptr.h
++++ enigma2-nightly/lib/base/smartptr.h
+@@ -6,6 +6,8 @@
+ #include <string.h>
+ #include <lib/python/swig.h>
+ 
++inline void ptrAssert(void *p) { if (!p) *(unsigned long*)0=0; }
++
+ template<class T>
+ class ePtr
+ {
+@@ -58,10 +60,10 @@ public:
+ 	}
+ #ifndef SWIG
+ 	T* grabRef() { if (!ptr) return 0; ptr->AddRef(); return ptr; }
+-	T* &ptrref() { return ptr; }
++	T* &ptrref() { ASSERT(!ptr); return ptr; }
+ 	operator bool() const { return !!this->ptr; }
+ #endif
+-	T* operator->() const { return ptr; }
++	T* operator->() const { ptrAssert(ptr); return ptr; }
+ 	operator T*() const { return this->ptr; }
+ };
+ 
+@@ -133,9 +135,9 @@ public:
+ 	}
+ #ifndef SWIG
+ 	T* grabRef() { if (!ptr) return 0; ptr->AddRef(); ptr->AddUse(); return ptr; }
+-	T* &ptrref() { return ptr; }
++	T* &ptrref() { ASSERT(!ptr); return ptr; }
+ #endif
+-	T* operator->() const { return ptr; }
++	T* operator->() const { ptrAssert(ptr); return ptr; }
+ 	operator T*() const { return this->ptr; }
+ };
+ 
+@@ -178,12 +180,12 @@ public:
+ 		ePtr<T>::operator=(c);
+ 		return *this;
+ 	}
+-	ePtrHelper<T> operator->() { return ePtrHelper<T>(ptr); }
++	ePtrHelper<T> operator->() { ptrAssert(ptr); return ePtrHelper<T>(ptr); }
+ 			/* for const objects, we don't need the helper, as they can't */
+ 			/* be changed outside the program flow. at least this is */
+ 			/* what the compiler assumes, so in case you're using const */
+ 			/* eMutablePtrs note that they have to be const. */
+-	const T* operator->() const { return ptr; }
++	const T* operator->() const { ptrAssert(ptr); return ptr; }
+ };
+ #endif
+ 
+diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/configure.ac enigma2-nightly/configure.ac
+--- enigma2-nightly.org/configure.ac	2014-03-25 21:34:35.180596945 +0100
++++ enigma2-nightly/configure.ac	2014-03-26 02:23:54.215866921 +0100
+@@ -34,10 +34,50 @@
+ 	AS_HELP_STRING([--with-gstversion],[use gstreamer version (major.minor)]),
+ 	[GST_MAJORMINOR=$withval],[GST_MAJORMINOR=0.10])
+ 
+-PKG_CHECK_MODULES(BASE, [freetype2 fribidi gstreamer-$GST_MAJORMINOR gstreamer-pbutils-$GST_MAJORMINOR libdvbsi++ libpng libxml-2.0 sigc++-1.2 libssl libcrypto])
++AC_ARG_ENABLE(libeplayer3,
++	[  --enable-libeplayer3          enable TDT libeplayer3 as player engine supportt],
++	[AC_DEFINE(ENABLE_LIBEPLAYER3,1,[enable TDT libeplayer3 as player engine support])])
++
++AM_CONDITIONAL(ENABLE_LIBEPLAYER3,test "$enable_libeplayer3" = "yes")
++if test "$enable_libeplayer3" = "yes"; then
++	AC_DEFINE(ENABLE_LIBEPLAYER3,1,[include TDT libeplayer3 as player engine support])
++fi
++
++AC_ARG_ENABLE(mediafwgstreamer,
++	[  --enable-mediafwgstreamer      enable gstreamer as player engine supportt],
++	[AC_DEFINE(ENABLE_MEDIAFWGSTREAMER,1,[enable gstreamer as player engine support])])
++
++AM_CONDITIONAL(ENABLE_MEDIAFWGSTREAMER,test "$enable_mediafwgstreamer" = "yes")
++if test "$enable_mediafwgstreamer" = "yes"; then
++	AC_DEFINE(ENABLE_MEDIAFWGSTREAMER,1,[include gstreamer as player engine support])
++fi
++
++if test "$enable_mediafwgstreamer" = "yes"; then
++	PKG_CHECK_MODULES(BASE, [freetype2 fribidi gstreamer-$GST_MAJORMINOR gstreamer-pbutils-$GST_MAJORMINOR libdvbsi++ libpng libxml-2.0 sigc++-1.2 libssl libcrypto])
++else
++	PKG_CHECK_MODULES(BASE, [freetype2 fribidi libdvbsi++ libpng libxml-2.0 sigc++-1.2 libssl libcrypto])
++fi
+ PKG_CHECK_MODULES(LIBDDVD, libdreamdvd, HAVE_LIBDDVD="yes", HAVE_LIBDDVD="no")
+ AM_CONDITIONAL(HAVE_LIBDDVD, test "$HAVE_LIBDDVD" = "yes")
+ 
++AC_ARG_ENABLE([tf7700],
++	[AS_HELP_STRING(--enable-tf7700,    enable topfield tf7700 stuff)],
++	[case "${enableval}" in
++		yes) enable_tf7700=true ;;
++		no) enable_tf7700=false ;;
++		*) AC_MSG_ERROR([bad value ${enableval} for --enable-tf7700]) ;;
++	esac])
++AM_CONDITIONAL([ENABLE_TF7700], [test x$enable_tf7700 = xtrue])
++
++AC_ARG_ENABLE([cuberevo],
++	[AS_HELP_STRING(--enable-cuberevo,    enable cuberevo stuff)],
++	[case "${enableval}" in
++		yes) enable_cuberevo=true ;;
++		no) enable_cuberevo=false ;;
++		*) AC_MSG_ERROR([bad value ${enableval} for --enable-cuberevo]) ;;
++	esac])
++AM_CONDITIONAL([ENABLE_CUBEREVO], [test x$enable_cuberevo = xtrue])
++
+ AC_CHECK_LIB([dl], [dlopen], [LIBDL_LIBS="-ldl"], [AC_MSG_ERROR([Could not find libdl])])
+ AC_SUBST(LIBDL_LIBS)
+ AC_CHECK_LIB([jpeg], [jpeg_set_defaults], [LIBJPEG_LIBS="-ljpeg"], [AC_MSG_ERROR([Could not find libjpeg])])
+@@ -86,6 +126,15 @@
+ fi
+ AM_CONDITIONAL(HAVE_COLORLCD, test x"$withcolorlcd" != xno)
+ 
++AC_ARG_WITH(graphlcd,
++	AC_HELP_STRING([--with-graphlcd], [use GraphLCD color display, yes or no]),
++	[[withgraphlcd=$withval]],
++	[[withgraphlcd=no]]
++)
++if test x"$withgraphlcd" != xno ; then
++	AC_DEFINE(HAVE_GRAPHLCD, 1,[Define when using a GraphLCD color display device])
++fi
++AM_CONDITIONAL(HAVE_GRAPHLCD, test x"$withgraphlcd" != xno)
+ 
+ AC_ARG_WITH(oldpvr,
+ 	AC_HELP_STRING([--with-oldpvr], [use /dev/misc/pvr instead of /dev/dvb/adapterX/dvrX, yes or no]),
+@@ -200,15 +249,12 @@
+ lib/python/Plugins/Extensions/MediaPlayer/meta/Makefile
+ lib/python/Plugins/Extensions/MediaScanner/Makefile
+ lib/python/Plugins/Extensions/MediaScanner/meta/Makefile
+-lib/python/Plugins/Extensions/Modem/Makefile
+ lib/python/Plugins/Extensions/PicturePlayer/Makefile
+ lib/python/Plugins/Extensions/PicturePlayer/meta/Makefile
+ lib/python/Plugins/Extensions/PicturePlayer/data/Makefile
+ lib/python/Plugins/Extensions/SocketMMI/Makefile
+ lib/python/Plugins/Extensions/SocketMMI/meta/Makefile
+ lib/python/Plugins/Extensions/SocketMMI/src/Makefile
+-lib/python/Plugins/Extensions/TuxboxPlugins/Makefile
+-lib/python/Plugins/Extensions/TuxboxPlugins/meta/Makefile
+ lib/python/Plugins/PLi/Makefile
+ lib/python/Plugins/SystemPlugins/CommonInterfaceAssignment/Makefile
+ lib/python/Plugins/SystemPlugins/CommonInterfaceAssignment/meta/Makefile
+@@ -245,6 +291,10 @@
+ lib/python/Plugins/SystemPlugins/Videomode/meta/Makefile
+ lib/python/Plugins/SystemPlugins/WirelessLan/Makefile
+ lib/python/Plugins/SystemPlugins/WirelessLan/meta/Makefile
++lib/python/Plugins/Extensions/TopfieldVFD/Makefile
++lib/python/Plugins/Extensions/CuberevoVFD/Makefile
++lib/python/Plugins/SystemPlugins/VFD-Icons/Makefile
++lib/python/Plugins/SystemPlugins/VFD-Icons/meta/Makefile
+ lib/python/Tools/Makefile
+ po/Makefile
+ main/Makefile
+diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/base/eptrlist.h enigma2-nightly/lib/base/eptrlist.h
+--- enigma2-nightly.org/lib/base/eptrlist.h	2014-03-25 21:34:35.212596944 +0100
++++ enigma2-nightly/lib/base/eptrlist.h	2014-03-26 02:23:54.215866921 +0100
+@@ -175,7 +175,7 @@
+ 	{
+ 		// added a new item to the list... in order
+ 		// returns a iterator to the new item
+-		return insert( std::lower_bound( std::list<T*>::begin(), std::list<T*>::end(), e, less()), e );
++		return this->insert( std::lower_bound( std::list<T*>::begin(), std::list<T*>::end(), e, less()), e );
+ 	}
+ 
+ };
 diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/configure.ac enigma2-nightly/configure.ac
 --- enigma2-nightly.org/configure.ac	2014-06-13 21:45:21.700535793 +0200
 +++ enigma2-nightly/configure.ac	2014-06-17 11:08:15.282431506 +0200
