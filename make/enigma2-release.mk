@@ -477,7 +477,7 @@ release_enigma2_adb_box: release_enigma2_common_utils
 	cp $(buildprefix)/root/firmware/as102_data2_st.hex $(prefix)/release/lib/firmware/
 	rm -f $(prefix)/release/lib/firmware/dvb-fe-{avl6222,cx24116,cx21143}.fw
 	cp -f $(buildprefix)/root/release/fstab_adb_box $(prefix)/release/etc/fstab
-	cp -dp $(buildprefix)/root/etc/lircd_adb_box.conf $(prefix)/release/etc/lircd.conf
+	cp -dp $(buildprefix)/root/release/lircd_adb_box.conf $(prefix)/release/etc/lircd.conf
 	cp -p $(targetprefix)/usr/sbin/lircd $(prefix)/release/usr/bin/lircd
 	mkdir -p $(prefix)/release/var/run/lirc
 	rm -f $(prefix)/release/bin/vdstandby
@@ -496,7 +496,7 @@ release_enigma2_vip1_v2: release_enigma2_common_utils
 	cp $(targetprefix)/boot/video_7109.elf $(prefix)/release/boot/video.elf
 	rm -f $(prefix)/release/lib/firmware/dvb-fe-{avl2108,avl6222,cx24116,cx21143,stv6306}.fw
 	cp -f $(buildprefix)/root/release/fstab_vip2 $(prefix)/release/etc/fstab
-	cp -dp $(buildprefix)/root/etc/lircd_vip1_v2.conf $(prefix)/release/etc/lircd.conf
+	cp -dp $(buildprefix)/root/release/lircd_vip1_v2.conf $(prefix)/release/etc/lircd.conf
 	cp -p $(targetprefix)/usr/sbin/lircd $(prefix)/release/usr/bin/
 	mkdir -p $(prefix)/release/var/run/lirc
 	rm -f $(prefix)/release/bin/vdstandby
@@ -516,7 +516,7 @@ release_enigma2_vip2_v1: release_enigma2_common_utils
 	cp $(targetprefix)/boot/video_7109.elf $(prefix)/release/boot/video.elf
 	rm -f $(prefix)/release/lib/firmware/dvb-fe-{avl2108,avl6222,cx24116,cx21143,stv6306}.fw
 	cp -f $(buildprefix)/root/release/fstab_vip2 $(prefix)/release/etc/fstab
-	cp -dp $(buildprefix)/root/etc/lircd_vip2_v1.conf $(prefix)/release/etc/lircd.conf
+	cp -dp $(buildprefix)/root/release/lircd_vip2_v1.conf $(prefix)/release/etc/lircd.conf
 	cp -p $(targetprefix)/usr/sbin/lircd $(prefix)/release/usr/bin/
 	mkdir -p $(prefix)/release/var/run/lirc
 	rm -f $(prefix)/release/bin/vdstandby
@@ -533,7 +533,7 @@ release_enigma2_hs5101: release_enigma2_common_utils
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/*.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-stx7100.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/boot/video_7100.elf $(prefix)/release/boot/video.elf
-	cp -dp $(buildprefix)/root/etc/lircd_hs5101.conf $(prefix)/release/etc/lircd.conf
+	cp -dp $(buildprefix)/root/release/lircd_hs5101.conf $(prefix)/release/etc/lircd.conf
 	cp -p $(targetprefix)/usr/sbin/lircd $(prefix)/release/usr/bin/
 	mkdir -p $(prefix)/release/var/run/lirc
 	rm -f $(prefix)/release/lib/firmware/dvb-fe-{avl2108,avl6222,cx21143,stv6306}.fw
@@ -596,7 +596,6 @@ release_enigma2_sagemcom88: release_enigma2_common_utils
 	cp -p $(targetprefix)/usr/bin/irsend $(prefix)/release/usr/bin/
 	cp -p $(targetprefix)/usr/bin/irw $(prefix)/release/usr/bin/
 	cp -dp $(buildprefix)/root/release/lircd_sagemcom88.conf $(prefix)/release/etc/lircd.conf
-
 
 #
 # release_base
