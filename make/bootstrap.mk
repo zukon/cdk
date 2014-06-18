@@ -19,7 +19,7 @@ STMKERNEL_VER = 2.6.32.46-47
 BINUTILS_VER  = 2.23.2-72
 GCC_VER       = 4.8.2-131
 LIBGCC_VER    = 4.8.2-137
-GLIBC_VER     = 2.14.1-49
+GLIBC_VER     = 2.14.1-50
 
 $(hostprefix)/bin/unpack-rpm.sh:
 	ln -sf $(buildprefix)/scripts/$(shell basename $@) $(hostprefix)/bin
