@@ -3353,11 +3353,12 @@ diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/gdi/picload.cpp
  
  extern "C" {
  #include <jpeglib.h>
-@@ -669,7 +670,45 @@
+@@ -669,7 +670,47 @@
  
  void ePicLoad::decodePic()
  {
 -	eDebug("[Picload] decode picture... %s",m_filepara->file);
++#if !defined(PLATFORM_ADB_BOX) || !defined(PLATFORM_SAGEMCOM88)
 +	if (m_filepara->id == F_JPEG)
 +	{
 +		eDebug("[Picload] hardware decode picture... %s",m_filepara->file);
@@ -3397,6 +3398,7 @@ diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/gdi/picload.cpp
 +	}
 +
 +	eDebug("[Picload] software decode picture... %s",m_filepara->file);
++#endif
  
  	switch(m_filepara->id)
  	{
