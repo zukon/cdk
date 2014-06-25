@@ -93,13 +93,13 @@ release_enigma2_cuberevo_mini2: release_enigma2_common_utils release_enigma2_cub
 #
 # release_cuberevo_mini
 #
-release_cuberevo_mini: release_enigma2_common_utils release_enigma2_cube_common release_enigma2_cube_common_tunner
+release_enigma2_cuberevo_mini: release_enigma2_common_utils release_enigma2_cube_common release_enigma2_cube_common_tunner
 	echo "cuberevo-mini" > $(prefix)/release/etc/hostname
 
 #
 # release_cuberevo
 #
-release_cuberevo: release_enigma2_common_utils release_enigma2_cube_common release_enigma2_cube_common_tunner
+release_enigma2_cuberevo: release_enigma2_common_utils release_enigma2_cube_common release_enigma2_cube_common_tunner
 	echo "cuberevo" > $(prefix)/release/etc/hostname
 
 #
@@ -686,7 +686,7 @@ release_enigma2_base:
 	cp -p $(targetprefix)/usr/bin/ffmpeg $(prefix)/release/sbin/ && \
 	cp -p $(targetprefix)/usr/bin/opkg-cl $(prefix)/release/usr/bin/opkg && \
 	cp -p $(targetprefix)/usr/bin/python $(prefix)/release/usr/bin/ && \
-	cp -p $(targetprefix)/usr/sbin/ethtool $(prefix)/release/usr/sbin/
+	cp -p $(targetprefix)/usr/sbin/ethtool $(prefix)/release/usr/sbin/ && \
 	cp -dp $(targetprefix)/sbin/mkfs $(prefix)/release/sbin/
 if !ENABLE_UFS910
 if !ENABLE_UFS922
