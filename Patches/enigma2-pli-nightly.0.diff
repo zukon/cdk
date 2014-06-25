@@ -1414,7 +1414,7 @@ diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/dvb/decoder.cpp
 diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/dvb/dvb.cpp enigma2-nightly/lib/dvb/dvb.cpp
 --- enigma2-nightly.org/lib/dvb/dvb.cpp	2014-06-13 21:45:21.744535791 +0200
 +++ enigma2-nightly/lib/dvb/dvb.cpp	2014-06-21 13:05:30.079088431 +0200
-@@ -115,6 +115,64 @@
+@@ -115,6 +115,66 @@
  		m_boxtype = DM800SE;
  	else if (!strncmp(tmp, "dm7020hd\n", rd))
  		m_boxtype = DM7020HD;
@@ -1475,6 +1475,8 @@ diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/dvb/dvb.cpp eni
 +		m_boxtype = WHITEBOX;
 +	else if (!strncmp(tmp, "atevio7500\n", rd))
 +		m_boxtype = ATEVIO7500;
++	else if (!strncmp(tmp, "sagemcom88\n", rd))
++		m_boxtype = SAGEMCOM88;
 +#else
  	else {
  		eDebug("boxtype detection via /proc/stb/info not possible... use fallback via demux count!\n");
@@ -1496,7 +1498,7 @@ diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/dvb/dvb.cpp eni
 +	else if (m_boxtype == ADB_BOX || m_boxtype == UFS910 || m_boxtype == UFS912 || m_boxtype == UFS913 || m_boxtype == UFS922 || m_boxtype == UFC960 || m_boxtype == SPARK || m_boxtype == SPARK7162 || m_boxtype == TF7700HDPVR || m_boxtype == HDBOX ||
 +		m_boxtype == HL101 || m_boxtype == CUBEREVO || m_boxtype == CUBEREVO_MINI || m_boxtype == CUBEREVO_MINI2 || m_boxtype == VIP1_V2 || m_boxtype == VIP2_V1 || m_boxtype == HS7810A || m_boxtype == HS7110 || m_boxtype == WHITEBOX ||	
 +		m_boxtype == CUBEREVO_MINI_FTA || m_boxtype == CUBEREVO_250HD || m_boxtype == CUBEREVO_2000HD || m_boxtype == CUBEREVO_9500HD || m_boxtype == OCTAGON1008 || m_boxtype == ATEVIO7500 ||
-+		m_boxtype == IPBOX9900 || m_boxtype == IPBOX99 || m_boxtype == IPBOX55)
++		m_boxtype == IPBOX9900 || m_boxtype == IPBOX99 || m_boxtype == IPBOX55 || m_boxtype == SAGEMCOM88)
 +	{
 +		int n=0;
 +		for (; i != m_demux.end(); ++i, ++n)
@@ -1578,7 +1580,7 @@ diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/dvb/dvb.h enigm
 +#if not defined(__sh__)
  	enum { DM7025, DM800, DM500HD, DM800SE, DM8000, DM7020HD };
 +#else
-+	enum { DM7025, DM800, DM500HD, DM800SE, DM8000, DM7020HD, ADB_BOX, UFS910, UFS912, UFS913, UFS922, UFC960, TF7700HDPVR, HDBOX, HL101, CUBEREVO, CUBEREVO_MINI, CUBEREVO_MINI2, CUBEREVO_MINI_FTA, CUBEREVO_250HD, CUBEREVO_9500HD, CUBEREVO_2000HD, IPBOX9900, IPBOX99, IPBOX55, OCTAGON1008, VIP1_V2, VIP2_V1, SPARK, SPARK7162, ATEVIO7500, HS7810A, HS7110, WHITEBOX};
++	enum { DM7025, DM800, DM500HD, DM800SE, DM8000, DM7020HD, ADB_BOX, UFS910, UFS912, UFS913, UFS922, UFC960, TF7700HDPVR, HDBOX, HL101, CUBEREVO, CUBEREVO_MINI, CUBEREVO_MINI2, CUBEREVO_MINI_FTA, CUBEREVO_250HD, CUBEREVO_9500HD, CUBEREVO_2000HD, IPBOX9900, IPBOX99, IPBOX55, OCTAGON1008, VIP1_V2, VIP2_V1, SPARK, SPARK7162, ATEVIO7500, HS7810A, HS7110, WHITEBOX, SAGEMCOM88};
 +#endif
  
  	int m_boxtype;
@@ -1791,6 +1793,20 @@ diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/dvb/volume.cpp 
  }
  
  int eDVBVolumecontrol::openMixer()
+diff -Naur '--exclude-from=diff-ignore' enigma2-nightly.org/lib/dvb/volume.h enigma2-nightly/lib/dvb/volume.h
+--- enigma2-nightly.org/lib/dvb/volume.h	2012-12-10 21:35:36.750034539 +0100
++++ enigma2-nightly/lib/dvb/volume.h	2012-12-31 15:44:30.756471237 +0100
+@@ -30,8 +30,8 @@
+ public:
+ 	static eDVBVolumecontrol* getInstance();
+ 
+-	void volumeUp(int left = 5, int right = 5);
++	void volumeUp(int left = 2, int right = 2); //j00zek
+-	void volumeDown(int left = 5, int right = 5);
++	void volumeDown(int left = 2, int right = 2); //j00zek
+ 
+ 	void setVolume(int left, int right);
+ 
 diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/dvb_ci/dvbci_appmgr.cpp enigma2-nightly/lib/dvb_ci/dvbci_appmgr.cpp
 --- enigma2-nightly.org/lib/dvb_ci/dvbci_appmgr.cpp	2014-06-13 21:45:21.748535791 +0200
 +++ enigma2-nightly/lib/dvb_ci/dvbci_appmgr.cpp	2014-06-21 13:05:30.083088431 +0200
@@ -2943,6 +2959,17 @@ diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/gdi/fb.h enigma
 diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/gdi/gfbdc.cpp enigma2-nightly/lib/gdi/gfbdc.cpp
 --- enigma2-nightly.org/lib/gdi/gfbdc.cpp	2014-06-13 21:45:21.752535791 +0200
 +++ enigma2-nightly/lib/gdi/gfbdc.cpp	2014-06-21 13:05:30.083088431 +0200
+@@ -25,8 +25,8 @@
+ 		|| (xres == 1920 && yres == 1080)))
+ 	{
+ 		/* fallback to a decent default */
+-		xres = 720;
+-		yres = 576;
++		xres = 1280; //j00zek lets make HD our default for openPLI
++		yres = 720;
+ 	}
+ 
+ 	surface.clut.data = 0;
 @@ -177,14 +177,35 @@
  
  void gFBDC::setResolution(int xres, int yres, int bpp)
