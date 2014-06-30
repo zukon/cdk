@@ -34,6 +34,8 @@ netbios-ns	137/udp
 netbios-ssn	139/tcp
 https		443/tcp				# MCom
 https		443/udp				# MCom
+microsoft-ds	445/tcp				# Microsoft Naked CIFS
+microsoft-ds	445/udp
 
 # Local services
 streamsec	31335/tcp
