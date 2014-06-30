@@ -1372,7 +1372,7 @@ $(D)/python: $(D)/bootstrap $(D)/host_python $(D)/libncurses $(D)/libcrypto $(D)
 			--prefix=/usr \
 			--sysconfdir=/etc \
 			--enable-shared \
-			--disable-ipv6 \
+			--enable-ipv6 \
 			--without-cxx-main \
 			--with-threads \
 			--with-pymalloc \
