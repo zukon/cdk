@@ -1052,6 +1052,13 @@ endif
 	fi
 
 #
+# minidlna
+#
+	if [ -e $(targetprefix)/usr/sbin/minidlnad ]; then \
+		cp -f $(targetprefix)/usr/sbin/minidlnad $(prefix)/release/usr/sbin/; \
+	fi
+
+#
 # DIRECTFB
 #
 	if [ -d $(prefix)/release/usr/lib/directfb-1.4-5 ]; then \
@@ -1078,13 +1085,6 @@ endif
 	fi
 	if [ -d $(prefix)/release/usr/lib/enchant ]; then \
 		rm -rf $(prefix)/release/usr/lib/enchant; \
-	fi
-
-#
-# minidlna
-#
-	if [ -e $(targetprefix)/usr/sbin/minidlna ]; then \
-		cp -f $(targetprefix)/usr/sbin/minidlna $(prefix)/release/usr/sbin/; \
 	fi
 
 #

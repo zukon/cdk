@@ -957,6 +957,21 @@ endif
 	fi
 
 #
+# minidlna
+#
+	if [ -e $(targetprefix)/usr/sbin/minidlnad ]; then \
+		cp -f $(targetprefix)/usr/sbin/minidlnad $(prefix)/release/usr/sbin/; \
+	fi
+
+#
+# xupnpd
+#
+	if [ -e $(targetprefix)/usr/bin/xupnpd ]; then \
+		cp -f $(targetprefix)/usr/bin/xupnpd $(prefix)/release/usr/bin; \
+		cp -aR $(targetprefix)/usr/share/xupnpd $(prefix)/release/usr/share; \
+	fi
+
+#
 # Plugins
 #
 	if [ -e $(targetprefix)/var/tuxbox/plugins/libfx2.so ]; then \
@@ -988,13 +1003,7 @@ endif
 		cp -f $(targetprefix)/usr/lib/libhowl.so* $(prefix)/release/usr/lib; \
 		cp -f $(targetprefix)/usr/lib/libmDNSResponder.so* $(prefix)/release/usr/lib; \
 	fi
-#
-# xupnpd
-#
-	if [ -e $(targetprefix)/usr/bin/xupnpd ]; then \
-		cp -f $(targetprefix)/usr/bin/xupnpd $(prefix)/release/usr/bin; \
-		cp -aR $(targetprefix)/usr/share/xupnpd $(prefix)/release/usr/share; \
-	fi
+
 #
 # Neutrino HD2 Workaround Build in Player
 #
