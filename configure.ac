@@ -389,6 +389,14 @@ AC_ARG_ENABLE(homecast5101,
 AM_CONDITIONAL(ENABLE_HOMECAST5101,test "$enable_homecast5101" = "yes")
 AC_SUBST(HOMECAST5101)
 
+AC_ARG_ENABLE(arivalink200,
+	AS_HELP_STRING(--enable-arivalink200, enable arivalink200 stuff),
+	[case "${enableval}" in
+		yes) ARIVALINK200=arivalink200 ;;
+	esac],[enable_arivalink200=no])
+AM_CONDITIONAL(ENABLE_ARIVALINK200,test "$enable_arivalink200" = "yes")
+AC_SUBST(ARIVALINK200)
+
 AC_ARG_ENABLE(ipbox9900,
 	AS_HELP_STRING(--enable-ipbox9900, enable ipbox 9900 stuff),
 	[case "${enableval}" in
