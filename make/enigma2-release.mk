@@ -595,6 +595,14 @@ release_enigma2_sagemcom88: release_enigma2_common_utils
 	cp -dp $(buildprefix)/root/release/lircd_sagemcom88.conf $(prefix)/release/etc/lircd.conf
 
 #
+# release_arivalink200
+#
+release_enigma2_arivalink200: release_enigma2_common_utils release_enigma2_common_ipbox
+	echo "Ariva@Link200" > $(prefix)/release/etc/hostname
+	cp -f $(buildprefix)/root/root_enigma2/usr/local/share/enigma2/keymap_arivalink200.xml $(prefix)/release/usr/local/share/enigma2/keymap.xml
+	cp -dp $(buildprefix)/root/release/lircd_arivalink200.conf $(prefix)/release/etc/lircd.conf
+
+#
 # release_base
 #
 # the following target creates the common file base

@@ -128,7 +128,8 @@ PLATFORM_CPPFLAGS := \
 	$(if $(IPBOX99),CPPFLAGS="$(CPPFLAGS) -DPLATFORM_IPBOX99 -I$(driverdir)/include -I $(buildprefix)/$(KERNEL_DIR)/include") \
 	$(if $(IPBOX55),CPPFLAGS="$(CPPFLAGS) -DPLATFORM_IPBOX55 -I$(driverdir)/include -I $(buildprefix)/$(KERNEL_DIR)/include") \
 	$(if $(VITAMIN_HD5000),CPPFLAGS="$(CPPFLAGS) -DPLATFORM_VITAMIN_HD5000 -I$(driverdir)/include -I $(buildprefix)/$(KERNEL_DIR)/include") \
-	$(if $(SAGEMCOM88),CPPFLAGS="$(CPPFLAGS) -DPLATFORM_SAGEMCOM88 -I$(driverdir)/include -I $(buildprefix)/$(KERNEL_DIR)/include")
+	$(if $(SAGEMCOM88),CPPFLAGS="$(CPPFLAGS) -DPLATFORM_SAGEMCOM88 -I$(driverdir)/include -I $(buildprefix)/$(KERNEL_DIR)/include") \
+	$(if $(ARIVALINK200),CPPFLAGS="$(CPPFLAGS) -DPLATFORM_ARIVALINK200 -I$(driverdir)/include -I $(buildprefix)/$(KERNEL_DIR)/include")
 
 DRIVER_PLATFORM := \
 	$(if $(UFS910),UFS910=$(UFS910)) \
@@ -163,6 +164,7 @@ DRIVER_PLATFORM := \
 	$(if $(IPBOX55),IPBOX55=$(IPBOX55)) \
 	$(if $(VITAMIN_HD5000),VITAMIN_HD5000=$(VITAMIN_HD5000)) \
 	$(if $(SAGEMCOM88),SAGEMCOM88=$(SAGEMCOM88)) \
+	$(if $(ARIVALINK200),ARIVALINK200=$(ARIVALINK200)) \
 	$(if $(WLANDRIVER),WLANDRIVER=$(WLANDRIVER)) \
 	$(if $(PLAYER191),PLAYER191=$(PLAYER191))
 
