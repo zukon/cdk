@@ -157,6 +157,12 @@ ADB_BOXPATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-i2c-st40-pio_stm24$(PATCH_STR).patch \
 		linux-sh4-pcm_noise_fix_stm24$(PATCH_STR).patch
 
+IPBOX9900PATCHES_24 = $(COMMONPATCHES_24) \
+		linux-sh4-ipbox9900_setup_stm24$(PATCH_STR).patch \
+		linux-sh4-i2c-st40-pio_stm24$(PATCH_STR).patch \
+		linux-sh4-ipbox_bdinfo_stm24$(PATCH_STR).patch \
+		linux-sh4-ipbox_dvb_ca_stm24$(PATCH_STR).patch
+
 IPBOX99PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-ipbox99_setup_stm24$(PATCH_STR).patch \
 		linux-sh4-i2c-st40-pio_stm24$(PATCH_STR).patch \
