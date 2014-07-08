@@ -306,8 +306,8 @@ esac
 echo -e "\nMedia Framework:"
 echo "   1) eplayer3"
 echo "   2) gstreamer"
-echo "   3) use build-in (recommended)"
-echo "   4) gstreamer+eplayer3"
+echo "   3) use build-in (recommended for Neutrino)"
+echo "   4) gstreamer+eplayer3 (recommended for openPLI)"
 case $5 in
 	[1-4]) REPLY=$5
 	echo -e "\nSelected media framework: $REPLY\n"
