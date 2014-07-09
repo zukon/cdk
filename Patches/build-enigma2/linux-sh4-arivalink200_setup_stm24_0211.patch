@@ -1,6 +1,6 @@
-diff -crp linux-sh4-2.6.32.59_stm24_0211/arch/sh/kernel/setup.c linux-sh4-2.6.32.59_stm24_0211/arch/sh/kernel/setup.c
-*** linux-sh4-2.6.32.59_stm24_0211/arch/sh/kernel/setup.c	2012-09-14 12:37:42.000000000 +0200
---- linux-sh4-2.6.32.59_stm24_0211/arch/sh/kernel/setup.c	2012-09-14 13:22:11.000000000 +0200
+diff -crp linux-sh4/arch/sh/kernel/setup.c linux-sh4/arch/sh/kernel/setup.c
+*** linux-sh4/arch/sh/kernel/setup.c	2012-09-14 12:37:42.000000000 +0200
+--- linux-sh4/arch/sh/kernel/setup.c	2012-09-14 13:22:11.000000000 +0200
 *************** void __init setup_arch(char **cmdline_p)
 *** 389,394 ****
 --- 389,418 ----
@@ -34,9 +34,9 @@ diff -crp linux-sh4-2.6.32.59_stm24_0211/arch/sh/kernel/setup.c linux-sh4-2.6.32
   	/* Save unparsed command line copy for /proc/cmdline */
   	memcpy(boot_command_line, command_line, COMMAND_LINE_SIZE);
   	*cmdline_p = command_line;
-diff -urN linux-sh4-2.6.32.16_stm24_0205.org/arch/sh/boards/ipbox9900/mach.c linux-sh4-2.6.32.16_stm24_0205/arch/sh/boards/ipbox9900/mach.c
---- linux-sh4-2.6.32.16_stm24_0205.org/arch/sh/boards/ipbox9900/mach.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-sh4-2.6.32.16_stm24_0205/arch/sh/boards/ipbox9900/mach.c	2011-07-03 17:37:41.000000000 +0200
+diff -urN linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/boards/arivalink200/mach.c linux-sh4/arch/sh/boards/arivalink200/mach.c
+--- linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/boards/arivalink200/mach.c	1970-01-01 01:00:00.000000000 +0100
++++ linux-sh4/arch/sh/boards/arivalink200/mach.c	2011-07-03 17:37:41.000000000 +0200
 @@ -0,0 +1,60 @@
 +/*
 + * arch/sh/boards/st/mb442/mach.c
@@ -98,18 +98,18 @@ diff -urN linux-sh4-2.6.32.16_stm24_0205.org/arch/sh/boards/ipbox9900/mach.c lin
 +	.mv_init_irq		= mb442_init_irq,
 +	.mv_ioport_map		= mb442_ioport_map,
 +};
-diff -urN linux-sh4-2.6.32.16_stm24_0205.org/arch/sh/boards/ipbox9900/Makefile linux-sh4-2.6.32.16_stm24_0205/arch/sh/boards/ipbox9900/Makefile
---- linux-sh4-2.6.32.16_stm24_0205.org/arch/sh/boards/ipbox9900/Makefile	1970-01-01 01:00:00.000000000 +0100
-+++ linux-sh4-2.6.32.16_stm24_0205/arch/sh/boards/ipbox9900/Makefile	2011-07-03 17:37:41.000000000 +0200
+diff -urN linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/boards/arivalink200/Makefile linux-sh4/arch/sh/boards/arivalink200/Makefile
+--- linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/boards/arivalink200/Makefile	1970-01-01 01:00:00.000000000 +0100
++++ linux-sh4/arch/sh/boards/arivalink200/Makefile	2011-07-03 17:37:41.000000000 +0200
 @@ -0,0 +1,5 @@
 +#
 +# Makefile for STMicroelectronics STb7100 Reference board
 +#
 +
 +obj-y := setup.o mach.o
-diff -urN linux-sh4-2.6.32.16_stm24_0205.org/arch/sh/boards/ipbox9900/setup.c linux-sh4-2.6.32.16_stm24_0205/arch/sh/boards/ipbox9900/setup.c
---- linux-sh4-2.6.32.16_stm24_0205.org/arch/sh/boards/ipbox9900/setup.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-sh4-2.6.32.16_stm24_0205/arch/sh/boards/ipbox9900/setup.c	2011-07-03 17:37:41.000000000 +0200
+diff -urN linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/boards/arivalink200/setup.c linux-sh4/arch/sh/boards/arivalink200/setup.c
+--- linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/boards/arivalink200/setup.c	1970-01-01 01:00:00.000000000 +0100
++++ linux-sh4/arch/sh/boards/arivalink200/setup.c	2011-07-03 17:37:41.000000000 +0200
 @@ -0,0 +1,177 @@
 +/*
 + * arch/sh/boards/st/mb442/setup.c
@@ -288,35 +288,35 @@ diff -urN linux-sh4-2.6.32.16_stm24_0205.org/arch/sh/boards/ipbox9900/setup.c li
 +			ARRAY_SIZE(mb442_devices));
 +}
 +device_initcall(mb442_device_init);
-diff -urN linux-sh4-2.6.32.16_stm24_0205.org/arch/sh/boards/Kconfig linux-sh4-2.6.32.16_stm24_0205/arch/sh/boards/Kconfig
---- linux-sh4-2.6.32.16_stm24_0205.org/arch/sh/boards/Kconfig	2011-07-17 20:30:23.000000000 +0200
-+++ linux-sh4-2.6.32.16_stm24_0205/arch/sh/boards/Kconfig	2011-07-17 23:23:34.590734928 +0200
+diff -urN linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/boards/Kconfig linux-sh4/arch/sh/boards/Kconfig
+--- linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/boards/Kconfig	2011-07-17 20:30:23.000000000 +0200
++++ linux-sh4/arch/sh/boards/Kconfig	2011-07-17 23:23:34.590734928 +0200
 @@ -702,6 +702,17 @@
  	  Select this option to enable a simple driver for the front
  	  pannel button on the mb705.
  
-+comment "Ipbox Boards"
++comment "Ferguson Boards"
 +
-+config SH_IPBOX9900
-+	bool "ipbox9900: STb7100 Ipbox board"
++config SH_ARIVALINK200
++	bool "arivalink200: STb7100 Ferguson board"
 +	depends on CPU_SUBTYPE_STX7100
 +	default n
 +	help
-+	  Select STb7100 Ipbox9900 if configuring for an
++	  Select STb7100 Ariva@link200 if configuring for an
 +	  STMicroelectronics STb7100 Reference Board (product code:
 +	  STb7100-REF). This is sometimes referred to as the CoCo board.
 +
  endmenu
  
  source "arch/sh/boards/mach-r2d/Kconfig"
-diff -urN linux-sh4-2.6.32.16_stm24_0205.org/arch/sh/Makefile linux-sh4-2.6.32.16_stm24_0205/arch/sh/Makefile
---- linux-sh4-2.6.32.16_stm24_0205.org/arch/sh/Makefile	2011-07-17 20:30:23.000000000 +0200
-+++ linux-sh4-2.6.32.16_stm24_0205/arch/sh/Makefile	2011-07-17 23:24:40.798578590 +0200
+diff -urN linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/Makefile linux-sh4/arch/sh/Makefile
+--- linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/Makefile	2011-07-17 20:30:23.000000000 +0200
++++ linux-sh4/arch/sh/Makefile	2011-07-17 23:24:40.798578590 +0200
 @@ -182,6 +182,7 @@
  machdir-$(CONFIG_SH_ST_MB837)			+= mach-mb837
  machdir-$(CONFIG_SH_ST_MB839)			+= mach-mb839
  machdir-$(CONFIG_SH_ST_MB903)			+= mach-mb903
-+machdir-$(CONFIG_SH_IPBOX9900)			+= ipbox9900
++machdir-$(CONFIG_SH_ARIVALINK200)		+= arivalink200
  
  ifneq ($(machdir-y),)
  core-y	+= $(addprefix arch/sh/boards/, \
@@ -346,14 +346,14 @@ diff -urN linux-sh4-2.6.32.16_stm24_0205.org/arch/sh/Makefile linux-sh4-2.6.32.1
  	stx7100_ssc_devices[ssc].id = i2c_busnum;
  
  	plat_data = stx7100_ssc_devices[ssc].dev.platform_data;
-diff -urN linux-sh4-2.6.32.16_stm24_0205.org/drivers/usb/core/hub.c linux-sh4-2.6.32.16_stm24_0205/drivers/usb/core/hub.c
---- linux-sh4-2.6.32.16_stm24_0205.org/drivers/usb/core/hub.c	2011-08-16 07:36:25.947316046 +0200
-+++ linux-sh4-2.6.32.16_stm24_0205/drivers/usb/core/hub.c	2011-08-16 07:24:47.494815389 +0200
+diff -urN linux-sh4-2.6.32.61_stm24_0215.org/drivers/usb/core/hub.c linux-sh4/drivers/usb/core/hub.c
+--- linux-sh4-2.6.32.61_stm24_0215.org/drivers/usb/core/hub.c	2011-08-16 07:36:25.947316046 +0200
++++ linux-sh4/drivers/usb/core/hub.c	2011-08-16 07:24:47.494815389 +0200
 @@ -1051,7 +1051,11 @@
  				dev_warn(hub_dev,
  					"insufficient power available "
  					"to use all downstream ports\n");
-+#if defined(CONFIG_SH_IPBOX9900)
++#if defined(CONFIG_SH_ARIVALINK200)
 +			hub->mA_per_port = 500;
 +#else
  			hub->mA_per_port = 100;		/* 7.2.1.1 */
@@ -361,22 +361,3 @@ diff -urN linux-sh4-2.6.32.16_stm24_0205.org/drivers/usb/core/hub.c linux-sh4-2.
  		}
  	} else {	/* Self-powered external hub */
  		/* FIXME: What about battery-powered external hubs that
-diff -urN linux-sh4-2.6.32.16_stm24_0205.org/drivers/media/dvb/dvb-core/dvb_ca_en50221.c linux-sh4-2.6.32.16_stm24_0205/drivers/media/dvb/dvb-core/dvb_ca_en50221.c
---- linux-sh4-2.6.32.16_stm24_0205.org/drivers/media/dvb/dvb-core/dvb_ca_en50221.c	2011-08-28 17:32:52.000000000 +0200
-+++ linux-sh4-2.6.32.16_stm24_0205/drivers/media/dvb/dvb-core/dvb_ca_en50221.c	2011-08-28 18:33:15.580391981 +0200
-@@ -2036,13 +2036,13 @@
- 		atomic_set(&ca->slot_info[i].camchange_count, 0);
- 		ca->slot_info[i].camchange_type = DVB_CA_EN50221_CAMCHANGE_REMOVED;
- 		mutex_init(&ca->slot_info[i].slot_lock);
--
-+#if defined(CONFIG_SH_IPBOX9900)
- 		/* add a ci device entry */
- 	        ret = dvb_register_device(dvb_adapter, &ca->dvbdev_ci[i], &dvbdev_ci[i], ca, DVB_DEVICE_CI);
- 		ca->slot_states[i] = DVB_CA_EN50221_CAMCHANGE_REMOVED;
- 	        if (ret)
- 		    printk("error creating ci device for slot %d\n", i);
--
-+#endif
- 	}
- 
- 	if (signal_pending(current)) {
