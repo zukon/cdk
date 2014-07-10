@@ -1500,7 +1500,7 @@ diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/dvb/dvb.cpp eni
 +	else if (m_boxtype == ADB_BOX || m_boxtype == UFS910 || m_boxtype == UFS912 || m_boxtype == UFS913 || m_boxtype == UFS922 || m_boxtype == UFC960 || m_boxtype == SPARK || m_boxtype == SPARK7162 || m_boxtype == TF7700HDPVR || m_boxtype == HDBOX ||
 +		m_boxtype == HL101 || m_boxtype == CUBEREVO || m_boxtype == CUBEREVO_MINI || m_boxtype == CUBEREVO_MINI2 || m_boxtype == VIP1_V2 || m_boxtype == VIP2_V1 || m_boxtype == HS7810A || m_boxtype == HS7110 || m_boxtype == WHITEBOX ||	
 +		m_boxtype == CUBEREVO_MINI_FTA || m_boxtype == CUBEREVO_250HD || m_boxtype == CUBEREVO_2000HD || m_boxtype == CUBEREVO_9500HD || m_boxtype == OCTAGON1008 || m_boxtype == ATEVIO7500 ||
-+		m_boxtype == IPBOX9900 || m_boxtype == IPBOX99 || m_boxtype == IPBOX55 || m_boxtype == SAGEMCOM88) || m_boxtype == ARIVALINK200)
++		m_boxtype == IPBOX9900 || m_boxtype == IPBOX99 || m_boxtype == IPBOX55 || m_boxtype == SAGEMCOM88 || m_boxtype == ARIVALINK200)
 +	{
 +		int n=0;
 +		for (; i != m_demux.end(); ++i, ++n)
@@ -1762,26 +1762,6 @@ diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/dvb/pmt.cpp eni
  		if (!ref.getServiceID().get() /* incorrect sid in meta file or recordings.epl*/ )
  		{
  			eDVBTSTools tstools;
-diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/dvb/scan.cpp enigma2-nightly/lib/dvb/scan.cpp
---- enigma2-nightly.org/lib/dvb/scan.cpp	2014-06-13 21:45:21.748535791 +0200
-+++ enigma2-nightly/lib/dvb/scan.cpp	2014-06-21 13:05:30.083088431 +0200
-@@ -618,6 +618,7 @@
- 
- 				eOriginalNetworkID onid = (*tsinfo)->getOriginalNetworkId();
- 				eTransportStreamID tsid = (*tsinfo)->getTransportStreamId();
-+				eDVBNamespace ns(0);
- 
- 				for (DescriptorConstIterator desc = (*tsinfo)->getDescriptors()->begin();
- 						desc != (*tsinfo)->getDescriptors()->end(); ++desc)
-@@ -655,7 +656,7 @@
- 
- 						unsigned long hash=0;
- 						feparm->getHash(hash);
--						eDVBNamespace ns = buildNamespace(onid, tsid, hash);
-+						ns = buildNamespace(onid, tsid, hash);
- 
- 						addChannelToScan(
- 							eDVBChannelID(ns, tsid, onid),
 diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/dvb/volume.cpp enigma2-nightly/lib/dvb/volume.cpp
 --- enigma2-nightly.org/lib/dvb/volume.cpp	2014-06-13 21:45:21.748535791 +0200
 +++ enigma2-nightly/lib/dvb/volume.cpp	2014-06-21 13:05:30.083088431 +0200
@@ -5604,7 +5584,7 @@ diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/python/Screens/
 +			# player driver might stop working
 +			self.setSeekState(self.SEEK_STATE_PLAY)
 +#+++<
- 			self.close()
+ 			self.close(self.cur_service)
  		elif answer in ("movielist", "deleteandmovielistconfirmed"):
  			if config.movielist.stop_service.value:
 @@ -294,6 +421,11 @@
