@@ -1,3 +1,42 @@
+diff -crp linux-sh4/drivers/net/phy/realtek.c linux-sh4/drivers/net/phy/realtek.c
+*** linux-sh4/drivers/net/phy/realtek.c	2009-12-03 04:51:21.000000000 +0100
+--- linux-sh4/drivers/net/phy/realtek.c	2014-07-10 17:43:32.815015201 +0200
+*************** static int rtl821x_config_intr(struct ph
+*** 48,53 ****
+--- 48,65 ----
+  	return err;
+  }
+  
++ /* RTL8201CP */
++ static struct phy_driver rtl8201cp_driver = {
++ 	.phy_id         = 0x00008201,
++ 	.name           = "RTL8201CP Ethernet",
++ 	.phy_id_mask    = 0x0000ffff,
++ 	.features       = PHY_BASIC_FEATURES,
++ 	.flags          = PHY_HAS_INTERRUPT,
++ 	.config_aneg    = &genphy_config_aneg,
++ 	.read_status    = &genphy_read_status,
++ 	.driver         = { .owner = THIS_MODULE,},
++ };
++ 
+  /* RTL8211B */
+  static struct phy_driver rtl821x_driver = {
+  	.phy_id		= 0x001cc912,
+*************** static int __init realtek_init(void)
+*** 66,72 ****
+--- 78,89 ----
+  {
+  	int ret;
+  
++ 	ret = phy_driver_register(&rtl8201cp_driver);
++ 	if (ret < 0)
++ 		return -ENODEV;
+  	ret = phy_driver_register(&rtl821x_driver);
++ 	if (ret < 0)
++ 		return -ENODEV;
+  
+  	return ret;
+  }
 diff -crp linux-sh4/arch/sh/kernel/setup.c linux-sh4/arch/sh/kernel/setup.c
 *** linux-sh4/arch/sh/kernel/setup.c	2012-09-14 12:37:42.000000000 +0200
 --- linux-sh4/arch/sh/kernel/setup.c	2012-09-14 13:22:11.000000000 +0200
