@@ -603,6 +603,15 @@ release_enigma2_arivalink200: release_enigma2_common_utils
 	cp -dp $(buildprefix)/root/release/lircd_arivalink200.conf $(prefix)/release/etc/lircd.conf
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-stx7109c3.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/boot/video_7109.elf $(prefix)/release/boot/video.elf
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/*.ko $(prefix)/release/lib/modules/
+	rm -f $(prefix)/release/lib/firmware/dvb-fe-{avl2108,cx21143,stv6306}.fw
+	cp -p $(targetprefix)/usr/sbin/lircd $(prefix)/release/usr/bin/
+	cp -p $(targetprefix)/usr/sbin/lircmd $(prefix)/release/usr/bin/
+	cp -p $(targetprefix)/usr/bin/irexec $(prefix)/release/usr/bin/
+	cp -p $(targetprefix)/usr/bin/irrecord $(prefix)/release/usr/bin/
+	cp -p $(targetprefix)/usr/bin/irsend $(prefix)/release/usr/bin/
+	cp -p $(targetprefix)/usr/bin/irw $(prefix)/release/usr/bin/
+	mkdir -p $(prefix)/release/var/run/lirc
 
 #
 # release_base
