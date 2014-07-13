@@ -1956,7 +1956,7 @@ $(D)/libdvbsipp: $(D)/bootstrap @DEPENDS_libdvbsipp@
 # libmpeg2
 #
 $(D)/libmpeg2: $(D)/bootstrap @DEPENDS_libmpeg2@
-	@PREPARE_libmpeg2)
+	@PREPARE_libmpeg2@
 	cd @DIR_libmpeg2@ && \
 		$(BUILDENV) \
 		./configure \
