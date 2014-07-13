@@ -684,7 +684,7 @@ $(D)/hotplug_e2: $(D)/bootstrap @DEPENDS_hotplug_e2@
 	[ -d "$(archivedir)/hotplug-e2-helper.git" ] && \
 	(cd $(archivedir)/hotplug-e2-helper.git; git pull; cd "$(buildprefix)";); \
 	cd @DIR_hotplug_e2@ && \
-		./autogen.sh &&\
+		./autogen.sh && \
 		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
