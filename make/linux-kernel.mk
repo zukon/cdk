@@ -295,6 +295,11 @@ $(D)/tfkernel.do_compile:
 		$(MAKE) $(if $(TF7700),TF7700=y) ARCH=sh CROSS_COMPILE=$(target)- uImage
 	touch $@
 
+linux-kernel-clean:
+	rm -f $(DEPDIR)/linux-kernel
+	rm -f $(DEPDIR)/linux-kernel.do_compile
+	rm -f $(DEPDIR)/linux-kernel.do_prepare
+
 #
 # Helper
 #
