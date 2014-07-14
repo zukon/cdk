@@ -715,7 +715,10 @@ $(D)/shairport: $(D)/bootstrap $(D)/libcrypto $(D)/howl $(D)/libalsa @DEPENDS_sh
 $(D)/dbus: $(D)/bootstrap $(D)/libexpat @DEPENDS_dbus@
 	@PREPARE_dbus@
 	cd @DIR_dbus@ && \
+		libtoolize --copy --ltdl && \
+		autoreconf -fi && \
 		$(BUILDENV) \
+		./configure \
 		CFLAGS="$(TARGET_CFLAGS) -Wno-cast-align" \
 		./autogen.sh \
 			--build=$(build) \
@@ -726,6 +729,7 @@ $(D)/dbus: $(D)/bootstrap $(D)/libexpat @DEPENDS_dbus@
 			--localstatedir=/var \
 			--with-console-auth-dir=/run/console/ \
 			--without-systemdsystemunitdir \
+			--enable-abstract-sockets \
 			--disable-systemd \
 			--disable-static && \
 		$(MAKE) all && \
