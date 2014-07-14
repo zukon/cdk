@@ -1,7 +1,7 @@
 #
 #
 #
-STMKERNEL_VER = 2.6.32.46-47
+STMKERNEL_VER = 2.6.32.46-48
 
 # 4.7.2
 #BINUTILS_VER  = 2.23.2-68
@@ -16,9 +16,9 @@ STMKERNEL_VER = 2.6.32.46-47
 #GLIBC_VER     = 2.10.2-43
 
 # 4.8.2
-BINUTILS_VER  = 2.23.2-72
+BINUTILS_VER  = 2.23.2-73
 GCC_VER       = 4.8.2-131
-LIBGCC_VER    = 4.8.2-137
+LIBGCC_VER    = 4.8.2-138
 GLIBC_VER     = 2.14.1-50
 
 $(hostprefix)/bin/unpack-rpm.sh:
