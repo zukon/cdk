@@ -370,7 +370,7 @@ $(D)/libfribidi: $(D)/bootstrap @DEPENDS_libfribidi@
 # libsigc_e2
 #
 $(D)/libsigc_e2: $(D)/bootstrap @DEPENDS_libsigc_e2@
-	@PREPARE_libsig_e2c@
+	@PREPARE_libsigc_e2@
 	cd @DIR_libsigc_e2@ && \
 		$(BUILDENV) \
 		./configure \
