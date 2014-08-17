@@ -367,6 +367,23 @@ $(D)/libfribidi: $(D)/bootstrap @DEPENDS_libfribidi@
 	touch $@
 
 #
+# libsigc_e2
+#
+$(D)/libsigc_e2: $(D)/bootstrap @DEPENDS_libsigc_e2@
+	@PREPARE_libsig_e2c@
+	cd @DIR_libsigc_e2@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=/usr \
+			--disable-checks && \
+		$(MAKE) all && \
+		@INSTALL_libsigc_e2@
+	@CLEANUP_libsigc_e2@
+	touch $@
+
+#
 # libsigc
 #
 $(D)/libsigc: $(D)/bootstrap @DEPENDS_libsigc@
