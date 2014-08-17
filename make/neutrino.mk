@@ -464,7 +464,7 @@ libstb-hal-next-distclean:
 #
 NEUTRINO_MP_NEXT_PATCHES =
 
-$(D)/neutrino-mp-next.do_prepare: | $(NEUTRINO_DEPS) libstb-hal-next
+$(D)/neutrino-mp-next.do_prepare: | $(NEUTRINO_DEPS) libsigc libstb-hal-next
 	rm -rf $(appsdir)/neutrino-mp-next
 	rm -rf $(appsdir)/neutrino-mp-next.org
 	rm -rf $(N_OBJDIR)
@@ -652,7 +652,7 @@ yaud-neutrino-mp-tangos-all: yaud-none lirc \
 #
 NEUTRINO_MP_TANGOS_PATCHES =
 
-$(D)/neutrino-mp-tangos.do_prepare: | $(NEUTRINO_DEPS) libstb-hal-github
+$(D)/neutrino-mp-tangos.do_prepare: | $(NEUTRINO_DEPS) libsigc libstb-hal-github
 	rm -rf $(appsdir)/neutrino-mp-tangos
 	rm -rf $(appsdir)/neutrino-mp-tangos.org
 	rm -rf $(N_OBJDIR)
