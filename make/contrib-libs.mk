@@ -395,7 +395,7 @@ $(D)/libsigc: $(D)/bootstrap @DEPENDS_libsigc@
 			--host=$(target) \
 			--prefix=/usr \
 			--enable-shared \
-			--disable-checks && \
+			--disable-documentation && \
 		$(MAKE) all && \
 		@INSTALL_libsigc@
 	@CLEANUP_libsigc@
