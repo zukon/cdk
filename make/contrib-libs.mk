@@ -1167,6 +1167,7 @@ $(D)/libflac: $(D)/bootstrap @DEPENDS_libflac@
 $(D)/elementtree: $(D)/bootstrap @DEPENDS_elementtree@
 	@PREPARE_elementtree@
 	cd @DIR_elementtree@ && \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
 		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
 	@CLEANUP_elementtree@
@@ -1250,6 +1251,7 @@ $(D)/libxmlccwrap: $(D)/bootstrap $(D)/libxml2 $(D)/libxslt @DEPENDS_libxmlccwra
 $(D)/lxml: $(D)/bootstrap $(D)/python @DEPENDS_lxml@
 	@PREPARE_lxml@
 	cd @DIR_lxml@ && \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
 		$(hostprefix)/bin/python ./setup.py build \
@@ -1275,9 +1277,10 @@ $(D)/setuptools: $(D)/bootstrap $(D)/python @DEPENDS_setuptools@
 $(D)/gdata: $(D)/bootstrap $(D)/setuptools @DEPENDS_gdata@
 	@PREPARE_gdata@
 	cd @DIR_gdata@ && \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
-		$(hostprefix)/bin/python -c "import setuptools; execfile('setup.py')" install --root=$(targetprefix) --prefix=/usr
+		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
 	@CLEANUP_gdata@
 	touch $@
 
@@ -1287,9 +1290,10 @@ $(D)/gdata: $(D)/bootstrap $(D)/setuptools @DEPENDS_gdata@
 $(D)/twisted: $(D)/bootstrap $(D)/setuptools @DEPENDS_twisted@
 	@PREPARE_twisted@
 	cd @DIR_twisted@ && \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
-		$(hostprefix)/bin/python -c "import setuptools; execfile('setup.py')" install --root=$(targetprefix) --prefix=/usr
+		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
 	@CLEANUP_twisted@
 	touch $@
 
@@ -1299,9 +1303,10 @@ $(D)/twisted: $(D)/bootstrap $(D)/setuptools @DEPENDS_twisted@
 $(D)/twistedweb2: $(D)/bootstrap $(D)/setuptools @DEPENDS_twistedweb2@
 	@PREPARE_twistedweb2@
 	cd @DIR_twistedweb2@ && \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
-		$(hostprefix)/bin/python -c "import setuptools; execfile('setup.py')" install --root=$(targetprefix) --prefix=/usr
+		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
 	@CLEANUP_twistedweb2@
 	touch $@
 
@@ -1311,9 +1316,10 @@ $(D)/twistedweb2: $(D)/bootstrap $(D)/setuptools @DEPENDS_twistedweb2@
 $(D)/twistedmail: $(D)/bootstrap $(D)/setuptools @DEPENDS_twistedmail@
 	@PREPARE_twistedmail@
 	cd @DIR_twistedmail@ && \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
-		$(hostprefix)/bin/python -c "import setuptools; execfile('setup.py')" install --root=$(targetprefix) --prefix=/usr
+		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
 	@CLEANUP_twistedmail@
 	touch $@
 
@@ -1325,9 +1331,10 @@ $(D)/pilimaging: $(D)/bootstrap $(D)/libjpeg $(D)/libfreetype $(D)/python $(D)/s
 	cd @DIR_pilimaging@ && \
 		sed -ie "s|"darwin"|"darwinNot"|g" "setup.py"; \
 		sed -ie "s|ZLIB_ROOT = None|ZLIB_ROOT = libinclude(\"${targetprefix}/usr\")|" "setup.py"; \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
-		$(hostprefix)/bin/python ./setup.py build install --root=$(targetprefix) --prefix=/usr
+		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
 	@CLEANUP_pilimaging@
 	touch $@
 
@@ -1342,6 +1349,7 @@ $(D)/pycrypto: $(D)/bootstrap $(D)/setuptools @DEPENDS_pycrypto@
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=/usr && \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
 		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
@@ -1354,6 +1362,7 @@ $(D)/pycrypto: $(D)/bootstrap $(D)/setuptools @DEPENDS_pycrypto@
 $(D)/pyusb: $(D)/bootstrap $(D)/setuptools @DEPENDS_pyusb@
 	@PREPARE_pyusb@
 	cd @DIR_pyusb@ && \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
 		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
@@ -1423,6 +1432,7 @@ $(D)/python: $(D)/bootstrap $(D)/host_python $(D)/libncurses $(D)/libcrypto $(D)
 $(D)/pythonwifi: $(D)/bootstrap $(D)/setuptools @DEPENDS_pythonwifi@
 	@PREPARE_pythonwifi@
 	cd @DIR_pythonwifi@ && \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
 		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
@@ -1435,6 +1445,7 @@ $(D)/pythonwifi: $(D)/bootstrap $(D)/setuptools @DEPENDS_pythonwifi@
 $(D)/pythoncheetah: $(D)/bootstrap $(D)/setuptools @DEPENDS_pythoncheetah@
 	@PREPARE_pythoncheetah@
 	cd @DIR_pythoncheetah@ && \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
 		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
@@ -1447,6 +1458,7 @@ $(D)/pythoncheetah: $(D)/bootstrap $(D)/setuptools @DEPENDS_pythoncheetah@
 $(D)/zope_interface: bootstrap python setuptools @DEPENDS_zope_interface@
 	@PREPARE_zope_interface@
 	cd @DIR_zope_interface@ && \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
 		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
