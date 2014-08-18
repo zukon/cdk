@@ -163,7 +163,7 @@ libxmlccwrap-0.0.12.tar.gz;http://www.ant.uni-bremen.de/whomes/rinas/libxmlccwra
 setuptools-0.6c11.tar.gz;http://pypi.python.org/packages/source/s/setuptools
 Twisted-13.0.0.tar.bz2;http://twistedmatrix.com/Releases/Twisted/13.0
 TwistedWeb2-8.1.0.tar.bz2;http://twistedmatrix.com/Releases/Web2/8.1
-TwistedMail-12.2.0.tar.bz2;http://twistedmatrix.com/Releases/Mail/12.0/TwistedMail-12.2.0.tar.bz2
+TwistedMail-12.2.0.tar.bz2;http://twistedmatrix.com/Releases/Mail/12.2
 Imaging-1.1.7.tar.gz;http://effbot.org/downloads
 pycrypto-2.5.tar.gz;http://ftp.dlitz.net/pub/dlitz/crypto/pycrypto
 pyOpenSSL-0.11.tar.gz;http://launchpad.net/pyopenssl/main/0.11/+download
