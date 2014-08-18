@@ -842,6 +842,7 @@ TUXBOX_RULES_MAKE(wget)
 #
 # python
 #
+TUXBOX_RULES_MAKE(gdata)
 TUXBOX_RULES_MAKE(elementtree)
 TUXBOX_RULES_MAKE(libxml2)
 TUXBOX_RULES_MAKE(libxslt)

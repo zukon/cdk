@@ -154,6 +154,7 @@ libplist-1.10.tar.gz;http://cgit.sukimashita.com/libplist.git/snapshot
 #
 # PYTHON
 #
+gdata-2.0.18.tar.gz;https://gdata-python-client.googlecode.com/files
 elementtree-1.2.6-20050316.tar.gz;http://effbot.org/media/downloads
 libxml2-2.9.0.tar.gz;http://xmlsoft.org/sources
 libxslt-1.1.28.tar.gz;http://xmlsoft.org/sources
