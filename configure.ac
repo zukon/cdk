@@ -421,6 +421,14 @@ AC_ARG_ENABLE(ipbox55,
 AM_CONDITIONAL(ENABLE_IPBOX55,test "$enable_ipbox55" = "yes")
 AC_SUBST(IPBOX55)
 
+AC_ARG_ENABLE(fortis_dp7000,
+	AS_HELP_STRING(--enable-fortis_dp7000, enable fortis_dp7000 stuff),
+	[case "${enableval}" in
+		yes) FORTIS_DP7000=fortis_dp7000 ;;
+	esac],[enable_fortis_dp7000=no])
+AM_CONDITIONAL(ENABLE_FORTIS_DP7000,test "$enable_fortis_dp7000" = "yes")
+AC_SUBST(FORTIS_DP7000)
+
 AC_SUBST(CFLAGS)
 AC_SUBST(TARGET_CFLAGS)
 AC_SUBST(TARGET_CXXFLAGS)

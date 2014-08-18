@@ -90,6 +90,7 @@ echo "   30) Vitamin HD5000"
 echo "   31) Atemio530"
 echo "   32) SagemCom 88 series"
 echo "   33) Ariva@Link200"
+echo "   34) fortis DP7000 (not finished yet)"
 
 case $1 in
 	[1-9] | 1[0-9] | 2[0-9] | 3[0-9]) REPLY=$1
@@ -132,6 +133,7 @@ case "$REPLY" in
 	31) TARGET="--enable-atemio530";BOXTYPE="--with-boxtype=atemio530";;
 	32) TARGET="--enable-sagemcom88";BOXTYPE="--with-boxtype=sagemcom88";;
 	33) TARGET="--enable-arivalink200";BOXTYPE="--with-boxtype=arivalink200";;
+	34) TARGET="--enable-fortis_dp7000";BOXTYPE="--with-boxtype=fortis_dp7000";;
 	 *) TARGET="--enable-atevio7500";BOXTYPE="--with-boxtype=atevio7500";;
 esac
 CONFIGPARAM="$CONFIGPARAM $TARGET $BOXTYPE"
