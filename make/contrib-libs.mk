@@ -1326,19 +1326,6 @@ $(D)/setuptools: $(D)/bootstrap $(D)/python @DEPENDS_setuptools@
 	touch $@
 
 #
-# gdata
-#
-$(D)/gdata: $(D)/bootstrap $(D)/setuptools @DEPENDS_gdata@
-	@PREPARE_gdata@
-	cd @DIR_gdata@ && \
-		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
-		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
-		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
-		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
-	@CLEANUP_gdata@
-	touch $@
-
-#
 # twisted
 #
 $(D)/twisted: $(D)/bootstrap $(D)/setuptools @DEPENDS_twisted@
@@ -1349,32 +1336,6 @@ $(D)/twisted: $(D)/bootstrap $(D)/setuptools @DEPENDS_twisted@
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
 		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
 	@CLEANUP_twisted@
-	touch $@
-
-#
-# twistetweb2
-#
-$(D)/twistedweb2: $(D)/bootstrap $(D)/setuptools @DEPENDS_twistedweb2@
-	@PREPARE_twistedweb2@
-	cd @DIR_twistedweb2@ && \
-		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
-		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
-		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
-		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
-	@CLEANUP_twistedweb2@
-	touch $@
-
-#
-# twistedmail
-#
-$(D)/twistedmail: $(D)/bootstrap $(D)/setuptools @DEPENDS_twistedmail@
-	@PREPARE_twistedmail@
-	cd @DIR_twistedmail@ && \
-		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
-		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
-		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
-		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
-	@CLEANUP_twistedmail@
 	touch $@
 
 #

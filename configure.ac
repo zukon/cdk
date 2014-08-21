@@ -858,15 +858,12 @@ TUXBOX_RULES_MAKE(wget)
 #
 # python
 #
-TUXBOX_RULES_MAKE(gdata)
 TUXBOX_RULES_MAKE(elementtree)
 TUXBOX_RULES_MAKE(libxml2)
 TUXBOX_RULES_MAKE(libxslt)
 TUXBOX_RULES_MAKE(lxml)
 TUXBOX_RULES_MAKE(setuptools)
 TUXBOX_RULES_MAKE(twisted)
-TUXBOX_RULES_MAKE(twistedweb2)
-TUXBOX_RULES_MAKE(twistedmail)
 TUXBOX_RULES_MAKE(pilimaging)
 TUXBOX_RULES_MAKE(host_python)
 TUXBOX_RULES_MAKE(python)
