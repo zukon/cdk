@@ -13,7 +13,7 @@ ENIGMA2_DEPS += libexpat libdvbsipp python libxml2 libxslt elementtree zope_inte
 ENIGMA2_DEPS += lxml libxmlccwrap libdreamdvd tuxtxt32bpp sdparm hotplug_e2 wpa_supplicant wireless_tools minidlna opkg ethtool
 ENIGMA2_DEPS += $(MEDIAFW_DEP) $(EXTERNALLCD_DEP)
 
-E_CONFIG_OPTS =
+E_CONFIG_OPTS = --enable-duckbox
 
 if ENABLE_EXTERNALLCD
 E_CONFIG_OPTS += --with-graphlcd
@@ -37,14 +37,14 @@ $(D)/enigma2-pli-nightly.do_prepare: | $(ENIGMA2_DEPS)
 	echo "========================================================================================================"; \
 	echo " 0) Newest                 - E2 OpenPli gstreamer / libplayer3    (Can fail due to outdated patch)     "; \
 	echo "========================================================================================================"; \
-	echo " 1) use your own e2 git dir without patchfile"; \
+	echo " 1) Use your own e2 git dir without patchfile"; \
 	echo "========================================================================================================"; \
 	echo " 2) Tue, 17 Jun 2014 07:44 - E2 OpenPli gstreamer / libplayer3 b670ebecf90dc4651b2862ebf448bca370d69fef"; \
 	echo " 3) Mon, 30 Dec 2013 18:33 - E2 OpenPli gstreamer / libplayer3 715a3024ad7ae3e89dad039bfb8ae49350552c39"; \
 	echo " 4) Sun, 23 Feb 2014 10:05 - E2 OpenPli gstreamer / libplayer3 e858a47a49c4fd8cdf22b29ea7278e6b4a2bddae"; \
 	echo " 5) Tue, 25 Mar 2014 18:17 - E2 OpenPli gstreamer / libplayer3 7272840d7db98a88f5c8b2882cc78d7ddc04e5e6"; \
 	echo "========================================================================================================"; \
-	echo "Media Framwork : $(MEDIAFW)"; \
+	echo "Media Framework : $(MEDIAFW)"; \
 	echo "External LCD   : $(EXTERNALLCD)"; \
 	read -p "Select         : "; \
 	[ "$$REPLY" == "0" ] && DIFF="0"; \
