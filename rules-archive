@@ -87,8 +87,7 @@ DFB++-1.0.0.tar.gz;http://www.directfb.org/downloads/Extras
 webkitdfb_2010-11-18.tar.gz;http://www.duckbox.info/files/packages
 icu4c-4_4_1-src.tgz;http://download.icu-project.org/files/icu4c/4.4.1
 sqlite-3.6.0.tar.gz;http://www.duckbox.info/files/packages
-sqlite-autoconf-3071100.tar.gz;http://www.sqlite.org
-sqlite-autoconf-3071500.tar.gz;http://www.sqlite.org
+sqlite-autoconf-3080600.tar.gz;http://www.sqlite.org/2014
 enchant-1.5.0.tar.gz;http://www.abisource.com/downloads/enchant/1.5.0
 lite-0.9.0+git0.7982ccc.tar.bz2;http://www.duckbox.info/files/packages
 cairo-1.8.10.tar.gz;http://cairographics.org/releases
