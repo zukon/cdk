@@ -1,13 +1,13 @@
 #!/bin/bash
 
 if [ "$1" == -h ] || [ "$1" == --help ]; then
- echo "Parameter 1: target system (1-31)"
+ echo "Parameter 1: target system (1-36)"
  echo "Parameter 2: kernel (1-4)"
  echo "Parameter 3: debug (y/N)"
  echo "Parameter 4: player (1-2)"
  echo "Parameter 5: Media Framework (1-4)"
  echo "Parameter 6: External LCD support (1-2)"
- echo "Parameter 7: target build (1-2)"
+ echo "Parameter 7: Image (Enigma=1 / Neutrino=2) (1-2)"
  exit
 fi
 
@@ -57,47 +57,46 @@ CONFIGPARAM="${CONFIGPARAM} --host=${host_alias} --build=${host_alias}"
 
 ##############################################
 
-echo "Targets:"
-echo "    1) Kathrein UFS-910"
-echo "    3) Kathrein UFS-912"
-echo "    4) Kathrein UFS-922"
-echo "    5) Topfield 7700 HDPVR"
-echo "    6) Fortis based (HDBOX)"
-echo "    7) SpiderBox HL-101"
-echo "    8) Edision Argus vip"
-echo "    9) Cuberevo (IPBOX 9000)"
-echo "   10) Cuberevo mini (IPBOX 900)"
-echo "   11) Cuberevo mini2 (IPBOX 910)"
-echo "   12) Cuberevo 250 (IPBOX 91)"
-echo "   13) Cuberevo 9500HD (7000HD)"
-echo "   14) Cuberevo 2000HD"
-echo "   15) Cuberevo mini_fta (200HD)"
-echo "   16) Homecast 5101"
-echo "   17) Octagon 1008"
-echo "   18) SPARK"
-echo "   19) Atevio7500"
-echo "   20) SPARK7162"
-echo "   21) IPBOX9900"
-echo "   22) IPBOX99"
-echo "   23) IPBOX55"
-echo "   24) Fortis HS7810A"
-echo "   25) B4Team ADB 5800S"
-echo "   26) Fortis HS7110"
-echo "   27) Atemio520"
-echo "   28) Kathrein UFS-913"
-echo "   29) Kathrein UFC-960"
-echo "   30) Vitamin HD5000"
-echo "   31) Atemio530"
-echo "   32) SagemCom 88 series"
-echo "   33) Ariva@Link200"
-echo "   34) fortis DP7000 (not finished yet)"
-
 case $1 in
-	[1-9] | 1[0-9] | 2[0-9] | 3[0-9]) REPLY=$1
-	echo -e "\nSelected target: $REPLY\n"
-	;;
+	[1-9] | 1[0-9] | 2[0-9] | 3[0-9]) REPLY=$1;;
 	*)
-	read -p "Select target (1-33)? ";;
+		echo "Target receivers:"
+		echo "    1) Kathrein UFS-910"
+		echo "    3) Kathrein UFS-912"
+		echo "    4) Kathrein UFS-922"
+		echo "    5) Topfield TF77X0 HDPVR"
+		echo "    6) Fortis HDbox (Fortis FS9000/9200)"
+		echo "    7) SpiderBox HL-101"
+		echo "    8) Edision Argus vip"
+		echo "    9) Cuberevo (IPBOX 9000)"
+		echo "   10) Cuberevo mini (IPBOX 900)"
+		echo "   11) Cuberevo mini2 (IPBOX 910)"
+		echo "   12) Cuberevo 250 (IPBOX 91)"
+		echo "   13) Cuberevo 9500HD (7000HD)"
+		echo "   14) Cuberevo 2000HD"
+		echo "   15) Cuberevo mini_fta (200HD)"
+		echo "   16) Homecast 5101"
+		echo "   17) Octagon SF1008P (Fortis HS9510)"
+		echo "   18) SPARK"
+		echo "   19) Atevio AV7500 (Fortis HS8200)"
+		echo "   20) SPARK7162"
+		echo "   21) IPBOX9900"
+		echo "   22) IPBOX99"
+		echo "   23) IPBOX55"
+		echo "   24) Fortis HS7810A"
+		echo "   25) B4Team ADB 5800S"
+		echo "   26) Fortis HS7110"
+		echo "   27) Atemio AM520"
+		echo "   28) Kathrein UFS-913"
+		echo "   29) Kathrein UFC-960"
+		echo "   30) Vitamin HD5000"
+		echo "   31) Atemio AM530"
+		echo "   32) SagemCom 88 series"
+		echo "   33) Ferguson Ariva @Link 200"
+		echo "   34) Fortis HS7119 (not finished yet)"
+		echo "   35) Fortis HS7819 (not finished yet)"
+		echo "   36) Fortis DP7000 (not finished yet)"
+		read -p "Select target (1-36)? ";;
 esac
 
 case "$REPLY" in
@@ -133,7 +132,9 @@ case "$REPLY" in
 	31) TARGET="--enable-atemio530";BOXTYPE="--with-boxtype=atemio530";;
 	32) TARGET="--enable-sagemcom88";BOXTYPE="--with-boxtype=sagemcom88";;
 	33) TARGET="--enable-arivalink200";BOXTYPE="--with-boxtype=arivalink200";;
-	34) TARGET="--enable-fortis_dp7000";BOXTYPE="--with-boxtype=fortis_dp7000";;
+	34) TARGET="--enable-hs7119";BOXTYPE="--with-boxtype=hs7119";;
+	35) TARGET="--enable-hs7819";BOXTYPE="--with-boxtype=hs7819";;
+	36) TARGET="--enable-fortis_dp7000";BOXTYPE="--with-boxtype=fortis_dp7000";;
 	 *) TARGET="--enable-atevio7500";BOXTYPE="--with-boxtype=atevio7500";;
 esac
 CONFIGPARAM="$CONFIGPARAM $TARGET $BOXTYPE"
@@ -160,17 +161,14 @@ esac
 
 ##############################################
 
-echo -e "\nKernel:"
-echo "   1) STM 24 P0209"
-echo "   2) STM 24 P0211 (recommended)"
-echo "   3) STM 24 P0214 (experimental)"
-echo "   4) STM 24 P0215 (experimental)"
 case $2 in
-	[1-4]) REPLY=$2
-	echo -e "\nSelected kernel: $REPLY\n"
-	;;
-	*)
-	read -p "Select kernel (1-4)? ";;
+	[1-4]) REPLY=$2;;
+	*)	echo -e "\nKernel:"
+		echo "   1) STM 24 P0209"
+		echo "   2) STM 24 P0211 (recommended)"
+		echo "   3) STM 24 P0214 (experimental)"
+		echo "   4) STM 24 P0215 (experimental)"
+		read -p "Select kernel (1-4)? ";;
 esac
 
 case "$REPLY" in
@@ -187,11 +185,9 @@ CONFIGPARAM="$CONFIGPARAM $KERNEL"
 echo -e "\nKernel debug:"
 if [ "$3" ]; then
 	REPLY="$3"
-	echo "Activate debug (y/N)? "
-	echo -e "\nSelected option: $REPLY\n"
 else
 	REPLY=N
-	read -p "Activate debug (y/N)? "
+	read -p "   Activate debug (y/N)? "
 fi
 [ "$REPLY" == "y" -o "$REPLY" == "Y" ] && CONFIGPARAM="$CONFIGPARAM --enable-debug"
 
@@ -206,15 +202,12 @@ cd - &>/dev/null
 
 ##############################################
 
-echo -e "\nPlayer:"
-echo "   1) Player 191 (stmfb-3.1_stm24_0102)"
-echo "   2) Player 191 (stmfb-3.1_stm24_0104, recommended)"
 case $4 in
-	[1-2]) REPLY=$4
-	echo -e "\nSelected player: $REPLY\n"
-	;;
-	*)
-	read -p "Select player (1-2)? ";;
+	[1-2]) REPLY=$4;;
+	*)	echo -e "\nPlayer:"
+		echo "   1) Player 191 (stmfb-3.1_stm24_0102)"
+		echo "   2) Player 191 (stmfb-3.1_stm24_0104, recommended)"
+		read -p "Select player (1-2)? ";;
 esac
 
 case "$REPLY" in
@@ -305,17 +298,14 @@ esac
 
 ##############################################
 
-echo -e "\nMedia Framework:"
-echo "   1) eplayer3"
-echo "   2) gstreamer"
-echo "   3) use build-in (recommended for Neutrino)"
-echo "   4) gstreamer+eplayer3 (recommended for openPLI)"
 case $5 in
-	[1-4]) REPLY=$5
-	echo -e "\nSelected media framework: $REPLY\n"
-	;;
-	*)
-	read -p "Select media framework (1-4)? ";;
+	[1-4]) REPLY=$5;;
+	*)	echo -e "\nMedia Framework:"
+		echo "   1) eplayer3"
+		echo "   2) gstreamer"
+		echo "   3) use built-in (recommended for Neutrino)"
+		echo "   4) gstreamer+eplayer3 (recommended for OpenPLi)"
+		read -p "Select media framework (1-4)? ";;
 esac
 
 case "$REPLY" in
@@ -328,47 +318,45 @@ esac
 
 ##############################################
 
-echo -e "\nExternal LCD support:"
-echo "   1) No external LCD"
-echo "   2) graphlcd for external LCD"
 case $6 in
-	[1-2]) REPLY=$6
-	echo -e "\nSelected LCD support: $REPLY\n"
-	;;
-	*)
-	read -p "Select external LCD support (1-2)? ";;
+	[1-2]) REPLY=$6;;
+	*)	echo -e "\nExternal LCD support:"
+		echo "   1) No external LCD"
+		echo "   2) graphlcd for external LCD"
+		read -p "Select external LCD support (1-2)? ";;
 esac
 
 case "$REPLY" in
 	1) EXTERNAL_LCD="";;
 	2) EXTERNAL_LCD="--enable-externallcd";;
-	*) EXTERNAL_LCD="--enable-externallcd";;
+	*) EXTERNAL_LCD="";;
 esac
 
 ##############################################
 
-echo -e "\nSelect to build:"
-echo "   1) Neutrino"
-echo "   2) Enigma2 + Wlan"
 case $7 in
-	[1-2]) REPLY=$7
-	echo -e "\nSelected to build: $REPLY\n"
-	;;
-	*)
-	read -p "Select to build (1-2)? ";;
+	[1-2]) REPLY=$7;;
+	*)	echo -e "\nWhich Image do you want to build:"
+		echo "   1) Neutrino"
+		echo "   2) Enigma2 (includes WLAN drivers)"
+		read -p "Select Image to build (1-2)? ";;
 esac
 
 case "$REPLY" in
-	1) MKTARGET="--enable-neutrino";;
-	2) MKTARGET="--enable-enigma2 --enable-wlandriver";;
-	*) MKTARGET="--enable-neutrino";;
+	1) IMAGE="--enable-neutrino";;
+	2) IMAGE="--enable-enigma2 --enable-wlandriver";;
+	*) IMAGE="--enable-neutrino";;
 esac
 
 ##############################################
 
-CONFIGPARAM="$CONFIGPARAM $PLAYER $MULTICOM $MEDIAFW $EXTERNAL_LCD $MKTARGET"
+CONFIGPARAM="$CONFIGPARAM $PLAYER $MULTICOM $MEDIAFW $EXTERNAL_LCD $IMAGE"
 
 ##############################################
+
+# configure still want's this
+# ignore errors here
+automake --add-missing
 
 echo && \
 echo "Performing autogen.sh..." && \
@@ -385,10 +373,16 @@ echo && \
 echo $CONFIGPARAM >lastChoice
 echo " "
 echo "----------------------------------------"
-echo "Your build enivroment is ready :-)"
+echo "Your build environment is ready :-)"
+echo "Your next step could be:"
+case "$IMAGE" in
+		--enable-neutrino*)
+		echo "  make yaud-neutrino-mp"
+		echo "  make yaud-neutrino-mp-next"
+		echo "  make yaud-neutrino-hd2-exp"
+		echo "  make yaud-neutrino-mp-martii-github";;
+		--enable-enigma2*)
+		echo "  make yaud-enigma2-pli-nightly";;
+		*)
+esac
 echo "----------------------------------------"
-echo "  make yaud-neutrino-mp"
-echo "  make yaud-neutrino-mp-next"
-echo "  make yaud-neutrino-hd2-exp"
-echo "  make yaud-enigma2-pli-nightly"
-echo " "
