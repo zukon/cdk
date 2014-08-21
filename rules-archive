@@ -159,7 +159,7 @@ libxslt-1.1.28.tar.gz;http://xmlsoft.org/sources
 lxml-2.2.8.tgz;http://launchpad.net/lxml/2.2/2.2.8/+download
 libxmlccwrap-0.0.12.tar.gz;http://www.ant.uni-bremen.de/whomes/rinas/libxmlccwrap/download
 setuptools-0.6c11.tar.gz;http://pypi.python.org/packages/source/s/setuptools
-Twisted-13.0.0.tar.bz2;http://twistedmatrix.com/Releases/Twisted/13.0
+Twisted-14.0.0.tar.bz2;http://twistedmatrix.com/Releases/Twisted/14.0
 Imaging-1.1.7.tar.gz;http://effbot.org/downloads
 pycrypto-2.5.tar.gz;http://ftp.dlitz.net/pub/dlitz/crypto/pycrypto
 pyOpenSSL-0.11.tar.gz;http://launchpad.net/pyopenssl/main/0.11/+download
