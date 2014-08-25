@@ -9,6 +9,7 @@ DEPMOD = $(hostprefix)/bin/depmod
 # Patches Kernel 24
 #
 COMMONPATCHES_24 = \
+		linux-kbuild-generate-mudules-builtin.patch \
 		linux-sh4-linuxdvb_stm24$(PATCH_STR).patch \
 		$(if $(P0209),linux-sh4-makefile_stm24.patch) \
 		linux-sh4-sound_stm24$(PATCH_STR).patch \
@@ -259,7 +260,7 @@ HOST_KERNEL_VERSION = 2.6.32.61$(KERNELSTMLABEL)-$(KERNELLABEL)
 endif
 HOST_KERNEL_PATCHES = $(KERNELPATCHES_24)
 HOST_KERNEL_CONFIG = linux-sh4-$(subst _stm24_,-,$(KERNELVERSION))_$(MODNAME).config$(DEBUG_STR)
-HOST_KERNEL_RPM = $(archivedir)/$(STLINUX)-$(HOST_KERNEL)-source-sh4-$(HOST_KERNEL_VERSION).noarch.rpm
+HOST_KERNEL_RPM = $(archivedir)/stlinux24-$(HOST_KERNEL)-source-sh4-$(HOST_KERNEL_VERSION).noarch.rpm
 
 $(D)/linux-kernel.do_prepare: \
 		$(if $(HOST_KERNEL_PATCHES),$(HOST_KERNEL_PATCHES:%=Patches/$(BUILDCONFIG$)/%)) \
