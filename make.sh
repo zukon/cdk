@@ -354,10 +354,6 @@ CONFIGPARAM="$CONFIGPARAM $PLAYER $MULTICOM $MEDIAFW $EXTERNAL_LCD $IMAGE"
 
 ##############################################
 
-# configure still want's this
-# ignore errors here
-automake --add-missing
-
 echo && \
 echo "Performing autogen.sh..." && \
 echo "------------------------" && \

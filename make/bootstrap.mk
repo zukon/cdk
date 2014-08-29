@@ -1,6 +1,7 @@
 #
 #
 #
+STM_RELOCATE = /opt/STM/STLinux-2.4
 STMKERNEL_VER = 2.6.32.46-48
 
 # 4.7.2
@@ -16,9 +17,15 @@ STMKERNEL_VER = 2.6.32.46-48
 #GLIBC_VER     = 2.10.2-43
 
 # 4.8.2
-BINUTILS_VER  = 2.23.2-73
-GCC_VER       = 4.8.2-131
-LIBGCC_VER    = 4.8.2-138
+#BINUTILS_VER  = 2.23.2-73
+#GCC_VER       = 4.8.2-131
+#LIBGCC_VER    = 4.8.2-138
+#GLIBC_VER     = 2.14.1-50
+
+# 4.8.3
+BINUTILS_VER  = 2.24.51.0.3-75
+GCC_VER       = 4.8.3-135
+LIBGCC_VER    = 4.8.3-142
 GLIBC_VER     = 2.14.1-50
 
 $(hostprefix)/bin/unpack-rpm.sh:
@@ -45,6 +52,9 @@ crosstool: host-filesystem \
 $(hostprefix)/bin/unpack-rpm.sh \
 crosstool-rpminstall
 	set -e; cd $(hostprefix); ln -sf ../host/target/* $(targetprefix)
+	if [ -e $(hostprefix)/sh4-linux/lib/libstdc++.la ] ; then \
+		sed -i "s,^libdir=.*,libdir='$(hostprefix)/sh4-linux/lib'," $(hostprefix)/sh4-linux/lib/lib{std,sup}c++.la; \
+	fi;
 	sed -i "s,^libdir=.*,libdir='$(hostprefix)/sh4-linux/lib'," $(hostprefix)/sh4-linux/lib/lib{std,sup}c++.la
 	sed -i "s,^libdir=.*,libdir='$(targetprefix)/usr/lib'," $(targetprefix)/usr/lib/lib{std,sup}c++.la
 	touch .deps/$@
@@ -61,11 +71,10 @@ host-filesystem:
 	touch .deps/$@
 
 $(D)/directories:
-	$(INSTALL) -d $(targetprefix)/{bin,boot,dev,dev.static,mnt,proc,root,sys,tmp,var}
+	$(INSTALL) -d $(targetprefix)/{bin,boot,root,var}
 	$(INSTALL) -d $(targetprefix)/etc/rc.d/{rc0.d,rc1.d,rc2.d,rc3.d,rc4.d,rc5.d,rc6.d,rcS.d}
 	$(INSTALL) -d $(targetprefix)/etc/network
 	$(INSTALL) -d $(targetprefix)/var/etc
-	ln -sf /tmp $(targetprefix)/var/run
 	$(INSTALL) -d $(hostprefix)/$(target)
 	$(INSTALL) -d $(hostprefix)/bin
 	$(INSTALL) -d $(bootprefix)
