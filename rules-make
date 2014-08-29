@@ -169,7 +169,7 @@ libxml2;2.9.0;libxml2-2.9.0;libxml2-2.9.0.tar.gz:libxml2-2.9.0.patch;extract:lib
 libxslt;1.1.28;libxslt-1.1.28;libxslt-1.1.28.tar.gz;extract:libxslt-1.1.28.tar.gz
 lxml;2.2.8;lxml-2.2.8;lxml-2.2.8.tgz;extract:lxml-2.2.8.tgz
 setuptools;0.6c11;setuptools-0.6c11;setuptools-0.6c11.tar.gz;extract:setuptools-0.6c11.tar.gz
-twisted;14.0.0;Twisted-14.0.0;Twisted-14.0.0.tar.bz2;extract:Twisted-14.0.0.tar.bz2
+twisted;13.2.0;Twisted-13.2.0;Twisted-13.2.0.tar.bz2;extract:Twisted-13.2.0.tar.bz2
 pilimaging;1.1.7;Imaging-1.1.7;Imaging-1.1.7.tar.gz;extract:Imaging-1.1.7.tar.gz;patch:Imaging-1.1.7-crosscompiling.patch
 pycrypto;2.5;pycrypto-2.5;pycrypto-2.5.tar.gz;extract:pycrypto-2.5.tar.gz;patch:python-pycrypto-no-usr-include.patch
 pyopenssl;0.12;pyOpenSSL-0.12;pyOpenSSL-0.12.tar.gz;extract:pyOpenSSL-0.12.tar.gz
