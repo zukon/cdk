@@ -253,7 +253,7 @@ $(D)/libpng12: $(D)/bootstrap @DEPENDS_libpng12@
 			--prefix=$(targetprefix)/usr \
 			&& \
 		ECHO=echo $(MAKE) all && \
-		sed -e "s,^prefix=,prefix=$(targetprefix)," < libpng-config > $(hostprefix)/bin/libpng-config && \
+		sed -e 's,^prefix="/usr",prefix="$(targetprefix)/usr",' < libpng-config > $(hostprefix)/bin/libpng-config && \
 		chmod 755 $(hostprefix)/bin/libpng-config && \
 		@INSTALL_libpng@
 	@CLEANUP_libpng12@
@@ -269,9 +269,9 @@ $(D)/libpng: $(D)/bootstrap $(D)/libz @DEPENDS_libpng@
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix=$(targetprefix)/usr && \
-			ECHO=echo $(MAKE) all \
+			--prefix=$(targetprefix)/usr \
 			&& \
+		ECHO=echo $(MAKE) all && \
 		sed -e 's,^prefix="/usr",prefix="$(targetprefix)/usr",' < libpng-config > $(hostprefix)/bin/libpng-config && \
 		chmod 755 $(hostprefix)/bin/libpng-config && \
 		@INSTALL_libpng@
@@ -1200,6 +1200,15 @@ $(D)/libflac: $(D)/bootstrap @DEPENDS_libflac@
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=/usr \
+			--disable-sse \
+			--disable-asm-optimizations \
+			--disable-doxygen-docs \
+			--disable-exhaustive-tests \
+			--disable-thorough-tests \
+			--disable-3dnow \
+			--disable-debug \
+			--disable-valgrind-testing \
+			--disable-dependency-tracking \
 			--disable-ogg \
 			--disable-xmms-plugin \
 			--disable-thorough-tests \
