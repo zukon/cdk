@@ -55,7 +55,6 @@ crosstool-rpminstall
 	if [ -e $(hostprefix)/sh4-linux/lib/libstdc++.la ] ; then \
 		sed -i "s,^libdir=.*,libdir='$(hostprefix)/sh4-linux/lib'," $(hostprefix)/sh4-linux/lib/lib{std,sup}c++.la; \
 	fi;
-	sed -i "s,^libdir=.*,libdir='$(hostprefix)/sh4-linux/lib'," $(hostprefix)/sh4-linux/lib/lib{std,sup}c++.la
 	sed -i "s,^libdir=.*,libdir='$(targetprefix)/usr/lib'," $(targetprefix)/usr/lib/lib{std,sup}c++.la
 	touch .deps/$@
 
