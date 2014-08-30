@@ -150,12 +150,11 @@ $(D)/libfreetype: $(D)/bootstrap $(D)/libpng @DEPENDS_libfreetype@
 			--prefix=$(targetprefix)/usr \
 			&& \
 		$(MAKE) all && \
-		sed -e "s,^prefix=,prefix=$(targetprefix)," < builds/unix/freetype-config > $(hostprefix)/bin/freetype-config && \
-		chmod 755 $(hostprefix)/bin/freetype-config && \
 		@INSTALL_libfreetype@
 		if [ -d $(targetprefix)/usr/include/freetype2/freetype ] ; then \
 			ln -sf ./freetype2/freetype $(targetprefix)/usr/include/freetype; \
 		fi;
+		mv $(targetprefix)/usr/bin/freetype-config $(hostprefix)/bin/freetype-config
 	@CLEANUP_libfreetype@
 	touch $@
 
