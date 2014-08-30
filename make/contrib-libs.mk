@@ -360,6 +360,7 @@ $(D)/libcurl: $(D)/bootstrap @DEPENDS_libcurl@
 		sed -e "s,^prefix=,prefix=$(targetprefix)," < curl-config > $(hostprefix)/bin/curl-config && \
 		chmod 755 $(hostprefix)/bin/curl-config && \
 		@INSTALL_libcurl@
+		rm -f $(targetprefix)/usr/bin/curl-config && \
 	@CLEANUP_libcurl@
 	touch $@
 
