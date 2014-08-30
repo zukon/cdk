@@ -103,7 +103,7 @@ ffmpeg;rewrite-pkgconfig:libavcodec/libavcodec.pc:libavdevice/libavdevice.pc:lib
 libcap;make:install:DESTDIR=TARGETS
 evebrowser;make:install:DESTDIR=TARGETS
 brofs;make:install:DESTDIR=TARGETS/usr/bin
-rtmpdump;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-pkgconfig::TARGETS/usr/lib/pkgconfig/librtmp.pc
+rtmpdump;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/librtmp.pc
 libdvbsipp;rewrite-pkgconfig:libdvbsi++.pc;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libdvbsi++.la
 libpcre;rewrite-pkgconfig:libpcre.pc:libpcrecpp.pc:libpcreposix.pc;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libpcre.la:TARGETS/usr/lib/libpcreposix.la
 libmodplug;make:install:prefix=/usr:DESTDIR=TARGETS
