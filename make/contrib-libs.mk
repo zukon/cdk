@@ -271,9 +271,8 @@ $(D)/libpng: $(D)/bootstrap $(D)/libz @DEPENDS_libpng@
 			--prefix=$(targetprefix)/usr \
 			&& \
 		ECHO=echo $(MAKE) all && \
-		sed -e 's,^prefix="/usr",prefix="$(targetprefix)/usr",' < libpng-config > $(hostprefix)/bin/libpng-config && \
-		chmod 755 $(hostprefix)/bin/libpng-config && \
 		@INSTALL_libpng@
+		mv $(targetprefix)/usr/bin/lib{png,png16}-config $(hostprefix)/bin/
 	@CLEANUP_libpng@
 	touch $@
 
