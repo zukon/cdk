@@ -74,12 +74,12 @@ libvorbisidec;make:install:DESTDIR=TARGETS;install:-m644:vorbisidec.pc:TARGETS/u
 #
 # contrib libs
 #
-libcrypto;rewrite-pkgconfig:libcrypto.pc:libssl.pc:openssl.pc;make:install_sw:INSTALL_PREFIX=TARGETS/usr
+libcrypto;rewrite-pkgconfig:libcrypto.pc:libssl.pc:openssl.pc;make:install_sw:INSTALL_PREFIX=TARGETS
 liblua;make:install:INSTALL_TOP=TARGETS/usr
 howl;rewrite-pkgconfig:howl.pc;make:install:prefix=TARGETS/usr;rewrite-libtool:TARGETS/usr/lib/libhowl.la:TARGETS/usr/lib/libhowl.la
 libopenthreads;rewrite-pkgconfig:packaging/pkgconfig/openthreads.pc;make:install:DESTDIR=TARGETS/usr
 libboost;remove:TARGETS/include/boost;move:boost:TARGETS/usr/include/boost
-libz;rewrite-pkgconfig:zlib.pc;make:install:prefix=TARGETS/usr;archive:TARGETS/usr/lib/libz_pic.a:*.o
+libz;rewrite-pkgconfig:zlib.pc;make:install:prefix=TARGETS/usr
 libreadline;make:install:DESTDIR=TARGETS
 lirc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/liblirc_client.la
 libsigc_e2;rewrite-pkgconfig:sigc++-1.2.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libsigc-1.2.la
@@ -126,7 +126,7 @@ taglib;make:install:DESTDIR=TARGETS
 #
 # contrib apps
 #
-libncurses;make:install.libs:DESTDIR=TARGETS;archive:TARGETS/usr/lib/libncurses_pic.a:obj_s/*.o
+libncurses;make:install.libs:DESTDIR=TARGETS
 bzip2;make:install:PREFIX=TARGETS/usr
 grep;make:install:DESTDIR=TARGETS
 openrdate;make:install:DESTDIR=TARGETS

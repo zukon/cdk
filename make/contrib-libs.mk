@@ -6,7 +6,7 @@ $(D)/libcrypto: $(D)/bootstrap @DEPENDS_libcrypto@
 	cd @DIR_libcrypto@ && \
 		$(BUILDENV) \
 		./Configure shared linux-sh no-hw no-engine \
-			--prefix=/ \
+			--prefix=/usr \
 			--openssldir=/.remove \
 			&& \
 		$(MAKE) depend && \
