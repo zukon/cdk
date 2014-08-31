@@ -205,13 +205,21 @@ AC_ARG_ENABLE(hs7119,
 AM_CONDITIONAL(ENABLE_HS7119,test "$enable_hs7119" = "yes")
 AC_SUBST(HS7119)
 
-AC_ARG_ENABLE(hs7819a,
+AC_ARG_ENABLE(hs7819,
 	AS_HELP_STRING(--enable-hs7819, enable fortis hs7819 stuff),
 	[case "${enableval}" in
 		yes) HS7819=hs7819 ;;
 	esac],[enable_hs7819=no])
 AM_CONDITIONAL(ENABLE_HS7819,test "$enable_hs7819" = "yes")
 AC_SUBST(HS7819)
+
+AC_ARG_ENABLE(fortis_dp7000,
+	AS_HELP_STRING(--enable-fortis_dp7000, enable fortis_dp7000 stuff),
+	[case "${enableval}" in
+		yes) FORTIS_DP7000=fortis_dp7000 ;;
+	esac],[enable_fortis_dp7000=no])
+AM_CONDITIONAL(ENABLE_FORTIS_DP7000,test "$enable_fortis_dp7000" = "yes")
+AC_SUBST(FORTIS_DP7000)
 
 AC_ARG_ENABLE(tf7700,
 	AS_HELP_STRING(--enable-tf7700, enable topfield tf7700 stuff),
@@ -436,14 +444,6 @@ AC_ARG_ENABLE(ipbox55,
 	esac],[enable_ipbox55=no])
 AM_CONDITIONAL(ENABLE_IPBOX55,test "$enable_ipbox55" = "yes")
 AC_SUBST(IPBOX55)
-
-AC_ARG_ENABLE(fortis_dp7000,
-	AS_HELP_STRING(--enable-fortis_dp7000, enable fortis_dp7000 stuff),
-	[case "${enableval}" in
-		yes) FORTIS_DP7000=fortis_dp7000 ;;
-	esac],[enable_fortis_dp7000=no])
-AM_CONDITIONAL(ENABLE_FORTIS_DP7000,test "$enable_fortis_dp7000" = "yes")
-AC_SUBST(FORTIS_DP7000)
 
 AC_SUBST(CFLAGS)
 AC_SUBST(TARGET_CFLAGS)

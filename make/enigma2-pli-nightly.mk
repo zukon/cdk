@@ -45,22 +45,22 @@ $(D)/enigma2-pli-nightly.do_prepare: | $(ENIGMA2_DEPS)
 	echo " 5) Tue, 25 Mar 2014 18:17 - E2 OpenPli gstreamer / libplayer3 7272840d7db98a88f5c8b2882cc78d7ddc04e5e6"; \
 	echo "========================================================================================================"; \
 	echo "Media Framework : $(MEDIAFW)"; \
-	echo "External LCD   : $(EXTERNALLCD)"; \
-	read -p "Select         : "; \
+	echo "External LCD    : $(EXTERNALLCD)"; \
+	read -p "Select          : "; \
 	[ "$$REPLY" == "0" ] && DIFF="0"; \
 	[ "$$REPLY" == "1" ] && DIFF="1" && REVISION=""; \
 	[ "$$REPLY" == "2" ] && DIFF="2" && REVISION="b670ebecf90dc4651b2862ebf448bca370d69fef"; \
 	[ "$$REPLY" == "3" ] && DIFF="3" && REVISION="715a3024ad7ae3e89dad039bfb8ae49350552c39"; \
 	[ "$$REPLY" == "4" ] && DIFF="4" && REVISION="e858a47a49c4fd8cdf22b29ea7278e6b4a2bddae"; \
 	[ "$$REPLY" == "5" ] && DIFF="5" && REVISION="7272840d7db98a88f5c8b2882cc78d7ddc04e5e6"; \
-	echo "Revision       : "$$REVISION; \
+	echo "Revision        : "$$REVISION; \
 	echo ""; \
 	if [ "$$REPLY" != "1" ]; then \
 		REPO="git://git.code.sf.net/p/openpli/enigma2"; \
 		rm -rf $(appsdir)/enigma2-nightly; \
 		rm -rf $(appsdir)/enigma2-nightly.org; \
 		[ -d "$(archivedir)/enigma2-pli-nightly.git" ] && \
-		(cd $(archivedir)/enigma2-pli-nightly.git; git pull ; git checkout HEAD; cd "$(buildprefix)";); \
+		(cd $(archivedir)/enigma2-pli-nightly.git; git pull; git checkout HEAD; cd "$(buildprefix)";); \
 		[ -d "$(archivedir)/enigma2-pli-nightly.git" ] || \
 		git clone -b $$HEAD $$REPO $(archivedir)/enigma2-pli-nightly.git; \
 		cp -ra $(archivedir)/enigma2-pli-nightly.git $(appsdir)/enigma2-nightly; \

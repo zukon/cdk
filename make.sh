@@ -7,7 +7,7 @@ if [ "$1" == -h ] || [ "$1" == --help ]; then
  echo "Parameter 4: player (1-2)"
  echo "Parameter 5: Media Framework (1-4)"
  echo "Parameter 6: External LCD support (1-2)"
- echo "Parameter 7: Image (Enigma=1 / Neutrino=2) (1-2)"
+ echo "Parameter 7: Image (Enigma=1/Neutrino=2) (1-2)"
  exit
 fi
 
@@ -53,7 +53,7 @@ esac
 host_alias=`echo ${host_alias} | sed -e "s/suse/${VENDOR}/"`
 
 # And add it to the config parameters.
-CONFIGPARAM="${CONFIGPARAM} --host=${host_alias} --build=${host_alias}"
+CONFIGPARAM="$CONFIGPARAM --host=$host_alias --build=$host_alias"
 
 ##############################################
 
