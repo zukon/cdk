@@ -343,7 +343,6 @@ $(D)/libcurl: $(D)/bootstrap @DEPENDS_libcurl@
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=/usr \
-			--mandir=/.remove \
 			--disable-debug \
 			--disable-verbose \
 			--disable-manual \
@@ -478,7 +477,7 @@ $(D)/libvorbis: $(D)/bootstrap $(D)/libogg @DEPENDS_libvorbis@
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix=/usr \
+			--prefix=$(targetprefix)/usr \
 		&& \
 		$(MAKE) all && \
 		@INSTALL_libvorbis@

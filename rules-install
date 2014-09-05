@@ -32,8 +32,6 @@ ipkg;make:install:DESTDIR=TARGETS
 module_init_tools;make:INSTALL=install:install:sbin_PROGRAMS="depmod modinfo":bin_PROGRAMS=:DESTDIR=TARGETS
 sysvinit;make:install:ROOT=TARGETS
 
-
-
 #
 # Graphics and Font Libraries
 #
@@ -55,7 +53,7 @@ pixman;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libpixman-1.
 #
 libalsa;rewrite-pkgconfig:utils/alsa.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libasound.la
 alsautils;make:install:DESTDIR=TARGETS
-libflac;rewrite-pkgconfig:src/libFLAC/flac.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libFLAC.la
+libflac;rewrite-pkgconfig:src/libFLAC/flac.pc:src/libFLAC++/flac++.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libFLAC.la
 a52dec;make:install:DESTDIR=TARGETS
 libao;rewrite-pkgconfig:libao.pc;make:install:prefix=TARGETS/usr;rewrite-libtool:TARGETS/usr/lib/libao.la:TARGETS/usr/lib/libao.la
 libass;rewrite-pkgconfig:libass.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libass.la
