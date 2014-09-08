@@ -107,7 +107,7 @@ brofs;make:install:DESTDIR=TARGETS/usr/bin
 rtmpdump;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/librtmp.pc
 libdvbsipp;rewrite-pkgconfig:libdvbsi++.pc;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libdvbsi++.la
 libpcre;rewrite-pkgconfig:libpcre.pc:libpcrecpp.pc:libpcreposix.pc;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libpcre.la:TARGETS/usr/lib/libpcreposix.la
-libmodplug;make:install:prefix=/usr:DESTDIR=TARGETS
+libmodplug;rewrite-pkgconfig:libmodplug.pc;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libmodplug.la
 lzo;make:install:prefix=/usr:DESTDIR=TARGETS
 yajl;make:install:prefix=/usr:DESTDIR=TARGETS
 libcdio;make:install:prefix=/usr:DESTDIR=TARGETS
