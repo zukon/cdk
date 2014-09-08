@@ -69,7 +69,7 @@ libvorbisidec_1.0.2+svn18153.orig.tar.gz;http://ftp.debian.org/debian/pool/main/
 #
 # contrib libs
 #
-openssl-0.9.8y.tar.gz;http://www.openssl.org/source
+openssl-0.9.8zb.tar.gz;http://www.openssl.org/source
 lua-5.2.3.tar.gz;http://www.lua.org/ftp
 luaposix.git;git://github.com/luaposix/luaposix.git;release-v31
 howl-1.0.0.tar.gz;http://downloads.sourceforge.net/project/howl/howl/1.0.0
