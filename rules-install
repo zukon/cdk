@@ -184,7 +184,7 @@ enigma2_webinterface;make:install:DESTDIR=TARGETS
 enigma2_openwebif;make:install:DESTDIR=TARGETS
 enigma2_plugins_all;make:install:DESTDIR=TARGETS
 hotplug_e2;make:install:prefix=/usr:DESTDIR=TARGETS
-libdreamdvd;rewrite-pkgconfig:libdreamdvd.pc;make:install:prefix=/usr:DESTDIR=TARGETS
+libdreamdvd;rewrite-pkgconfig:libdreamdvd.pc;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libdreamdvd.la
 
 #
 # EXTERNAL_LCD
