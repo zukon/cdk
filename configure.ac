@@ -871,6 +871,7 @@ TUXBOX_RULES_MAKE(pyusb)
 TUXBOX_RULES_MAKE(pyopenssl)
 TUXBOX_RULES_MAKE(pythonwifi)
 TUXBOX_RULES_MAKE(pythoncheetah)
+TUXBOX_RULES_MAKE(pythonmechanize)
 TUXBOX_RULES_MAKE(zope_interface)
 
 #

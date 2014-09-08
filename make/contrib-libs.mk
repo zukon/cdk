@@ -1342,8 +1342,8 @@ $(D)/setuptools: $(D)/bootstrap $(D)/python @DEPENDS_setuptools@
 $(D)/twisted: $(D)/bootstrap $(D)/setuptools @DEPENDS_twisted@
 	@PREPARE_twisted@
 	cd @DIR_twisted@ && \
-		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
 		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
 	@CLEANUP_twisted@
@@ -1357,8 +1357,8 @@ $(D)/pilimaging: $(D)/bootstrap $(D)/libjpeg $(D)/libfreetype $(D)/python $(D)/s
 	cd @DIR_pilimaging@ && \
 		sed -ie "s|"darwin"|"darwinNot"|g" "setup.py"; \
 		sed -ie "s|ZLIB_ROOT = None|ZLIB_ROOT = libinclude(\"${targetprefix}/usr\")|" "setup.py"; \
-		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
 		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
 	@CLEANUP_pilimaging@
@@ -1375,8 +1375,8 @@ $(D)/pycrypto: $(D)/bootstrap $(D)/setuptools @DEPENDS_pycrypto@
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=/usr && \
-		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
 		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
 	@CLEANUP_pycrypto@
@@ -1388,8 +1388,8 @@ $(D)/pycrypto: $(D)/bootstrap $(D)/setuptools @DEPENDS_pycrypto@
 $(D)/pyusb: $(D)/bootstrap $(D)/setuptools @DEPENDS_pyusb@
 	@PREPARE_pyusb@
 	cd @DIR_pyusb@ && \
-		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
 		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
 	@CLEANUP_pyusb@
@@ -1401,8 +1401,8 @@ $(D)/pyusb: $(D)/bootstrap $(D)/setuptools @DEPENDS_pyusb@
 $(D)/pyopenssl: $(D)/bootstrap $(D)/setuptools @DEPENDS_pyopenssl@
 	@PREPARE_pyopenssl@
 	cd @DIR_pyopenssl@ && \
-		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
 		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
 	@CLEANUP_pyopenssl@
@@ -1460,8 +1460,8 @@ $(D)/python: $(D)/bootstrap $(D)/host_python $(D)/libncurses $(D)/libcrypto $(D)
 $(D)/pythonwifi: $(D)/bootstrap $(D)/setuptools @DEPENDS_pythonwifi@
 	@PREPARE_pythonwifi@
 	cd @DIR_pythonwifi@ && \
-		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
 		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
 	@CLEANUP_pythonwifi@
@@ -1473,11 +1473,24 @@ $(D)/pythonwifi: $(D)/bootstrap $(D)/setuptools @DEPENDS_pythonwifi@
 $(D)/pythoncheetah: $(D)/bootstrap $(D)/setuptools @DEPENDS_pythoncheetah@
 	@PREPARE_pythoncheetah@
 	cd @DIR_pythoncheetah@ && \
-		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
 		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
 	@CLEANUP_pythoncheetah@
+	touch $@
+
+#
+# pythonmechanize
+#
+$(D)/pythonmechanize: $(D)/bootstrap $(D)/setuptools @DEPENDS_pythonmechanize@
+	@PREPARE_pythonmechanize@
+	cd @DIR_pythonmechanize@ && \
+		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
+		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
+		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
+	@CLEANUP_pythonmechanize@
 	touch $@
 
 #
@@ -1486,8 +1499,8 @@ $(D)/pythoncheetah: $(D)/bootstrap $(D)/setuptools @DEPENDS_pythoncheetah@
 $(D)/zope_interface: bootstrap python setuptools @DEPENDS_zope_interface@
 	@PREPARE_zope_interface@
 	cd @DIR_zope_interface@ && \
-		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
 		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
 	@CLEANUP_zope_interface@
@@ -1718,9 +1731,9 @@ $(D)/gst_plugin_subsink: $(D)/bootstrap $(D)/gstreamer $(D)/gst_plugins_base $(D
 #
 # gmediarender
 #
-$(D)/gmediarender: $(D)/bootstrap $(D)/gst_plugins_dvbmediasink $(D)/libupnp @DEPENDS_gmediarender@
-	@PREPARE_gmediarender@
-	cd @DIR_gmediarender@ && \
+$(D)/gst_gmediarender: $(D)/bootstrap $(D)/gst_plugins_dvbmediasink $(D)/libupnp @DEPENDS_gst_gmediarender@
+	@PREPARE_gst_gmediarender@
+	cd @DIR_gst_gmediarender@ && \
 		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
@@ -1729,8 +1742,8 @@ $(D)/gmediarender: $(D)/bootstrap $(D)/gst_plugins_dvbmediasink $(D)/libupnp @DE
 			--with-libupnp=$(targetprefix)/usr \
 		&& \
 		$(MAKE) all && \
-		@INSTALL_gmediarender@
-	@CLEANUP_gmediarender@
+		@INSTALL_gst_gmediarender@
+	@CLEANUP_gst_gmediarender@
 	touch $@
 
 #
