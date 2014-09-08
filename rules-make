@@ -126,7 +126,6 @@ djmount;0.71;djmount-0.71;djmount-0.71.tar.gz;extract:djmount-0.71.tar.gz
 libupnp;1.6.17;libupnp-1.6.17;libupnp-1.6.17.tar.bz2;extract:libupnp-1.6.17.tar.bz2
 rarfs;0.1.0;rarfs-0.1.0;rarfs-0.1.0.tar.gz;extract:rarfs-0.1.0.tar.gz
 sshfs;2.4;sshfs-fuse-2.4;sshfs-fuse-2.4.tar.bz2;extract:sshfs-fuse-2.4.tar.bz2
-gmediarender;0.0.6;gmediarender-0.0.6;gmediarender-0.0.6.tar.bz2;extract:gmediarender-0.0.6.tar.bz2;patch:gmediarender.patch
 tinyxml;2.6.2;tinyxml2.6.2;tinyxml_2_6_2.tar.gz;extract:tinyxml_2_6_2.tar.gz;move:tinyxml:tinyxml2.6.2;patch:tinyxml2.6.2.patch
 libnfs;c0ebf57b21;libnfs-c0ebf57b21;libnfs.git;extract:libnfs.git
 taglib;1.8;taglib-1.8;taglib-1.8.tar.gz;extract:taglib-1.8.tar.gz
@@ -183,13 +182,14 @@ zope_interface;4.0.1;zope.interface-4.0.1;zope.interface-4.0.1.tar.gz;extract:zo
 #
 # GSTREAMER
 #
-gstreamer;0.10.36;gstreamer-0.10.36;gstreamer-0.10.36.tar.bz2;extract:gstreamer-0.10.36.tar.bz2;patch:gstreamer.patch
-gst_plugins_base;0.10.36;gst-plugins-base-0.10.36;gst-plugins-base-0.10.36.tar.bz2;extract:gst-plugins-base-0.10.36.tar.bz2
-gst_plugins_good;0.10.31;gst-plugins-good-0.10.31;gst-plugins-good-0.10.31.tar.bz2;extract:gst-plugins-good-0.10.31.tar.bz2;patch:gst-plugins-good-0.10.29_avidemux_only_send_pts_on_keyframe.patch
-gst_plugins_bad;0.10.23;gst-plugins-bad-0.10.23;gst-plugins-bad-0.10.23.tar.bz2:gst-plugins-bad-0.10.22-mpegtsdemux_remove_bluray_pgs_detection.patch:gst-plugins-bad-0.10.22-mpegtsdemux_speedup.patch;extract:gst-plugins-bad-0.10.23.tar.bz2;patch:gst-plugins-bad-0.10.22-mpegtsdemux_remove_bluray_pgs_detection.patch;patch:gst-plugins-bad-0.10.22-mpegtsdemux_speedup.patch
+gstreamer;0.10.36;gstreamer-0.10.36;gstreamer-0.10.36.tar.bz2;extract:gstreamer-0.10.36.tar.bz2;patch:gstreamer-0.10.36.patch
+gst_plugins_base;0.10.36;gst-plugins-base-0.10.36;gst-plugins-base-0.10.36.tar.bz2;extract:gst-plugins-base-0.10.36.tar.bz2;patch:gst-plugins-base-0.10.36.patch
+gst_plugins_good;0.10.31;gst-plugins-good-0.10.31;gst-plugins-good-0.10.31.tar.bz2;extract:gst-plugins-good-0.10.31.tar.bz2;patch:gst-plugins-good-0.10.31.patch
+gst_plugins_bad;0.10.23;gst-plugins-bad-0.10.23;gst-plugins-bad-0.10.23.tar.bz2;extract:gst-plugins-bad-0.10.23.tar.bz2;patch:gst-plugins-bad-0.10.23.patch
 gst_plugins_ugly;0.10.19;gst-plugins-ugly-0.10.19;gst-plugins-ugly-0.10.19.tar.bz2;extract:gst-plugins-ugly-0.10.19.tar.bz2
-gst_ffmpeg;0.10.13;gst-ffmpeg-0.10.13;gst-ffmpeg-0.10.13.tar.bz2;extract:gst-ffmpeg-0.10.13.tar.bz2;patch:gst-ffmpeg-0.10.12_lower_rank.patch
-gst_plugins_fluendo_mpegdemux;0.10.71;gst-fluendo-mpegdemux-0.10.71;gst-fluendo-mpegdemux-0.10.71.tar.gz:gst-plugins-fluendo-mpegdemux-0.10.69-add_dts_hd_detection.patch;extract:gst-fluendo-mpegdemux-0.10.71.tar.gz;patch:gst-plugins-fluendo-mpegdemux-0.10.69-add_dts_hd_detection.patch
+gst_ffmpeg;0.10.13;gst-ffmpeg-0.10.13;gst-ffmpeg-0.10.13.tar.bz2;extract:gst-ffmpeg-0.10.13.tar.bz2;patch:gst-ffmpeg-0.10.13.patch
+gst_gmediarender;0.0.6;gmediarender-0.0.6;gmediarender-0.0.6.tar.bz2;extract:gmediarender-0.0.6.tar.bz2;patch:gst-gmediarender-0.0.6.patch
+gst_plugins_fluendo_mpegdemux;0.10.71;gst-fluendo-mpegdemux-0.10.71;gst-fluendo-mpegdemux-0.10.71.tar.gz;extract:gst-fluendo-mpegdemux-0.10.71.tar.gz;patch:gst-plugins-fluendo-mpegdemux-0.10.71.patch
 gst_plugins_dvbmediasink;0.10.1;gst-plugins-dvbmediasink-0.10.1;;link:../apps/libs/gst-plugins-dvbmediasink:gst-plugins-dvbmediasink-0.10.1
 gst_plugin_subsink;1.0;gst-plugin-subsink;gst-plugin-subsink.git;extract:gst-plugin-subsink.git
 

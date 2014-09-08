@@ -116,7 +116,6 @@ djmount;make:install:DESTDIR=TARGETS
 libupnp;rewrite-pkgconfig:libupnp.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libupnp.la:TARGETS/usr/lib/libixml.la:TARGETS/usr/lib/libthreadutil.la
 rarfs;make:install:DESTDIR=TARGETS
 sshfs;make:install:DESTDIR=TARGETS
-gmediarender;make:install:DESTDIR=TARGETS
 tinyxml;make:install:PREFIX=TARGETS/usr
 libnfs;make:install:DESTDIR=TARGETS
 taglib;make:install:DESTDIR=TARGETS
@@ -161,12 +160,13 @@ python;make:install:DESTDIR=TARGETS;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/
 #
 # GSTREAMER
 #
-gstreamer;rewrite-pkgconfig:pkgconfig/gstreamer-0.10.pc:pkgconfig/gstreamer-base-0.10.pc:pkgconfig/gstreamer-controller-0.10.pc:pkgconfig/gstreamer-dataprotocol-0.10.pc:pkgconfig/gstreamer-net-0.10.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libgstreamer-0.10.la:TARGETS/usr/lib/libgstbase-0.10.la:TARGETS/usr/lib/libgstcontroller-0.10.la:TARGETS/usr/lib/libgstdataprotocol-0.10.la:TARGETS/usr/lib/libgstnet-0.10.la;rewrite-dependency:TARGETS/usr/lib/libgstbase-0.10.la:TARGETS/usr/lib/libgstcheck-0.10.la:TARGETS/usr/lib/libgstcontroller-0.10.la:TARGETS/usr/lib/libgstdataprotocol-0.10.la:TARGETS/usr/lib/libgstnet-0.10.la
+gstreamer;rewrite-pkgconfig:pkgconfig/gstreamer-0.10.pc:pkgconfig/gstreamer-base-0.10.pc:pkgconfig/gstreamer-controller-0.10.pc:pkgconfig/gstreamer-dataprotocol-0.10.pc:pkgconfig/gstreamer-net-0.10.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libgstreamer-0.10.la:TARGETS/usr/lib/libgstbase-0.10.la:TARGETS/usr/lib/libgstcontroller-0.10.la:TARGETS/usr/lib/libgstdataprotocol-0.10.la:TARGETS/usr/lib/libgstnet-0.10.la;rewrite-dependency:TARGETS/usr/lib/libgstbase-0.10.la:TARGETS/usr/lib/libgstcontroller-0.10.la:TARGETS/usr/lib/libgstdataprotocol-0.10.la:TARGETS/usr/lib/libgstnet-0.10.la
 gst_plugins_bad;rewrite-pkgconfig:pkgconfig/gstreamer-plugins-bad.pc:pkgconfig/gstreamer-basevideo.pc:pkgconfig/gstreamer-codecparsers.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libgstbasecamerabinsrc-0.10.la:TARGETS/usr/lib/libgstbasevideo-0.10.la:TARGETS/usr/lib/libgstcodecparsers-0.10.la:TARGETS/usr/lib/libgstphotography-0.10.la:TARGETS/usr/lib/libgstsignalprocessor-0.10.la
 gst_plugins_base;rewrite-pkgconfig:pkgconfig/gstreamer-audio-0.10.pc:pkgconfig/gstreamer-app-0.10.pc:pkgconfig/gstreamer-cdda-0.10.pc:pkgconfig/gstreamer-cdda.pc:pkgconfig/gstreamer-fft-0.10.pc:pkgconfig/gstreamer-floatcast-0.10.pc:pkgconfig/gstreamer-interfaces-0.10.pc:pkgconfig/gstreamer-netbuffer-0.10.pc:pkgconfig/gstreamer-pbutils-0.10.pc:pkgconfig/gstreamer-riff-0.10.pc:pkgconfig/gstreamer-rtp-0.10.pc:pkgconfig/gstreamer-rtsp-0.10.pc:pkgconfig/gstreamer-sdp-0.10.pc:pkgconfig/gstreamer-tag-0.10.pc:pkgconfig/gstreamer-video-0.10.pc:pkgconfig/gstreamer-plugins-base-0.10.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libgstapp-0.10.la:TARGETS/usr/lib/libgstaudio-0.10.la:TARGETS/usr/lib/libgstcdda-0.10.la:TARGETS/usr/lib/libgstfft-0.10.la:TARGETS/usr/lib/libgstinterfaces-0.10.la:TARGETS/usr/lib/libgstnetbuffer-0.10.la:TARGETS/usr/lib/libgstpbutils-0.10.la:TARGETS/usr/lib/libgstriff-0.10.la:TARGETS/usr/lib/libgstrtp-0.10.la:TARGETS/usr/lib/libgstrtsp-0.10.la:TARGETS/usr/lib/libgstsdp-0.10.la:TARGETS/usr/lib/libgsttag-0.10.la:TARGETS/usr/lib/libgstvideo-0.10.la;rewrite-dependency:TARGETS/usr/lib/libgstapp-0.10.la:TARGETS/usr/lib/libgstaudio-0.10.la:TARGETS/usr/lib/libgstcdda-0.10.la:TARGETS/usr/lib/libgstfft-0.10.la:TARGETS/usr/lib/libgstinterfaces-0.10.la:TARGETS/usr/lib/libgstnetbuffer-0.10.la:TARGETS/usr/lib/libgstpbutils-0.10.la:TARGETS/usr/lib/libgstriff-0.10.la:TARGETS/usr/lib/libgstrtp-0.10.la:TARGETS/usr/lib/libgstrtsp-0.10.la:TARGETS/usr/lib/libgstsdp-0.10.la:TARGETS/usr/lib/libgsttag-0.10.la:TARGETS/usr/lib/libgstvideo-0.10.la
 gst_plugins_good;make:install:DESTDIR=TARGETS
 gst_plugins_ugly;make:install:DESTDIR=TARGETS
 gst_ffmpeg;make:install:DESTDIR=TARGETS
+gst_gmediarender;make:install:DESTDIR=TARGETS
 gst_plugins_fluendo_mpegdemux;make:install:DESTDIR=TARGETS
 gst_plugins_dvbmediasink;make:install:DESTDIR=TARGETS
 gst_plugin_subsink;make:install:DESTDIR=TARGETS
