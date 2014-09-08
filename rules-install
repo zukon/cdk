@@ -21,6 +21,7 @@ ipkg_utils;make:install
 host_pkgconfig;make:install
 host_module_init_tools;make:install
 host_mtd_utils;make:install:DESTDIR=HOST/bin
+host_glib2_genmarshal;make:install
 uboot_tf7700
 
 #
