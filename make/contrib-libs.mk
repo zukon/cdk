@@ -521,6 +521,21 @@ $(D)/libffi: $(D)/bootstrap @DEPENDS_libffi@
 	@CLEANUP_libffi@
 	touch $@
 
+$(D)/orc: $(D)/bootstrap @DEPENDS_orc@
+	@PREPARE_orc@
+	cd @DIR_orc@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--target=$(target) \
+			--prefix=/usr \
+		&& \
+		$(MAKE) all && \
+		@INSTALL_orc@
+	@CLEANUP_orc@
+	touch $@
+
 #
 # libglib2
 # You need libglib2.0-dev on host system
@@ -1536,7 +1551,7 @@ $(D)/gstreamer: $(D)/bootstrap $(D)/glib2 $(D)/libxml2 @DEPENDS_gstreamer@
 #
 # gst_plugins_base
 #
-$(D)/gst_plugins_base: $(D)/bootstrap $(D)/glib2 $(D)/gstreamer $(D)/libogg $(D)/libalsa @DEPENDS_gst_plugins_base@
+$(D)/gst_plugins_base: $(D)/bootstrap $(D)/glib2 $(D)/orc $(D)/gstreamer $(D)/libogg $(D)/libalsa @DEPENDS_gst_plugins_base@
 	@PREPARE_gst_plugins_base@
 	cd @DIR_gst_plugins_base@ && \
 		$(BUILDENV) \
@@ -1548,12 +1563,10 @@ $(D)/gst_plugins_base: $(D)/bootstrap $(D)/glib2 $(D)/gstreamer $(D)/libogg $(D)
 			--disable-gnome_vfs \
 			--disable-pango \
 			--disable-x \
-			--disable-ivorbis \
-			--disable-vorbis \
-			--disable-vorbistest \
 			--disable-examples \
 			--disable-debug \
 			--disable-freetypetest \
+			--enable-orc \
 			--with-audioresample-format=int \
 		&& \
 		$(MAKE) && \
@@ -1611,6 +1624,7 @@ $(D)/gst_plugins_bad: $(D)/bootstrap $(D)/gstreamer $(D)/gst_plugins_base libmod
 			--disable-curl \
 			--disable-rsvg \
 			--disable-debug \
+			--enable-orc \
 			ac_cv_openssldir=no \
 		&& \
 		$(MAKE) && \
@@ -1631,6 +1645,7 @@ $(D)/gst_plugins_ugly: $(D)/bootstrap $(D)/gstreamer $(D)/gst_plugins_base @DEPE
 			--prefix=/usr \
 			--disable-debug \
 			--disable-mpeg2dec \
+			--enable-orc \
 		&& \
 		$(MAKE) && \
 		@INSTALL_gst_plugins_ugly@
@@ -1725,6 +1740,7 @@ $(D)/gst_plugin_subsink: $(D)/bootstrap $(D)/gstreamer $(D)/gst_plugins_base $(D
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=/usr \
+			--enable-orc \
 		&& \
 		$(MAKE) && \
 		@INSTALL_gst_plugin_subsink@

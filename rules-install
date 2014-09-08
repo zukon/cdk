@@ -84,6 +84,7 @@ libsigc_e2;rewrite-pkgconfig:sigc++-1.2.pc;make:install:DESTDIR=TARGETS;rewrite-
 libsigc;rewrite-pkgconfig:sigc++-2.0.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libsigc-2.0.la;rewrite-dependency:TARGETS/usr/lib/libsigc-2.0.la
 glib2;rewrite-pkgconfig:glib-2.0.pc:gmodule-2.0.pc:gio-2.0.pc:gio-unix-2.0.pc:gmodule-export-2.0.pc:gmodule-no-export-2.0.pc:gobject-2.0.pc:gthread-2.0.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libglib-2.0.la;rewrite-libtool:TARGETS/usr/lib/libgmodule-2.0.la;rewrite-dependency:TARGETS/usr/lib/libgmodule-2.0.la;rewrite-libtool:TARGETS/usr/lib/libgio-2.0.la;rewrite-dependency:TARGETS/usr/lib/libgio-2.0.la;rewrite-libtool:TARGETS/usr/lib/libgobject-2.0.la;rewrite-dependency:TARGETS/usr/lib/libgobject-2.0.la;rewrite-libtool:TARGETS/usr/lib/libgthread-2.0.la;rewrite-dependency:TARGETS/usr/lib/libgthread-2.0.la
 libffi;make:install:DESTDIR=TARGETS
+orc;rewrite-pkgconfig:orc-0.4.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/liborc-0.4.la:TARGETS/usr/lib/liborc-test-0.4.la;rewrite-dependency:TARGETS/usr/lib/liborc-test-0.4.la
 libiconv;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libiconv.la
 libmng;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libmng.la;rewrite-dependency:TARGETS/usr/lib/libmng.la
 lcms;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/liblcms.la
