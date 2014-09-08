@@ -113,7 +113,7 @@ yajl;make:install:prefix=/usr:DESTDIR=TARGETS
 libcdio;make:install:prefix=/usr:DESTDIR=TARGETS
 jasper;make:install:prefix=/usr:DESTDIR=TARGETS
 libmicrohttpd;make:install:prefix=/usr:DESTDIR=TARGETS
-libexif;make:install:prefix=/usr:DESTDIR=TARGETS
+libexif;rewrite-pkgconfig:libexif.pc;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libexif.la
 minidlna;make:install:prefix=/usr:DESTDIR=TARGETS
 djmount;make:install:DESTDIR=TARGETS
 libupnp;rewrite-pkgconfig:libupnp.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libupnp.la:TARGETS/usr/lib/libixml.la:TARGETS/usr/lib/libthreadutil.la
