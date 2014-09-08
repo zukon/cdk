@@ -5,7 +5,7 @@ tools-clean:
 	-$(MAKE) -C $(appsdir)/tools distclean
 
 if ENABLE_ENIGMA2
-ENIGMA2_FFMPEG = rtmpdump
+ENIGMA2_FFMPEG = librtmpdump
 endif
 
 $(appsdir)/tools/config.status: bootstrap driver bzip2 libpng libjpeg $(ENIGMA2_FFMPEG) ffmpeg
