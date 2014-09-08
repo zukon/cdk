@@ -871,7 +871,6 @@ endif
 	rm -rf $(prefix)/release/usr/lib/gcc
 	rm -rf $(prefix)/release/usr/lib/gio
 	rm -rf $(prefix)/release/usr/lib/glib-2.0
-	rm -rf $(prefix)/release/usr/lib/libffi-3.0.10
 	rm -f $(prefix)/release/usr/lib/libexpat*
 	rm -f $(prefix)/release/usr/lib/libfontconfig*
 	rm -f $(prefix)/release/usr/lib/libtermcap*
