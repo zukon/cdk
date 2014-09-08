@@ -16,17 +16,19 @@ STMKERNEL_VER = 2.6.32.46-48
 #LIBGCC_VER    = 4.7.3-129
 #GLIBC_VER     = 2.10.2-43
 
+if ENABLE_ENIGMA2
 # 4.8.2
-#BINUTILS_VER  = 2.23.2-73
-#GCC_VER       = 4.8.2-131
-#LIBGCC_VER    = 4.8.2-138
-#GLIBC_VER     = 2.14.1-50
-
+BINUTILS_VER  = 2.23.2-73
+GCC_VER       = 4.8.2-131
+LIBGCC_VER    = 4.8.2-138
+GLIBC_VER     = 2.14.1-50
+else
 # 4.8.3
 BINUTILS_VER  = 2.24.51.0.3-75
 GCC_VER       = 4.8.3-135
 LIBGCC_VER    = 4.8.3-143
 GLIBC_VER     = 2.14.1-51
+endif
 
 $(hostprefix)/bin/unpack-rpm.sh:
 	ln -sf $(buildprefix)/scripts/$(shell basename $@) $(hostprefix)/bin
@@ -38,9 +40,9 @@ $(archivedir)/stlinux24-cross-sh4-cpp-$(GCC_VER).i386.rpm \
 $(archivedir)/stlinux24-cross-sh4-gcc-$(GCC_VER).i386.rpm \
 $(archivedir)/stlinux24-cross-sh4-g++-$(GCC_VER).i386.rpm \
 $(archivedir)/stlinux24-sh4-linux-kernel-headers-$(STMKERNEL_VER).noarch.rpm \
-$(archivedir)/stlinux24-sh4-libgcc-$(LIBGCC_VER).sh4.rpm \
 $(archivedir)/stlinux24-sh4-glibc-$(GLIBC_VER).sh4.rpm \
 $(archivedir)/stlinux24-sh4-glibc-dev-$(GLIBC_VER).sh4.rpm \
+$(archivedir)/stlinux24-sh4-libgcc-$(LIBGCC_VER).sh4.rpm \
 $(archivedir)/stlinux24-sh4-libstdc++-$(LIBGCC_VER).sh4.rpm \
 $(archivedir)/stlinux24-sh4-libstdc++-dev-$(LIBGCC_VER).sh4.rpm
 	unpack-rpm.sh $(buildprefix)/BUILD $(STM_RELOCATE)/devkit/sh4 $(hostprefix) \
