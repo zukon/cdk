@@ -511,7 +511,10 @@ $(D)/libffi: $(D)/bootstrap @DEPENDS_libffi@
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix= \
+			--target=$(target) \
+			--prefix=/usr \
+			--disable-static \
+			--enable-builddir=libffi \
 		&& \
 		$(MAKE) all && \
 		@INSTALL_libffi@
@@ -522,7 +525,7 @@ $(D)/libffi: $(D)/bootstrap @DEPENDS_libffi@
 # libglib2
 # You need libglib2.0-dev on host system
 #
-$(D)/glib2: $(D)/bootstrap $(D)/libz @DEPENDS_glib2@
+$(D)/glib2: $(D)/bootstrap $(D)/libz $(D)/libffi @DEPENDS_glib2@
 	@PREPARE_glib2@
 	echo "glib_cv_va_copy=no" > @DIR_glib2@/config.cache
 	echo "glib_cv___va_copy=yes" >> @DIR_glib2@/config.cache
@@ -534,13 +537,13 @@ $(D)/glib2: $(D)/bootstrap $(D)/libz @DEPENDS_glib2@
 	cd @DIR_glib2@ && \
 		$(BUILDENV) \
 		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=/usr \
 			--cache-file=config.cache \
 			--disable-gtk-doc \
 			--with-threads="posix" \
 			--enable-static \
-			--build=$(build) \
-			--host=$(target) \
-			--prefix=/usr \
 		&& \
 		$(MAKE) all && \
 		@INSTALL_glib2@
