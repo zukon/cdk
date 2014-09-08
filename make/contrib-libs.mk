@@ -2033,15 +2033,17 @@ $(D)/libopenthreads: $(D)/bootstrap @DEPENDS_libopenthreads@
 	touch $@
 
 #
-# rtmpdump
+# librtmpdump
 #
-$(D)/rtmpdump: $(D)/bootstrap $(D)/libcrypto $(D)/libz @DEPENDS_rtmpdump@
-	@PREPARE_rtmpdump@
-	cd @DIR_rtmpdump@ && \
+$(D)/librtmpdump: $(D)/bootstrap $(D)/libcrypto $(D)/libz @DEPENDS_librtmpdump@
+	@PREPARE_librtmpdump@
+	[ -d "$(archivedir)/rtmpdump.git" ] && \
+	(cd $(archivedir)/rtmpdump.git; git pull ; cd "$(buildprefix)";); \
+	cd @DIR_librtmpdump@ && \
 		$(BUILDENV) \
 		make CROSS_COMPILE=$(target)- && \
-		@INSTALL_rtmpdump@
-	@CLEANUP_rtmpdump@
+		@INSTALL_librtmpdump@
+	@CLEANUP_librtmpdump@
 	touch $@
 
 #

@@ -80,6 +80,7 @@ libopenthreads;rewrite-pkgconfig:packaging/pkgconfig/openthreads.pc;make:install
 libboost;remove:TARGETS/include/boost;move:boost:TARGETS/usr/include/boost
 libz;rewrite-pkgconfig:zlib.pc;make:install:prefix=TARGETS/usr
 libreadline;make:install:DESTDIR=TARGETS
+librtmpdump;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/librtmp.pc
 lirc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/liblirc_client.la
 libsigc_e2;rewrite-pkgconfig:sigc++-1.2.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libsigc-1.2.la
 libsigc;rewrite-pkgconfig:sigc++-2.0.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libsigc-2.0.la;rewrite-dependency:TARGETS/usr/lib/libsigc-2.0.la
@@ -104,7 +105,6 @@ ffmpeg;rewrite-pkgconfig:libavcodec/libavcodec.pc:libavdevice/libavdevice.pc:lib
 libcap;make:install:DESTDIR=TARGETS
 evebrowser;make:install:DESTDIR=TARGETS
 brofs;make:install:DESTDIR=TARGETS/usr/bin
-rtmpdump;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-pkgconfig:TARGETS/usr/lib/pkgconfig/librtmp.pc
 libdvbsipp;rewrite-pkgconfig:libdvbsi++.pc;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libdvbsi++.la
 libpcre;rewrite-pkgconfig:libpcre.pc:libpcrecpp.pc:libpcreposix.pc;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libpcre.la:TARGETS/usr/lib/libpcreposix.la
 libmodplug;rewrite-pkgconfig:libmodplug.pc;make:install:prefix=/usr:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libmodplug.la

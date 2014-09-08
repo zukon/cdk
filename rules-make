@@ -89,6 +89,7 @@ libopenthreads;1.00;openthreads;;
 libboost;boost-1.53.0;boost_1_53_0;boost_1_53_0.tar.bz2;extract:boost_1_53_0.tar.bz2;patch:libboost.patch
 libz;1.2.8;zlib-1.2.8;zlib-1.2.8.tar.gz;extract:zlib-1.2.8.tar.gz;patch:zlib-1.2.8.patch
 libreadline;6.2;readline-6.2;readline-6.2.tar.gz;extract:readline-6.2.tar.gz
+librtmpdump;2.4;rtmpdump;rtmpdump.git;extract:rtmpdump.git;patch:rtmpdump-2.4.patch
 lirc;0.9.0;lirc-0.9.0;lirc-0.9.0.tar.gz:lirc-0.9.0-try_first_last_remote.patch;extract:lirc-0.9.0.tar.gz;patch:lirc-0.9.0-try_first_last_remote.patch
 libsigc_e2;1.2.7;libsigc++-1.2.7;libsigc++-1.2.7.tar.gz;extract:libsigc++-1.2.7.tar.gz
 libsigc;2.3.2;libsigc++-2.3.2;libsigc++-2.3.2.tar.xz;extract:libsigc++-2.3.2.tar.xz
@@ -113,7 +114,6 @@ libxmlccwrap;0.0.12;libxmlccwrap-0.0.12;libxmlccwrap-0.0.12.tar.gz;extract:libxm
 ffmpeg;2.2.4;ffmpeg-2.2.4;ffmpeg-2.2.4.tar.bz2;extract:ffmpeg-2.2.4.tar.bz2;patch:ffmpeg-2.2.patch
 evebrowser;0.0.1;evebrowser-0.0.1
 brofs;1.2;BroFS1.2;BroFS1.2.tgz;extract:BroFS1.2.tgz
-rtmpdump;2.4;rtmpdump-2.4;rtmpdump-2.4.tar.gz;extract:rtmpdump-2.4.tar.gz;move:rtmpdump:rtmpdump-2.4;patch:rtmpdump-2.4.patch
 libdvbsipp;0.3.7;libdvbsi++-0.3.7;libdvbsi++-0.3.7.tar.bz2;extract:libdvbsi++-0.3.7.tar.bz2;patch:libdvbsi++-0.3.7.patch
 libmodplug;0.8.8.4;libmodplug-0.8.8.4;libmodplug-0.8.8.4.tar.gz;extract:libmodplug-0.8.8.4.tar.gz
 lzo;2.06;lzo-2.06;lzo-2.06.tar.gz;extract:lzo-2.06.tar.gz
