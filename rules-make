@@ -89,7 +89,7 @@ libopenthreads;1.00;openthreads;;
 libboost;boost-1.53.0;boost_1_53_0;boost_1_53_0.tar.bz2;extract:boost_1_53_0.tar.bz2;patch:libboost.patch
 libz;1.2.8;zlib-1.2.8;zlib-1.2.8.tar.gz;extract:zlib-1.2.8.tar.gz;patch:zlib-1.2.8.patch
 libreadline;6.2;readline-6.2;readline-6.2.tar.gz;extract:readline-6.2.tar.gz
-librtmpdump;2.4;rtmpdump;rtmpdump.git;extract:rtmpdump.git;patch:rtmpdump-2.4.patch
+librtmpdump;2.4;rtmpdump-2.4;rtmpdump.git;extract:rtmpdump.git;patch:rtmpdump-2.4.patch
 lirc;0.9.0;lirc-0.9.0;lirc-0.9.0.tar.gz:lirc-0.9.0-try_first_last_remote.patch;extract:lirc-0.9.0.tar.gz;patch:lirc-0.9.0-try_first_last_remote.patch
 libsigc_e2;1.2.7;libsigc++-1.2.7;libsigc++-1.2.7.tar.gz;extract:libsigc++-1.2.7.tar.gz
 libsigc;2.3.2;libsigc++-2.3.2;libsigc++-2.3.2.tar.xz;extract:libsigc++-2.3.2.tar.xz
@@ -151,7 +151,7 @@ mencoder;1.0;mplayer-export-*;mplayer-export-snapshot.tar.bz2;extract:mplayer-ex
 opkg;0.2.0;opkg-0.2.0;opkg-0.2.0.tar.gz;extract:opkg-0.2.0.tar.gz;patch:opkg-0.2.0-dont-segfault.patch
 sysstat;10.0.4;sysstat-10.0.4;sysstat-10.0.4.tar.gz;extract:sysstat-10.0.4.tar.gz
 imagemagick;6.7.7-7;ImageMagick-6.7.7-7;ImageMagick-6.7.7-7.tar.bz2;extract:ImageMagick-6.7.7-7.tar.bz2
-shairport;1.0;shairport;shairport.git;extract:shairport.git
+shairport;1.0;shairport-1.0;shairport.git;extract:shairport.git;patch:shairport.patch
 mtd_utils;1.5.0;mtd-utils-1.5.0;mtd-utils-1.5.0.tar.bz2;extract:mtd-utils-1.5.0.tar.bz2
 wget;1.15;wget-1.15;wget-1.15.tar.gz;extract:wget-1.15.tar.gz
 
@@ -195,7 +195,7 @@ gst_ffmpeg;0.10.13;gst-ffmpeg-0.10.13;gst-ffmpeg-0.10.13.tar.bz2;extract:gst-ffm
 gst_gmediarender;0.0.6;gmediarender-0.0.6;gmediarender-0.0.6.tar.bz2;extract:gmediarender-0.0.6.tar.bz2;patch:gst-gmediarender-0.0.6.patch
 gst_plugins_fluendo_mpegdemux;0.10.71;gst-fluendo-mpegdemux-0.10.71;gst-fluendo-mpegdemux-0.10.71.tar.gz;extract:gst-fluendo-mpegdemux-0.10.71.tar.gz;patch:gst-plugins-fluendo-mpegdemux-0.10.71.patch
 gst_plugins_dvbmediasink;0.10.1;gst-plugins-dvbmediasink-0.10.1;;link:../apps/libs/gst-plugins-dvbmediasink:gst-plugins-dvbmediasink-0.10.1
-gst_plugin_subsink;1.0;gst-plugin-subsink;gst-plugin-subsink.git;extract:gst-plugin-subsink.git
+gst_plugin_subsink;1.0;gst-plugin-subsink-1.0;gst-plugin-subsink.git;extract:gst-plugin-subsink.git
 
 #
 # ENGIMA2
@@ -206,8 +206,8 @@ enigma2_networkbrowser;1.0;enigma2-networkbrowser;enigma2-openpli-plugins-enigma
 enigma2_webinterface;1.0;enigma2-webinterface;enigma2-openpli-plugins-enigma2.git;extract:enigma2-openpli-plugins-enigma2.git/webinterface:enigma2-webinterface
 enigma2_openwebif;1.0;e2openplugin-OpenWebif;e2openplugin-OpenWebif.git;extract:e2openplugin-OpenWebif.git
 enigma2_plugins_all;1.0;enigma2-plugins-all;enigma2-openpli-plugins-enigma2.git;extract:enigma2-openpli-plugins-enigma2.git:enigma2-plugins-all;patch:enigma2-plugins.patch
-hotplug_e2;1.0;hotplug-e2-helper;hotplug-e2-helper.git;extract:hotplug-e2-helper.git;patch:hotplug-e2-helper-support_fw_upload.patch
-libdreamdvd;libdreamdvd;libdreamdvd;libdreamdvd.git:libdreamdvd-1.0-support_sh4.patch;extract:libdreamdvd.git;patch:libdreamdvd-1.0-support_sh4.patch
+hotplug_e2;1.0;hotplug-e2-helper-1.0;hotplug-e2-helper.git;extract:hotplug-e2-helper.git;patch:hotplug-e2-helper-support_fw_upload.patch
+libdreamdvd;1.0;libdreamdvd-1.0;libdreamdvd.git:libdreamdvd-1.0-support_sh4.patch;extract:libdreamdvd.git;patch:libdreamdvd-1.0-support_sh4.patch
 
 #
 # EXTERNAL_LCD
