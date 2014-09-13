@@ -8,10 +8,10 @@ PYTHON_INCLUDE_DIR = /usr/include/python$(PYTHON_VERSION)
 #
 # helper-"functions":
 #
-PATCHES    = $(buildprefix)/Patches
-TARGETLIB  = $(targetprefix)/usr/lib
-REWRITE_LIBDIR = sed -i "s,^libdir=.*,libdir='$(TARGETLIB)'," $(TARGETLIB)
-REWRITE_LIBDEP = sed -i -e "s,\(^dependency_libs='\| \|-L\|^dependency_libs='\)/usr/lib,\$(TARGETLIB)," $(TARGETLIB)
+PATCHES         = $(buildprefix)/Patches
+TARGETLIB       = $(targetprefix)/usr/lib
+REWRITE_LIBDIR  = sed -i "s,^libdir=.*,libdir='$(TARGETLIB)'," $(TARGETLIB)
+REWRITE_LIBDEP  = sed -i -e "s,\(^dependency_libs='\| \|-L\|^dependency_libs='\)/usr/lib,\$(TARGETLIB)," $(TARGETLIB)
 REWRITE_PKGCONF = sed -i "s,^prefix=.*,prefix=$(targetprefix)/usr,"
 
 #
