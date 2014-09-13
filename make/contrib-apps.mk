@@ -750,8 +750,10 @@ $(D)/shairport: $(D)/bootstrap $(D)/libcrypto $(D)/howl $(D)/libalsa @DEPENDS_sh
 	[ -d "$(archivedir)/shairport.git" ] && \
 	(cd $(archivedir)/shairport.git; git pull; cd "$(buildprefix)";); \
 	cd @DIR_shairport@ && \
+		sed -i 's|pkg-config|$$PKG_CONFIG|g' configure && \
+		PKG_CONFIG=$(hostprefix)/bin/$(target)-pkg-config \
 		$(BUILDENV) \
-		$(MAKE) all CC=$(target)-gcc LD=$(target)-ld && \
+		$(MAKE) && \
 		@INSTALL_shairport@
 	@CLEANUP_shairport@
 	touch $@
