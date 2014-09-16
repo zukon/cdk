@@ -35,7 +35,6 @@ $(appsdir)/neutrino-mp-plugins/config.status: bootstrap xupnpd
 			--with-fontdir=/usr/share/fonts \
 			PKG_CONFIG=$(hostprefix)/bin/$(target)-pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
-			$(PLATFORM_CPPFLAGS) \
 			CPPFLAGS="$(N_CPPFLAGS) -DMARTII -DNEW_LIBCURL" \
 			LDFLAGS="$(N_LDFLAGS) -L$(appsdir)/neutrino-mp-plugins/fx2/lib/.libs"
 

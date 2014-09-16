@@ -1230,24 +1230,16 @@ $(D)/libflac: $(D)/bootstrap @DEPENDS_libflac@
 	@CLEANUP_libflac@
 	touch $@
 
-##############################   PYTHON   #####################################
-
-#
-# elementtree
-#
-$(D)/elementtree: $(D)/bootstrap @DEPENDS_elementtree@
-	@PREPARE_elementtree@
-	cd @DIR_elementtree@ && \
-		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
-		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
-		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
-	@CLEANUP_elementtree@
-	touch $@
-
 #
 # libxml2
 #
-$(D)/libxml2: $(D)/bootstrap @DEPENDS_libxml2@
+if ENABLE_ENIGMA2
+LIBXML2_EXTRA = --with-python=$(hostprefix)/bin/python
+else
+LIBXML2_EXTRA = --without-python
+endif
+
+$(D)/libxml2: $(D)/bootstrap $(D)/libz @DEPENDS_libxml2@
 	@PREPARE_libxml2@
 	cd @DIR_libxml2@ && \
 		touch NEWS AUTHORS ChangeLog && \
@@ -1257,9 +1249,13 @@ $(D)/libxml2: $(D)/bootstrap @DEPENDS_libxml2@
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=/usr \
-			--with-python=$(hostprefix)/bin/python \
+			--enable-shared \
+			--disable-static \
+			--datarootdir=/.remove \
+			$(LIBXML2_EXTRA) \
 			--without-c14n \
 			--without-debug \
+			--without-docbook \
 			--without-mem-debug \
 		&& \
 		$(MAKE) all && \
@@ -1300,6 +1296,8 @@ $(D)/libxslt: $(D)/bootstrap $(D)/libxml2 @DEPENDS_libxslt@
 		sed -e "/^XML2_INCLUDEDIR/ s,/usr/include,$(targetprefix)/usr/include,g" -i $(targetprefix)/usr/lib/xsltConf.sh
 	@CLEANUP_libxslt@
 	touch $@
+
+##############################   PYTHON   #####################################
 
 #
 # libxmlccwrap
@@ -1392,32 +1390,6 @@ $(D)/pycrypto: $(D)/bootstrap $(D)/setuptools @DEPENDS_pycrypto@
 	touch $@
 
 #
-# pyusb
-#
-$(D)/pyusb: $(D)/bootstrap $(D)/setuptools @DEPENDS_pyusb@
-	@PREPARE_pyusb@
-	cd @DIR_pyusb@ && \
-		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
-		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
-		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
-		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
-	@CLEANUP_pyusb@
-	touch $@
-
-#
-# pyopenssl
-#
-$(D)/pyopenssl: $(D)/bootstrap $(D)/setuptools @DEPENDS_pyopenssl@
-	@PREPARE_pyopenssl@
-	cd @DIR_pyopenssl@ && \
-		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
-		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
-		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
-		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
-	@CLEANUP_pyopenssl@
-	touch $@
-
-#
 # python
 #
 $(D)/python: $(D)/bootstrap $(D)/host_python $(D)/libncurses $(D)/libcrypto $(D)/sqlite $(D)/libreadline $(D)/bzip2 @DEPENDS_python@
@@ -1464,6 +1436,44 @@ $(D)/python: $(D)/bootstrap $(D)/host_python $(D)/libncurses $(D)/libcrypto $(D)
 	touch $@
 
 #
+# pyusb
+#
+$(D)/pyusb: $(D)/bootstrap $(D)/setuptools @DEPENDS_pyusb@
+	@PREPARE_pyusb@
+	cd @DIR_pyusb@ && \
+		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
+		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
+		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
+	@CLEANUP_pyusb@
+	touch $@
+
+#
+# pyopenssl
+#
+$(D)/pyopenssl: $(D)/bootstrap $(D)/setuptools @DEPENDS_pyopenssl@
+	@PREPARE_pyopenssl@
+	cd @DIR_pyopenssl@ && \
+		$(BUILDENV) CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
+		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
+		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
+	@CLEANUP_pyopenssl@
+	touch $@
+
+#
+# elementtree
+#
+$(D)/elementtree: $(D)/bootstrap @DEPENDS_elementtree@
+	@PREPARE_elementtree@
+	cd @DIR_elementtree@ && \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
+		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
+		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
+	@CLEANUP_elementtree@
+	touch $@
+
+#
 # pythonwifi
 #
 $(D)/pythonwifi: $(D)/bootstrap $(D)/setuptools @DEPENDS_pythonwifi@
@@ -1500,6 +1510,19 @@ $(D)/pythonmechanize: $(D)/bootstrap $(D)/setuptools @DEPENDS_pythonmechanize@
 		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
 		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
 	@CLEANUP_pythonmechanize@
+	touch $@
+
+#
+# gdata
+#
+$(D)/gdata: $(D)/bootstrap $(D)/setuptools @DEPENDS_gdata@
+	@PREPARE_gdata@
+	cd @DIR_gdata@ && \
+		CC='$(target)-gcc' LDSHARED='$(target)-gcc -shared' \
+		CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/python$(PYTHON_VERSION)" \
+		PYTHONPATH=$(targetprefix)$(PYTHON_DIR)/site-packages \
+		$(hostprefix)/bin/python ./setup.py install --root=$(targetprefix) --prefix=/usr
+	@CLEANUP_gdata@
 	touch $@
 
 #
@@ -1786,9 +1809,7 @@ $(D)/graphlcd: $(D)/bootstrap $(D)/libfreetype $(D)/libusb @DEPENDS_graphlcd@
 	[ -d "$(archivedir)/graphlcd-base-touchcol.git" ] && \
 	(cd $(archivedir)/graphlcd-base-touchcol.git; git pull ; git checkout touchcol; cd "$(buildprefix)";); \
 	cd @DIR_graphlcd@ && \
-		$(BUILDENV) \
-		$(MAKE) all DESTDIR=$(targetprefix)/usr \
-		&& \
+		$(MAKE) all CC=$(target)-gcc CXX=$(target)-g++ LDFLAGS="-L$(targetprefix)/usr/lib -Wl,-rpath-link,$(targetprefix)/usr/lib" DESTDIR=$(targetprefix) && \
 		@INSTALL_graphlcd@
 	@CLEANUP_graphlcd@
 	touch $@
