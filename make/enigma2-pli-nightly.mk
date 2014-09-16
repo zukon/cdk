@@ -57,21 +57,21 @@ $(D)/enigma2-pli-nightly.do_prepare: | $(ENIGMA2_DEPS)
 	echo ""; \
 	if [ "$$REPLY" != "1" ]; then \
 		REPO="git://git.code.sf.net/p/openpli/enigma2"; \
-		rm -rf $(appsdir)/enigma2-nightly; \
-		rm -rf $(appsdir)/enigma2-nightly.org; \
+		rm -rf $(sourcedir)/enigma2-nightly; \
+		rm -rf $(sourcedir)/enigma2-nightly.org; \
 		[ -d "$(archivedir)/enigma2-pli-nightly.git" ] && \
 		(cd $(archivedir)/enigma2-pli-nightly.git; git pull; git checkout HEAD; cd "$(buildprefix)";); \
 		[ -d "$(archivedir)/enigma2-pli-nightly.git" ] || \
 		git clone -b $$HEAD $$REPO $(archivedir)/enigma2-pli-nightly.git; \
-		cp -ra $(archivedir)/enigma2-pli-nightly.git $(appsdir)/enigma2-nightly; \
-		[ "$$REVISION" == "" ] || (cd $(appsdir)/enigma2-nightly; git checkout "$$REVISION"; cd "$(buildprefix)";); \
-		cp -ra $(appsdir)/enigma2-nightly $(appsdir)/enigma2-nightly.org; \
-		cd $(appsdir)/enigma2-nightly && patch -p1 < "../../cdk/Patches/enigma2-pli-nightly.$$DIFF.diff"; \
+		cp -ra $(archivedir)/enigma2-pli-nightly.git $(sourcedir)/enigma2-nightly; \
+		[ "$$REVISION" == "" ] || (cd $(sourcedir)/enigma2-nightly; git checkout "$$REVISION"; cd "$(buildprefix)";); \
+		cp -ra $(sourcedir)/enigma2-nightly $(sourcedir)/enigma2-nightly.org; \
+		cd $(sourcedir)/enigma2-nightly && patch -p1 < "../../cdk/Patches/enigma2-pli-nightly.$$DIFF.diff"; \
 	fi
 	touch $@
 
-$(appsdir)/enigma2-pli-nightly/config.status:
-	cd $(appsdir)/enigma2-nightly && \
+$(sourcedir)/enigma2-pli-nightly/config.status:
+	cd $(sourcedir)/enigma2-nightly && \
 		./autogen.sh && \
 		sed -e 's|#!/usr/bin/python|#!$(hostprefix)/bin/python|' -i po/xml2po.py && \
 		$(BUILDENV) \
@@ -91,13 +91,13 @@ $(appsdir)/enigma2-pli-nightly/config.status:
 			$(PLATFORM_CPPFLAGS) \
 			$(E_CONFIG_OPTS)
 
-$(D)/enigma2-pli-nightly.do_compile: $(appsdir)/enigma2-pli-nightly/config.status
-	cd $(appsdir)/enigma2-nightly && \
+$(D)/enigma2-pli-nightly.do_compile: $(sourcedir)/enigma2-pli-nightly/config.status
+	cd $(sourcedir)/enigma2-nightly && \
 		$(MAKE) all
 	touch $@
 
 $(D)/enigma2-pli-nightly: enigma2-pli-nightly.do_prepare enigma2-pli-nightly.do_compile
-	$(MAKE) -C $(appsdir)/enigma2-nightly install DESTDIR=$(targetprefix)
+	$(MAKE) -C $(sourcedir)/enigma2-nightly install DESTDIR=$(targetprefix)
 	if [ -e $(targetprefix)/usr/bin/enigma2 ]; then \
 		$(target)-strip $(targetprefix)/usr/bin/enigma2; \
 	fi
@@ -109,12 +109,12 @@ $(D)/enigma2-pli-nightly: enigma2-pli-nightly.do_prepare enigma2-pli-nightly.do_
 enigma2-pli-nightly-clean:
 	rm -f $(D)/enigma2-pli-nightly
 	rm -f $(D)/enigma2-pli-nightly.do_compile
-	cd $(appsdir)/enigma2-nightly && \
+	cd $(sourcedir)/enigma2-nightly && \
 		$(MAKE) distclean
 
 enigma2-pli-nightly-distclean:
 	rm -f $(D)/enigma2-pli-nightly
 	rm -f $(D)/enigma2-pli-nightly.do_compile
 	rm -f $(D)/enigma2-pli-nightly.do_prepare
-	rm -rf $(appsdir)/enigma2-nightly
-	rm -rf $(appsdir)/enigma2-nightly.org
+	rm -rf $(sourcedir)/enigma2-nightly
+	rm -rf $(sourcedir)/enigma2-nightly.org
