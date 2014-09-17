@@ -1029,8 +1029,8 @@ Multicom406                 : $enable_multicom406
 MediaFw Gstreamer           : $enable_mediafwgstreamer
 MediaFw                     : $MEDIAFW
 MediaFw Dep                 : $MEDIAFW_DEP
-EXTERNALLCD                 : $enable_externallcd
-EXTERNALLCD_DEP             : $EXTERNALLCD_DEP
+External LCD                : $enable_externallcd
+External LCD dependancy     : $EXTERNALLCD_DEP
 ----------------------------------------
 ])
 
