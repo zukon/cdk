@@ -375,7 +375,7 @@ case "$IMAGE" in
 		--enable-neutrino*)
 		echo "  make yaud-neutrino-mp"
 		echo "  make yaud-neutrino-mp-next"
-		echo "  make yaud-neutrino-hd2-exp"
+		echo "  make yaud-neutrino-hd2-exp";;
 		--enable-enigma2*)
 		echo "  make yaud-enigma2-pli-nightly";;
 		*)
