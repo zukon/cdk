@@ -16,7 +16,7 @@ $(D)/neutrino-mp-plugins.do_prepare:
 	cp -ra $(sourcedir)/neutrino-mp-plugins $(sourcedir)/neutrino-mp-plugins.org
 	touch $@
 
-$(appsdir)/neutrino-mp-plugins/config.status: bootstrap xupnpd
+$(sourcedir)/neutrino-mp-plugins/config.status: $(D)/bootstrap $(D)/xupnpd
 	cd $(sourcedir)/neutrino-mp-plugins && \
 		./autogen.sh && \
 		$(BUILDENV) \
@@ -36,7 +36,7 @@ $(appsdir)/neutrino-mp-plugins/config.status: bootstrap xupnpd
 			PKG_CONFIG=$(hostprefix)/bin/$(target)-pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			CPPFLAGS="$(N_CPPFLAGS) -DMARTII -DNEW_LIBCURL" \
-			LDFLAGS="$(N_LDFLAGS) -L$(appsdir)/neutrino-mp-plugins/fx2/lib/.libs"
+			LDFLAGS="$(TARGET_LDFLAGS) -L$(sourcedir)/neutrino-mp-plugins/fx2/lib/.libs"
 
 $(D)/neutrino-mp-plugins.do_compile: $(sourcedir)/neutrino-mp-plugins/config.status
 	cd $(sourcedir)/neutrino-mp-plugins && \
