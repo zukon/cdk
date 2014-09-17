@@ -127,7 +127,7 @@ $(D)/neutrino-mp-github.do_prepare: | $(NEUTRINO_DEPS) libstb-hal-github
 	done;
 	touch $@
 
-$(D)neutrino-mp-github.config.status:
+$(D)/neutrino-mp-github.config.status:
 	rm -rf $(N_OBJDIR)
 	test -d $(N_OBJDIR) || mkdir -p $(N_OBJDIR) && \
 	cd $(N_OBJDIR) && \
@@ -168,7 +168,7 @@ $(sourcedir)/neutrino-mp-github/src/gui/version.h:
 		pushd $(buildprefix) ; \
 		DDT_REV=$$(git log | grep "^commit" | wc -l) ; \
 		popd ; \
-		echo '#define VCS "DDT-rev'$$DDT_REV'_HAL-rev'$$HAL_REV'-next_NMP-rev'$$NMP_REV'-next"' >> $@ ; \
+		echo '#define VCS "DDT-rev'$$DDT_REV'_HAL-rev'$$HAL_REV'_NMP-rev'$$NMP_REV'"' >> $@ ; \
 	fi
 
 $(D)/neutrino-mp-github.do_compile: neutrino-mp-github.config.status $(sourcedir)/neutrino-mp-github/src/gui/version.h
@@ -263,7 +263,7 @@ $(sourcedir)/neutrino-mp-martii-github/src/gui/version.h:
 		pushd $(buildprefix) ; \
 		DDT_REV=$$(git log | grep "^commit" | wc -l) ; \
 		popd ; \
-		echo '#define VCS "DDT-rev'$$DDT_REV'_HAL-rev'$$HAL_REV'-next_NMP-rev'$$NMP_REV'-next"' >> $@ ; \
+		echo '#define VCS "DDT-rev'$$DDT_REV'_HAL-rev'$$HAL_REV'_NMP-rev'$$NMP_REV'"' >> $@ ; \
 	fi
 
 $(D)/neutrino-mp-martii-github.do_compile: neutrino-mp-martii-github.config.status $(sourcedir)/neutrino-mp-martii-github/src/gui/version.h
