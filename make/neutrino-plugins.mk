@@ -6,18 +6,18 @@
 # PLUGINS
 #
 $(D)/neutrino-mp-plugins.do_prepare:
-	rm -rf$(sourcedir)neutrino-mp-plugins
-	rm -rf$(sourcedir)neutrino-mp-plugins.org
+	rm -rf $(sourcedir)/neutrino-mp-plugins
+	rm -rf $(sourcedir)/neutrino-mp-plugins.org
 	[ -d "$(archivedir)/neutrino-mp-plugins.git" ] && \
 	(cd $(archivedir)/neutrino-mp-plugins.git; git pull; cd "$(buildprefix)";); \
 	[ -d "$(archivedir)/neutrino-mp-plugins.git" ] || \
 	git clone https://github.com/TangoCash/nmp-plugins.git $(archivedir)/neutrino-mp-plugins.git; \
-	cp -ra $(archivedir)/neutrino-mp-plugins.git$(sourcedir)neutrino-mp-plugins;\
-	cp -ra$(sourcedir)neutrino-mp-plugins$(sourcedir)neutrino-mp-plugins.org
+	cp -ra $(archivedir)/neutrino-mp-plugins.git $(sourcedir)/neutrino-mp-plugins;\
+	cp -ra $(sourcedir)/neutrino-mp-plugins $(sourcedir)/neutrino-mp-plugins.org
 	touch $@
 
 $(appsdir)/neutrino-mp-plugins/config.status: bootstrap xupnpd
-	cd$(sourcedir)neutrino-mp-plugins && \
+	cd $(sourcedir)/neutrino-mp-plugins && \
 		./autogen.sh && \
 		$(BUILDENV) \
 		./configure \
@@ -38,18 +38,18 @@ $(appsdir)/neutrino-mp-plugins/config.status: bootstrap xupnpd
 			CPPFLAGS="$(N_CPPFLAGS) -DMARTII -DNEW_LIBCURL" \
 			LDFLAGS="$(N_LDFLAGS) -L$(appsdir)/neutrino-mp-plugins/fx2/lib/.libs"
 
-$(D)/neutrino-mp-plugins.do_compile:$(sourcedir)neutrino-mp-plugins/config.status
-	cd$(sourcedir)neutrino-mp-plugins && \
+$(D)/neutrino-mp-plugins.do_compile: $(sourcedir)/neutrino-mp-plugins/config.status
+	cd $(sourcedir)/neutrino-mp-plugins && \
 		$(MAKE)
 	touch $@
 
 $(D)/neutrino-mp-plugins: neutrino-mp-plugins.do_prepare neutrino-mp-plugins.do_compile
-	$(MAKE) -C$(sourcedir)neutrino-mp-plugins install DESTDIR=$(targetprefix)
+	$(MAKE) -C $(sourcedir)/neutrino-mp-plugins install DESTDIR=$(targetprefix)
 	touch $@
 
 neutrino-mp-plugins-clean:
 	rm -f $(D)/neutrino-mp-plugins
-	cd$(sourcedir)neutrino-mp-plugins && \
+	cd $(sourcedir)/neutrino-mp-plugins && \
 		$(MAKE) clean
 
 neutrino-mp-plugins-distclean:
