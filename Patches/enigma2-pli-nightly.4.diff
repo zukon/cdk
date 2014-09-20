@@ -3525,7 +3525,7 @@ diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/Makefile.am eni
  
 +if ENABLE_LIBEPLAYER3
 +AM_CPPFLAGS += \
-+	-I$(top_srcdir)/../tools/libeplayer3/include
++	-I$(top_srcdir)/../../apps/tools/libeplayer3/include
 +endif
 +
  # initialize these, to be filled with targets in the included files
