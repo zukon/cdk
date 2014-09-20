@@ -1809,7 +1809,9 @@ $(D)/graphlcd: $(D)/bootstrap $(D)/libfreetype $(D)/libusb @DEPENDS_graphlcd@
 	[ -d "$(archivedir)/graphlcd-base-touchcol.git" ] && \
 	(cd $(archivedir)/graphlcd-base-touchcol.git; git pull ; git checkout touchcol; cd "$(buildprefix)";); \
 	cd @DIR_graphlcd@ && \
-		$(MAKE) all CC=$(target)-gcc CXX=$(target)-g++ LDFLAGS="-L$(targetprefix)/usr/lib -Wl,-rpath-link,$(targetprefix)/usr/lib" DESTDIR=$(targetprefix) && \
+		export TARGET=$(target)- && \
+		export LDFLAGS="-L$(targetprefix)/usr/lib -Wl,-rpath-link,$(targetprefix)/usr/lib" && \
+		$(MAKE) all DESTDIR=$(targetprefix) && \
 		@INSTALL_graphlcd@
 	@CLEANUP_graphlcd@
 	touch $@
