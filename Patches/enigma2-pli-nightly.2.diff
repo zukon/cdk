@@ -627,7 +627,7 @@ diff -Naur '--exclude-from=diff-exclude' enigma2-nightly.org/lib/driver/vfd.cpp 
 +#include <lib/driver/vfd.h>
 +
 +#ifdef PLATFORM_TF7700
-+#include "../../tools/tffpctl/frontpanel.h"
++#include "/../../apps/tools/tffpctl/frontpanel.h"
 +#endif
 +
 +#define VFD_DEVICE "/dev/vfd"
