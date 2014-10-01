@@ -369,7 +369,7 @@ libstb-hal-distclean:
 #
 # neutrino-mp
 #
-NEUTRINO_MP_PATCHES
+NEUTRINO_MP_PATCHES =
 
 $(D)/neutrino-mp.do_prepare: | $(NEUTRINO_DEPS) libstb-hal
 	rm -rf $(sourcedir)/neutrino-mp
