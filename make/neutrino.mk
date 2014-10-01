@@ -60,6 +60,8 @@ yaud-neutrino-mp-github: yaud-none lirc \
 #
 # libstb-hal-github
 #
+NEUTRINO_MP_LIBSTB_GH_PATCHES =
+
 $(D)/libstb-hal-github.do_prepare:
 	rm -rf $(sourcedir)/libstb-hal-github
 	rm -rf $(sourcedir)/libstb-hal-github.org
@@ -70,6 +72,10 @@ $(D)/libstb-hal-github.do_prepare:
 	git clone https://github.com/MaxWiesel/libstb-hal.git $(archivedir)/libstb-hal-github.git; \
 	cp -ra $(archivedir)/libstb-hal-github.git $(sourcedir)/libstb-hal-github;\
 	cp -ra $(sourcedir)/libstb-hal-github $(sourcedir)/libstb-hal-github.org
+	for i in $(NEUTRINO_MP_LIBSTB_GH_PATCHES); do \
+		echo "==> Applying Patch: $(subst $(PATCHES)/,'',$$i)"; \
+		cd $(sourcedir)/libstb-hal-github && patch -p1 -i $$i; \
+	done;
 	touch $@
 
 $(D)/libstb-hal-github.config.status: | $(NEUTRINO_DEPS)
@@ -449,6 +455,8 @@ yaud-neutrino-mp-next-all: yaud-none lirc \
 #
 # libstb-hal-next
 #
+NEUTRINO_MP_LIBSTB_PATCHES =
+
 $(D)/libstb-hal-next.do_prepare:
 	rm -rf $(sourcedir)/libstb-hal-next
 	rm -rf $(sourcedir)/libstb-hal-next.org
@@ -460,6 +468,10 @@ $(D)/libstb-hal-next.do_prepare:
 	cp -ra $(archivedir)/libstb-hal.git $(sourcedir)/libstb-hal-next;\
 	(cd $(sourcedir)/libstb-hal-next; git checkout next; cd "$(buildprefix)";); \
 	cp -ra $(sourcedir)/libstb-hal-next $(sourcedir)/libstb-hal-next.org
+	for i in $(NEUTRINO_MP_LIBSTB_PATCHES); do \
+		echo "==> Applying Patch: $(subst $(PATCHES)/,'',$$i)"; \
+		cd $(sourcedir)/libstb-hal-github && patch -p1 -i $$i; \
+	done;
 	touch $@
 
 $(D)/libstb-hal-next.config.status: bootstrap
