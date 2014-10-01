@@ -369,6 +369,8 @@ libstb-hal-distclean:
 #
 # neutrino-mp
 #
+NEUTRINO_MP_PATCHES
+
 $(D)/neutrino-mp.do_prepare: | $(NEUTRINO_DEPS) libstb-hal
 	rm -rf $(sourcedir)/neutrino-mp
 	rm -rf $(sourcedir)/neutrino-mp.org
@@ -378,6 +380,9 @@ $(D)/neutrino-mp.do_prepare: | $(NEUTRINO_DEPS) libstb-hal
 	git clone git://gitorious.org/neutrino-mp/max10s-neutrino-mp.git $(archivedir)/neutrino-mp.git; \
 	cp -ra $(archivedir)/neutrino-mp.git $(sourcedir)/neutrino-mp; \
 	cp -ra $(sourcedir)/neutrino-mp $(sourcedir)/neutrino-mp.org
+	for i in $(NEUTRINO_MP_PATCHES); do \
+		echo "==> Applying Patch: $(subst $(PATCHES)/,'',$$i)"; \
+		cd $(sourcedir)/neutrino-mp && patch -p1 -i $$i; \
 	touch $@
 
 $(sourcedir)/neutrino-mp/config.status:
@@ -455,7 +460,7 @@ yaud-neutrino-mp-next-all: yaud-none lirc \
 #
 # libstb-hal-next
 #
-NEUTRINO_MP_LIBSTB_PATCHES =
+NEUTRINO_MP_LIBSTB_NEXT_PATCHES =
 
 $(D)/libstb-hal-next.do_prepare:
 	rm -rf $(sourcedir)/libstb-hal-next
@@ -468,7 +473,7 @@ $(D)/libstb-hal-next.do_prepare:
 	cp -ra $(archivedir)/libstb-hal.git $(sourcedir)/libstb-hal-next;\
 	(cd $(sourcedir)/libstb-hal-next; git checkout next; cd "$(buildprefix)";); \
 	cp -ra $(sourcedir)/libstb-hal-next $(sourcedir)/libstb-hal-next.org
-	for i in $(NEUTRINO_MP_LIBSTB_PATCHES); do \
+	for i in $(NEUTRINO_MP_LIBSTB_NEXT_PATCHES); do \
 		echo "==> Applying Patch: $(subst $(PATCHES)/,'',$$i)"; \
 		cd $(sourcedir)/libstb-hal-next && patch -p1 -i $$i; \
 	done;
