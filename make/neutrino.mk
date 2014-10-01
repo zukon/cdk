@@ -470,7 +470,7 @@ $(D)/libstb-hal-next.do_prepare:
 	cp -ra $(sourcedir)/libstb-hal-next $(sourcedir)/libstb-hal-next.org
 	for i in $(NEUTRINO_MP_LIBSTB_PATCHES); do \
 		echo "==> Applying Patch: $(subst $(PATCHES)/,'',$$i)"; \
-		cd $(sourcedir)/libstb-hal-github && patch -p1 -i $$i; \
+		cd $(sourcedir)/libstb-hal-next && patch -p1 -i $$i; \
 	done;
 	touch $@
 
