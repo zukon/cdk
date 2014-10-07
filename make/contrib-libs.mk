@@ -988,7 +988,7 @@ $(D)/libass: $(D)/bootstrap $(D)/libfreetype $(D)/libfribidi @DEPENDS_libass@
 #
 # WebKitDFB
 #
-$(D)/webkitdfb: $(D)/bootstrap $(D)/glib2 $(D)/icu4c $(D)/libxml2 $(D)/enchant $(D)/lite $(D)/libcurl $(D)/fontconfig $(D)/sqlite $(D)/libsoup $(D)/cairo $(D)/libjpeg @DEPENDS_webkitdfb@
+$(D)/webkitdfb: $(D)/bootstrap $(D)/glib2 $(D)/icu4c $(D)/libxml2_e2 $(D)/enchant $(D)/lite $(D)/libcurl $(D)/fontconfig $(D)/sqlite $(D)/libsoup $(D)/cairo $(D)/libjpeg @DEPENDS_webkitdfb@
 	@PREPARE_webkitdfb@
 	cd @DIR_webkitdfb@ && \
 		$(BUILDENV) \
@@ -1302,7 +1302,7 @@ $(D)/libxml2: $(D)/bootstrap $(D)/libz @DEPENDS_libxml2@
 #
 # libxslt
 #
-$(D)/libxslt: $(D)/bootstrap $(D)/libxml2 @DEPENDS_libxslt@
+$(D)/libxslt: $(D)/bootstrap $(D)/libxml2_e2 @DEPENDS_libxslt@
 	@PREPARE_libxslt@
 	cd @DIR_libxslt@ && \
 		$(BUILDENV) \
@@ -1334,7 +1334,7 @@ $(D)/libxslt: $(D)/bootstrap $(D)/libxml2 @DEPENDS_libxslt@
 #
 # libxmlccwrap
 #
-$(D)/libxmlccwrap: $(D)/bootstrap $(D)/libxml2 $(D)/libxslt @DEPENDS_libxmlccwrap@
+$(D)/libxmlccwrap: $(D)/bootstrap $(D)/libxml2_e2 $(D)/libxslt @DEPENDS_libxmlccwrap@
 	@PREPARE_libxmlccwrap@
 	cd @DIR_libxmlccwrap@ && \
 		$(BUILDENV) \
@@ -1574,7 +1574,7 @@ $(D)/zope_interface: bootstrap python setuptools @DEPENDS_zope_interface@
 #
 # gstreamer
 #
-$(D)/gstreamer: $(D)/bootstrap $(D)/glib2 $(D)/libxml2 @DEPENDS_gstreamer@
+$(D)/gstreamer: $(D)/bootstrap $(D)/glib2 $(D)/libxml2_e2 @DEPENDS_gstreamer@
 	@PREPARE_gstreamer@
 	cd @DIR_gstreamer@ && \
 		$(BUILDENV) \
