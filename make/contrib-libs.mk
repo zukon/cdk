@@ -841,12 +841,15 @@ $(D)/libdreamdvd: $(D)/bootstrap $(D)/libdvdnav @DEPENDS_libdreamdvd@
 if ENABLE_ENIGMA2
 FFMPEG_EXTRA = --enable-librtmp
 LIBRTMPDUMP = librtmpdump
+else
+FFMPEG_EXTRA = --disable-iconv
+LIBXML2 = libxml2
 endif
 
-$(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBRTMPDUMP) @DEPENDS_ffmpeg@
+$(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpeg@
 	@PREPARE_ffmpeg@
 	cd @DIR_ffmpeg@ && \
-		export PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig && \
+		$(BUILDENV) \
 		./configure \
 			--disable-ffserver \
 			--disable-ffplay \
@@ -1233,14 +1236,39 @@ $(D)/libflac: $(D)/bootstrap @DEPENDS_libflac@
 	touch $@
 
 #
-# libxml2
+# libxml2_e2
 #
-if ENABLE_ENIGMA2
-LIBXML2_EXTRA = --with-python=$(hostprefix)/bin/python
-else
-LIBXML2_EXTRA = --without-python
-endif
+$(D)/libxml2_e2: $(D)/bootstrap $(D)/libz @DEPENDS_libxml2_e2@
+	@PREPARE_libxml2_e2@
+	cd @DIR_libxml2_e2@ && \
+		touch NEWS AUTHORS ChangeLog && \
+		autoreconf -fi && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=/usr \
+			--enable-shared \
+			--disable-static \
+			--datarootdir=/.remove \
+			--with-python=$(hostprefix)/bin/python \
+			--without-c14n \
+			--without-debug \
+			--without-docbook \
+			--without-mem-debug \
+		&& \
+		$(MAKE) all && \
+		@INSTALL_libxml2_e2@ && \
+		sed -e "s,^prefix=,prefix=$(targetprefix)," < xml2-config > $(hostprefix)/bin/xml2-config && \
+		chmod 755 $(hostprefix)/bin/xml2-config && \
+		sed -e "/^XML2_LIBDIR/ s,/usr/lib,$(targetprefix)/usr/lib,g" -i $(targetprefix)/usr/lib/xml2Conf.sh && \
+		sed -e "/^XML2_INCLUDEDIR/ s,/usr/include,$(targetprefix)/usr/include,g" -i $(targetprefix)/usr/lib/xml2Conf.sh
+	@CLEANUP_libxml2_e2@
+	touch $@
 
+#
+# libxml2 neutrino
+#
 $(D)/libxml2: $(D)/bootstrap $(D)/libz @DEPENDS_libxml2@
 	@PREPARE_libxml2@
 	cd @DIR_libxml2@ && \
@@ -1254,7 +1282,9 @@ $(D)/libxml2: $(D)/bootstrap $(D)/libz @DEPENDS_libxml2@
 			--enable-shared \
 			--disable-static \
 			--datarootdir=/.remove \
-			$(LIBXML2_EXTRA) \
+			--without-python \
+			--with-minimum \
+			--without-iconv \
 			--without-c14n \
 			--without-debug \
 			--without-docbook \

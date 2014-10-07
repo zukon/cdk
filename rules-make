@@ -132,8 +132,8 @@ sshfs;2.4;sshfs-fuse-2.4;sshfs-fuse-2.4.tar.bz2;extract:sshfs-fuse-2.4.tar.bz2
 tinyxml;2.6.2;tinyxml2.6.2;tinyxml_2_6_2.tar.gz;extract:tinyxml_2_6_2.tar.gz;move:tinyxml:tinyxml2.6.2;patch:tinyxml2.6.2.patch
 libnfs;c0ebf57b21;libnfs-c0ebf57b21;libnfs.git;extract:libnfs.git
 taglib;1.8;taglib-1.8;taglib-1.8.tar.gz;extract:taglib-1.8.tar.gz
-
-libxml2;2.9.0;libxml2-2.9.0;libxml2-2.9.0.tar.gz:libxml2-2.9.0.patch;extract:libxml2-2.9.0.tar.gz;patch:libxml2-2.9.0.patch
+libxml2;2.8.0;libxml2-2.8.0;libxml2-2.8.0.tar.gz;extract:libxml2-2.8.0.tar.gz
+libxml2_e2;2.9.0;libxml2-2.9.0;libxml2-2.9.0.tar.gz;extract:libxml2-2.9.0.tar.gz;patch:libxml2-2.9.0.patch
 libxslt;1.1.28;libxslt-1.1.28;libxslt-1.1.28.tar.gz;extract:libxslt-1.1.28.tar.gz
 
 #
