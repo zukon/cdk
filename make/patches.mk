@@ -1,3 +1,16 @@
+#
+# diff helper
+#
+enigma2-nightly-diff \
+neutrino-mp-next-diff \
+neutrino-mp-tangos-diff \
+neutrino-mp-martii-github-diff \
+neutrino-mp-github-next-cst-diff \
+libstb-hal-next-diff \
+libstb-hal-github-diff \
+libstb-hal-github-old-diff :
+	cd $(sourcedir) && diff -NEbur --exclude-from=$(buildprefix)/scripts/diff-exclude $(subst -diff,,$@).org $(subst -diff,,$@) > $(cvsdir)/$@ ; [ $$? -eq 1 ]
+
 # keeping all patches together in one file
 # uncomment if needed
 #
