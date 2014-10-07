@@ -7,7 +7,6 @@
 *.lo
 *.in
 *.mo
-*.m4
 *.o
 *.orig
 *.org
@@ -58,6 +57,12 @@ udpstreampes
 #
 # Enigma2
 #
+libtool.m4
+lt~obsolete.m4
+ltoptions.m4
+ltsugar.m4
+ltversion.m4
+tuxbox.m4
 tuxtxt
 po
 enigma2_config.h
