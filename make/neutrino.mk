@@ -205,61 +205,6 @@ neutrino-mp-github-distclean:
 
 ################################################################################
 #
-# libstb-hal-github-old
-#
-NEUTRINO_MP_LIBSTB_GH_OLD_PATCHES =
-
-$(D)/libstb-hal-github-old.do_prepare:
-	rm -rf $(sourcedir)/libstb-hal-github-old
-	rm -rf $(sourcedir)/libstb-hal-github-old.org
-	rm -rf $(LH_OBJDIR)
-	[ -d "$(archivedir)/libstb-hal-github-old.git" ] && \
-	(cd $(archivedir)/libstb-hal-github-old.git; git pull; cd "$(buildprefix)";); \
-	[ -d "$(archivedir)/libstb-hal-github-old.git" ] || \
-	git clone https://github.com/MaxWiesel/libstb-hal-old.git $(archivedir)/libstb-hal-github-old.git; \
-	cp -ra $(archivedir)/libstb-hal-github-old.git $(sourcedir)/libstb-hal-github-old;\
-	cp -ra $(sourcedir)/libstb-hal-github-old $(sourcedir)/libstb-hal-github-old.org
-	for i in $(NEUTRINO_MP_LIBSTB_GH_OLD_PATCHES); do \
-		echo "==> Applying Patch: $(subst $(PATCHES)/,'',$$i)"; \
-		cd $(sourcedir)/libstb-hal-github-old && patch -p1 -i $$i; \
-	done;
-	touch $@
-
-$(D)/libstb-hal-github-old.config.status: | $(NEUTRINO_DEPS)
-	rm -rf $(LH_OBJDIR) && \
-	test -d $(LH_OBJDIR) || mkdir -p $(LH_OBJDIR) && \
-	cd $(LH_OBJDIR) && \
-		$(sourcedir)/libstb-hal-github-old/autogen.sh && \
-		$(BUILDENV) \
-		$(sourcedir)/libstb-hal-github-old/configure \
-			--host=$(target) \
-			--build=$(build) \
-			--prefix= \
-			--with-target=cdk \
-			--with-boxtype=$(BOXTYPE) \
-			PKG_CONFIG=$(hostprefix)/bin/$(target)-pkg-config \
-			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
-			CFLAGS="$(N_CFLAGS)" CXXFLAGS="$(N_CFLAGS)" CPPFLAGS="$(N_CPPFLAGS)"
-
-$(D)/libstb-hal-github-old.do_compile: libstb-hal-github-old.config.status
-	cd $(sourcedir)/libstb-hal-github-old && \
-		$(MAKE) -C $(LH_OBJDIR)
-	touch $@
-
-$(D)/libstb-hal-github-old: libstb-hal-github-old.do_prepare libstb-hal-github-old.do_compile
-	$(MAKE) -C $(LH_OBJDIR) install DESTDIR=$(targetprefix)
-	touch $@
-
-libstb-hal-github-old-clean:
-	rm -f $(D)/libstb-hal-github-old
-	cd $(LH_OBJDIR) && \
-		$(MAKE) -C $(LH_OBJDIR) distclean
-
-libstb-hal-github-old-distclean:
-	rm -rf $(LH_OBJDIR)
-	rm -f $(D)/libstb-hal-github-old*
-
-#
 # neutrino-mp-github-next-cst
 #
 yaud-neutrino-mp-github-next-cst: yaud-none lirc \
@@ -268,7 +213,7 @@ yaud-neutrino-mp-github-next-cst: yaud-none lirc \
 
 NEUTRINO_MP_GH_NEXT_CST_PATCHES =
 
-$(D)/neutrino-mp-github-next-cst.do_prepare: | $(NEUTRINO_DEPS) libstb-hal-github-old
+$(D)/neutrino-mp-github-next-cst.do_prepare: | $(NEUTRINO_DEPS) libstb-hal-github
 	rm -rf $(sourcedir)/neutrino-mp-github-next-cst
 	rm -rf $(sourcedir)/neutrino-mp-github-next-cst.org
 	rm -rf $(N_OBJDIR)
@@ -306,7 +251,7 @@ $(D)/neutrino-mp-github-next-cst.config.status:
 			--with-configdir=/var/tuxbox/config \
 			--with-gamesdir=/var/tuxbox/games \
 			--with-plugindir=/var/tuxbox/plugins \
-			--with-stb-hal-includes=$(sourcedir)/libstb-hal-github-old/include \
+			--with-stb-hal-includes=$(sourcedir)/libstb-hal-github/include \
 			--with-stb-hal-build=$(LH_OBJDIR) \
 			PKG_CONFIG=$(hostprefix)/bin/$(target)-pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
