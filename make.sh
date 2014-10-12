@@ -93,8 +93,8 @@ case $1 in
 		echo "   31) Atemio AM530"
 		echo "   32) SagemCom 88 series"
 		echo "   33) Ferguson Ariva @Link 200"
-		echo "   34) Fortis HS7119 (not finished yet)"
-		echo "   35) Fortis HS7819 (almost finished)"
+		echo "   34) Fortis HS7119"
+		echo "   35) Fortis HS7819"
 		echo "   36) Fortis DP7000 (not finished yet)"
 		read -p "Select target (1-36)? ";;
 esac
@@ -303,7 +303,7 @@ case $5 in
 	*)	echo -e "\nMedia Framework:"
 		echo "   1) eplayer3"
 		echo "   2) gstreamer"
-		echo "   3) use built-in (recommended for Neutrino)"
+		echo "   3) use built-in (required for Neutrino)"
 		echo "   4) gstreamer+eplayer3 (recommended for OpenPLi)"
 		read -p "Select media framework (1-4)? ";;
 esac
