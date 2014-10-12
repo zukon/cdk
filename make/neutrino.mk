@@ -170,9 +170,6 @@ yaud-neutrino-mp-github: yaud-none lirc \
 		boot-elf neutrino-mp-github release_neutrino
 	@TUXBOX_YAUD_CUSTOMIZE@
 
-#
-# neutrino-mp-github
-#
 NEUTRINO_MP_GH_PATCHES =
 
 $(D)/neutrino-mp-github.do_prepare: | $(NEUTRINO_DEPS) libstb-hal-github
@@ -297,7 +294,6 @@ $(D)/neutrino-mp-github-next-cst.config.status:
 			--host=$(target) \
 			$(N_CONFIG_OPTS) \
 			--with-boxtype=$(BOXTYPE) \
-			--enable-lua \
 			--enable-upnp \
 			--enable-ffmpegdec \
 			--enable-giflib \
