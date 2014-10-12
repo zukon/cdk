@@ -269,6 +269,7 @@ $(D)/libpng: $(D)/bootstrap $(D)/libz @DEPENDS_libpng@
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=$(targetprefix)/usr \
+			--mandir=$(targetprefix)/.remove \
 		&& \
 		ECHO=echo $(MAKE) all && \
 		@INSTALL_libpng@
@@ -479,6 +480,8 @@ $(D)/libvorbis: $(D)/bootstrap $(D)/libogg @DEPENDS_libvorbis@
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=$(targetprefix)/usr \
+			--disable-docs \
+			--disable-examples \
 		&& \
 		$(MAKE) all && \
 		@INSTALL_libvorbis@
@@ -502,6 +505,7 @@ $(D)/libvorbisidec: $(D)/bootstrap $(D)/libogg @DEPENDS_libvorbisidec@
 		@INSTALL_libvorbisidec@
 	@CLEANUP_libvorbisidec@
 	touch $@
+
 #
 # libffi
 #
@@ -522,6 +526,9 @@ $(D)/libffi: $(D)/bootstrap @DEPENDS_libffi@
 	@CLEANUP_libffi@
 	touch $@
 
+#
+# orc
+#
 $(D)/orc: $(D)/bootstrap @DEPENDS_orc@
 	@PREPARE_orc@
 	cd @DIR_orc@ && \
@@ -577,6 +584,11 @@ $(D)/libiconv: $(D)/bootstrap @DEPENDS_libiconv@
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=/usr \
+			--target=$(target) \
+			--enable-static \
+			--disable-shared \
+			--datarootdir=/.remove \
+			--bindir=/.remove \
 		&& \
 		$(MAKE) && \
 		cp ./srcm4/* $(hostprefix)/share/aclocal/ && \
@@ -881,7 +893,6 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpe
 			--disable-armv6t2 \
 			--disable-vfp \
 			--disable-neon \
-			--disable-vis \
 			--disable-inline-asm \
 			--disable-yasm \
 			--disable-mips32r2 \
@@ -904,6 +915,9 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpe
 			--enable-muxer=mpeg2video \
 			--enable-muxer=ogg \
 			\
+			--enable-parser=mjpeg \
+			--disable-parser=hevc \
+			\
 			--disable-encoders \
 			--enable-encoder=aac \
 			--enable-encoder=h261 \
@@ -917,14 +931,17 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpe
 			\
 			--disable-decoders \
 			--enable-decoder=aac \
+			--enable-decoder=dca \
 			--enable-decoder=dvbsub \
 			--enable-decoder=dvdsub \
 			--enable-decoder=flac \
-			--enable-decoder=h261 \
-			--enable-decoder=h263 \
-			--enable-decoder=h263i \
-			--enable-decoder=h264 \
-			--enable-decoder=iff_byterun1 \
+			--enable-decoder=text \
+			--enable-decoder=srt \
+			--enable-decoder=subrip \
+			--enable-decoder=subviewer \
+			--enable-decoder=subviewer1 \
+			--enable-decoder=xsub \
+			--enable-decoder=pgssub \
 			--enable-decoder=mjpeg \
 			--enable-decoder=mp3 \
 			--enable-decoder=mpeg1video \
@@ -936,14 +953,46 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpe
 			--enable-decoder=pcm_s16le \
 			--enable-decoder=pcm_s16le_planar \
 			\
+			--disable-demuxers \
 			--enable-demuxer=mjpeg \
+			--enable-demuxer=aac \
+			--enable-demuxer=ac3 \
+			--enable-demuxer=avi \
+			--enable-demuxer=mov \
+			--enable-demuxer=vc1 \
+			--enable-demuxer=mpegts \
+			--enable-demuxer=mpegtsraw \
+			--enable-demuxer=mpegps \
+			--enable-demuxer=mpegvideo \
 			--enable-demuxer=wav \
+			--enable-demuxer=mp3 \
+			--enable-demuxer=pcm_s16be \
+			--enable-demuxer=pcm_s16le \
+			--enable-demuxer=matroska \
+			--enable-demuxer=flv \
+			--enable-demuxer=rm \
 			--enable-demuxer=rtsp \
-			--enable-parser=mjpeg \
-			--disable-parser=hevc \
+			--enable-demuxer=hds \
+			--enable-demuxer=hls \
+			--enable-demuxer=dts \
+			--enable-demuxer=wav \
+			--enable-demuxer=ogg \
+			--enable-demuxer=flac \
+			--enable-demuxer=srt \
+			\
+			--disable-protocols \
+			--enable-protocol=file \
+			--enable-protocol=http \
+			--enable-protocol=rtmp \
+			--enable-protocol=rtmpe \
+			--enable-protocol=rtmps \
+			--enable-protocol=rtmpte \
+			--enable-protocol=mmsh \
+			--enable-protocol=mmst \
+			\
+			--enable-bsfs \
 			--disable-indevs \
 			--disable-outdevs \
-			--disable-bsfs \
 			--enable-bzlib \
 			--enable-zlib \
 			$(FFMPEG_EXTRA) \
@@ -1195,7 +1244,7 @@ $(D)/libogg: $(D)/bootstrap @DEPENDS_libogg@
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--docdir=/usr/share/doc/libogg-1.3.1 \
+			--enable-shared \
 			--disable-static \
 			--prefix=/usr \
 		&& \
@@ -2103,7 +2152,7 @@ $(D)/libdvbsipp: $(D)/bootstrap @DEPENDS_libdvbsipp@
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix=/usr \
+			--prefix=$(targetprefix)/usr \
 		&& \
 		$(MAKE) all && \
 		@INSTALL_libdvbsipp@
