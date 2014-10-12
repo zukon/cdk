@@ -354,6 +354,7 @@ $(D)/libcurl: $(D)/bootstrap @DEPENDS_libcurl@
 			--disable-smtp \
 			--without-ssl \
 			--with-random \
+			--mandir=/.remove \
 		&& \
 		$(MAKE) all && \
 		sed -e "s,^prefix=,prefix=$(targetprefix)," < curl-config > $(hostprefix)/bin/curl-config && \
