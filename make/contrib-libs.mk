@@ -980,16 +980,6 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpe
 			--enable-demuxer=flac \
 			--enable-demuxer=srt \
 			\
-			--disable-protocols \
-			--enable-protocol=file \
-			--enable-protocol=http \
-			--enable-protocol=rtmp \
-			--enable-protocol=rtmpe \
-			--enable-protocol=rtmps \
-			--enable-protocol=rtmpte \
-			--enable-protocol=mmsh \
-			--enable-protocol=mmst \
-			\
 			--enable-bsfs \
 			--disable-indevs \
 			--disable-outdevs \
