@@ -265,6 +265,10 @@ yaud-neutrino-mp-github-next-cst: yaud-none lirc \
 		boot-elf neutrino-mp-github-next-cst release_neutrino
 	@TUXBOX_YAUD_CUSTOMIZE@
 
+yaud-neutrino-mp-github-next-cst-plugins: yaud-none lirc \
+		boot-elf neutrino-mp-github-next-cst neutrino-mp-plugins release_neutrino
+	@TUXBOX_YAUD_CUSTOMIZE@
+
 NEUTRINO_MP_GH_NEXT_CST_PATCHES =
 
 $(D)/neutrino-mp-github-next-cst.do_prepare: | $(NEUTRINO_DEPS) libstb-hal-github
