@@ -90,7 +90,7 @@ $(D)/directories:
 	$(INSTALL) -d $(targetprefix)/usr/{bin,lib,local,sbin,share}
 	$(INSTALL) -d $(targetprefix)/usr/include/linux
 	$(INSTALL) -d $(targetprefix)/usr/include/linux/dvb
-	$(INSTALL) -d $(targetprefix)/usr/local/{bin,include,lib,sbin,share}
+	$(INSTALL) -d $(targetprefix)/usr/local/{bin,sbin,share}
 	$(INSTALL) -d $(targetprefix)/var/{etc,lib,run}
 	$(INSTALL) -d $(targetprefix)/var/lib/{misc,nfs}
 	$(INSTALL) -d $(targetprefix)/var/bin
