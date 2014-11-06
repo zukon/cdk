@@ -27,7 +27,7 @@ else
 BINUTILS_VER  = 2.24.51.0.3-75
 GCC_VER       = 4.8.3-135
 LIBGCC_VER    = 4.8.3-143
-GLIBC_VER     = 2.14.1-51
+GLIBC_VER     = 2.14.1-53
 endif
 
 $(hostprefix)/bin/unpack-rpm.sh:
