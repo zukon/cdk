@@ -35,22 +35,18 @@ $(D)/libbluray: $(D)/bootstrap @DEPENDS_libbluray@
 	touch $@
 
 #
-# liblua
-#
-$(D)/liblua: $(D)/bootstrap $(D)/libncurses $(archivedir)/luaposix.git @DEPENDS_liblua@
-	@PREPARE_liblua@
-	cd @DIR_liblua@ && \
-		$(BUILDENV) \
+# lua
+# BUILDMODE=dynamic
+$(D)/lua: $(D)/bootstrap $(D)/libncurses $(archivedir)/luaposix.git @DEPENDS_lua@
+	@PREPARE_lua@
+	cd @DIR_lua@ && \
 		cp -r $(archivedir)/luaposix.git .; \
 		cd luaposix.git/ext; cp posix/posix.c include/lua52compat.h ../../src/; cd ../..; \
 		sed -i 's/<config.h>/"config.h"/' src/posix.c; \
 		sed -i '/^#define/d' src/lua52compat.h; \
-		sed -i 's@^#define LUA_ROOT.*@#define LUA_ROOT "/"@' src/luaconf.h; \
-		sed -i '/^#define LUA_USE_READLINE/d' src/luaconf.h; \
-		sed -i 's/ -lreadline//' src/Makefile; \
-		$(MAKE) linux CC='$(target)-gcc' LDFLAGS="-L$(targetprefix)/usr/lib" && \
-		@INSTALL_liblua@
-	@CLEANUP_liblua@
+		$(MAKE) linux CC=$(target)-gcc LDFLAGS="-L$(targetprefix)/usr/lib" PKG_VERSION=5.2.3 && \
+		@INSTALL_lua@
+	@CLEANUP_lua@
 	touch $@
 
 #

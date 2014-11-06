@@ -83,7 +83,7 @@ libvorbisidec;1.0.2+svn18153;libvorbisidec-1.0.2+svn18153;libvorbisidec_1.0.2+sv
 # contrib libs
 #
 libcrypto;0.9.8zb;openssl-0.9.8zb;openssl-0.9.8zb.tar.gz;extract:openssl-0.9.8zb.tar.gz;patch:openssl-0.9.8.patch;patch:openssl-0.9.8-parallel-build.patch
-liblua;5.2.3;lua-5.2.3;lua-5.2.3.tar.gz;extract:lua-5.2.3.tar.gz;patch:liblua-5.2.3-luaposix-31.patch
+lua;5.2.3;lua-5.2.3;lua-5.2.3.tar.gz;extract:lua-5.2.3.tar.gz;patch:lua-5.2.3-luaposix-31.patch
 howl;1.0.0;howl-1.0.0;howl-1.0.0.tar.gz;extract:howl-1.0.0.tar.gz
 libopenthreads;1.00;openthreads;;
 libboost;boost-1.53.0;boost_1_53_0;boost_1_53_0.tar.bz2;extract:boost_1_53_0.tar.bz2;patch:libboost.patch
