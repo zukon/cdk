@@ -25,7 +25,7 @@ GLIBC_VER     = 2.14.1-50
 else
 # 4.8.3
 BINUTILS_VER  = 2.24.51.0.3-75
-GCC_VER       = 4.8.3-135
+GCC_VER       = 4.8.3-136
 LIBGCC_VER    = 4.8.3-145
 GLIBC_VER     = 2.14.1-53
 endif
