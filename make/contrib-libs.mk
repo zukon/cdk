@@ -50,6 +50,17 @@ $(D)/lua: $(D)/bootstrap $(D)/libncurses $(archivedir)/luaposix.git @DEPENDS_lua
 	touch $@
 
 #
+# luaexpat
+#
+$(D)/luaexpat: $(D)/bootstrap $(D)/lua $(D)/libexpat @DEPENDS_luaexpat@
+	@PREPARE_luaexpat@
+	cd @DIR_luaexpat@ && \
+		$(MAKE) CC=$(target)-gcc LDFLAGS="-L$(targetprefix)/usr/lib" PREFIX=$(targetprefix)/usr && \
+		@INSTALL_luaexpat@
+	@CLEANUP_luaexpat@
+	touch $@
+
+#
 # libao
 #
 $(D)/libao: $(D)/bootstrap @DEPENDS_libao@
