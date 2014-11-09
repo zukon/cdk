@@ -942,6 +942,11 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpe
 			--enable-decoder=dvbsub \
 			--enable-decoder=dvdsub \
 			--enable-decoder=flac \
+			--enable-decoder=h261 \
+			--enable-decoder=h263 \
+			--enable-decoder=h263i \
+			--enable-decoder=h264 \
+			--enable-decoder=iff_byterun1 \
 			--enable-decoder=text \
 			--enable-decoder=srt \
 			--enable-decoder=subrip \
@@ -960,32 +965,10 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpe
 			--enable-decoder=pcm_s16le \
 			--enable-decoder=pcm_s16le_planar \
 			\
-			--disable-demuxers \
-			--enable-demuxer=mjpeg \
-			--enable-demuxer=aac \
-			--enable-demuxer=ac3 \
-			--enable-demuxer=avi \
-			--enable-demuxer=mov \
-			--enable-demuxer=vc1 \
-			--enable-demuxer=mpegts \
-			--enable-demuxer=mpegtsraw \
-			--enable-demuxer=mpegps \
-			--enable-demuxer=mpegvideo \
-			--enable-demuxer=wav \
-			--enable-demuxer=mp3 \
-			--enable-demuxer=pcm_s16be \
-			--enable-demuxer=pcm_s16le \
-			--enable-demuxer=matroska \
-			--enable-demuxer=flv \
-			--enable-demuxer=rm \
-			--enable-demuxer=rtsp \
 			--enable-demuxer=hds \
-			--enable-demuxer=hls \
-			--enable-demuxer=dts \
+			--enable-demuxer=mjpeg \
 			--enable-demuxer=wav \
-			--enable-demuxer=ogg \
-			--enable-demuxer=flac \
-			--enable-demuxer=srt \
+			--enable-demuxer=rtsp \
 			\
 			--enable-bsfs \
 			--disable-indevs \
