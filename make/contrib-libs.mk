@@ -145,10 +145,10 @@ $(D)/libreadline: $(D)/bootstrap @DEPENDS_libreadline@
 #
 # libfreetype
 #
-$(D)/libfreetype: $(D)/bootstrap $(D)/libpng @DEPENDS_libfreetype@
+$(D)/libfreetype: $(D)/bootstrap $(D)/libz $(D)/bzip2 $(D)/libpng @DEPENDS_libfreetype@
 	@PREPARE_libfreetype@
 	cd @DIR_libfreetype@ && \
-		sed -i '/#define FT_CONFIG_OPTION_OLD_INTERNALS/d' include/freetype/config/ftoption.h && \
+		sed -i '/#define FT_CONFIG_OPTION_OLD_INTERNALS/d' include/config/ftoption.h && \
 		sed -i '/^FONT_MODULES += \(type1\|cid\|pfr\|type42\|pcf\|bdf\)/d' modules.cfg && \
 		$(BUILDENV) \
 		./configure \
@@ -160,7 +160,11 @@ $(D)/libfreetype: $(D)/bootstrap $(D)/libpng @DEPENDS_libfreetype@
 		@INSTALL_libfreetype@
 		if [ -d $(targetprefix)/usr/include/freetype2/freetype ] ; then \
 			ln -sf ./freetype2/freetype $(targetprefix)/usr/include/freetype; \
-		fi;
+		else \
+			if [ ! -e $(targetprefix)/usr/include/freetype ] ; then \
+				ln -sf freetype2 $(targetprefix)/usr/include/freetype; \
+			fi; \
+		fi; \
 		mv $(targetprefix)/usr/bin/freetype-config $(hostprefix)/bin/freetype-config
 	@CLEANUP_libfreetype@
 	touch $@
