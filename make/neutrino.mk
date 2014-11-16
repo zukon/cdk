@@ -15,7 +15,7 @@ $(targetprefix)/var/etc/.version:
 #
 NEUTRINO_DEPS  = bootstrap libcrypto libcurl libid3tag libmad libvorbisidec libpng libjpeg libgif libfreetype
 NEUTRINO_DEPS += ffmpeg lua libdvbsipp libsigc libopenthreads libusb libalsa
-NEUTRINO_DEPS += $(EXTERNALLCD_DEP) $(MEDIAFW_DEP)
+NEUTRINO_DEPS += $(EXTERNALLCD_DEP)
 
 N_CFLAGS   = -Wall -W -Wshadow -pipe -Os -fno-strict-aliasing -funsigned-char
 N_CFLAGS  += -D__user=
@@ -773,7 +773,7 @@ yaud-neutrino-hd2-exp-plugins: yaud-none lirc \
 #
 NEUTRINO_HD2_PATCHES =
 
-$(D)/neutrino-hd2-exp.do_prepare: | $(NEUTRINO_DEPS) libflac
+$(D)/neutrino-hd2-exp.do_prepare: | $(NEUTRINO_DEPS) $(MEDIAFW_DEP) libflac
 	rm -rf $(sourcedir)/nhd2-exp
 	rm -rf $(sourcedir)/nhd2-exp.org
 	[ -d "$(archivedir)/neutrino-hd2-exp.svn" ] && \
@@ -836,6 +836,58 @@ neutrino-hd2-exp-distclean:
 	rm -f $(D)/neutrino-hd2-exp
 	rm -f $(D)/neutrino-hd2-exp.do_compile
 	rm -f $(D)/neutrino-hd2-exp.do_prepare
+
+#
+# NHD2 plugins
+#
+$(D)/nhd2-plugins.do_prepare:
+	rm -rf $(sourcedir)/nhd2-plugins
+	rm -rf $(sourcedir)/nhd2-plugins.org
+	[ -d "$(archivedir)/nhd2-plugins.svn" ] && \
+	(cd $(archivedir)/nhd2-plugins.svn; svn up ; cd "$(buildprefix)";); \
+	[ -d "$(archivedir)/nhd2-plugins.svn" ] || \
+	svn co http://neutrinohd2.googlecode.com/svn/branches/plugins $(archivedir)/nhd2-plugins.svn; \
+	cp -ra $(archivedir)/nhd2-plugins.svn $(sourcedir)/nhd2-plugins; \
+	cp -ra $(sourcedir)/nhd2-plugins $(sourcedir)/nhd2-plugins.org
+	touch $@
+
+$(sourcedir)/nhd2-plugins/config.status: bootstrap
+	cd $(sourcedir)/nhd2-plugins && \
+		./autogen.sh && \
+		$(BUILDENV) \
+		./configure \
+			--host=$(target) \
+			--build=$(build) \
+			--prefix= \
+			--with-target=cdk \
+			--with-boxtype=$(BOXTYPE) \
+			--with-plugindir=/var/tuxbox/plugins \
+			--with-libdir=/usr/lib \
+			--with-datadir=/usr/share/tuxbox \
+			--with-fontdir=/usr/share/fonts \
+			PKG_CONFIG=$(hostprefix)/bin/$(target)-pkg-config \
+			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
+			CPPFLAGS="$(CPPFLAGS) -I$(driverdir) -I$(buildprefix)/$(KERNEL_DIR)/include -I$(targetprefix)/include" \
+			LDFLAGS="$(TARGET_LDFLAGS)"
+
+$(D)/nhd2-plugins.do_compile: $(sourcedir)/nhd2-plugins/config.status
+	cd $(sourcedir)/nhd2-plugins && \
+	$(MAKE)
+	touch $@
+
+$(D)/nhd2-plugins: nhd2-plugins.do_prepare nhd2-plugins.do_compile
+	rm -rf $(targetprefix)/var/tuxbox/plugins/*
+	$(MAKE) -C $(sourcedir)/nhd2-plugins install DESTDIR=$(targetprefix)
+#	touch $@
+
+nhd2-plugins-clean:
+	rm -f $(D)/nhd2-plugins
+	cd $(sourcedir)/nhd2-plugins && \
+	$(MAKE) clean
+	rm -f $(sourcedir)/nhd2-plugins/config.status
+
+nhd2-plugins-distclean:
+	rm -f $(D)/nhd2-plugins*
 
 ################################################################################
 #
