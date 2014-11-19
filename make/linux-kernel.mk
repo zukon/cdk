@@ -295,9 +295,9 @@ $(D)/linux-kernel.do_prepare: \
 
 $(D)/linux-kernel.do_compile: $(D)/linux-kernel.do_prepare Patches/$(BUILDCONFIG)/$(HOST_KERNEL_CONFIG) | $(HOST_U_BOOT_TOOLS)
 	cd $(KERNEL_DIR) && \
+		$(MAKE) ARCH=sh CROSS_COMPILE=$(target)- mrproper && \
 		@M4@ $(buildprefix)/Patches/$(BUILDCONFIG)/$(HOST_KERNEL_CONFIG) > .config && \
-		$(MAKE) ARCH=sh CROSS_COMPILE=$(target)- uImage modules && \
-		$(MAKE) ARCH=sh CROSS_COMPILE=$(target)-
+		$(MAKE) ARCH=sh CROSS_COMPILE=$(target)- uImage modules
 	touch $@
 
 $(D)/linux-kernel: $(D)/bootstrap $(D)/linux-kernel.do_compile
@@ -333,4 +333,3 @@ linux-kernel.%:
 	@echo ""
 	diff $(KERNEL_DIR)/.config.old $(KERNEL_DIR)/.config
 	@echo ""
-
