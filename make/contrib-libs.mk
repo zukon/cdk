@@ -974,14 +974,13 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpe
 			--enable-demuxer=wav \
 			--enable-demuxer=rtsp \
 			\
-			--enable-bsfs \
+			--disable-bsfs \
 			--disable-indevs \
 			--disable-outdevs \
 			--enable-bzlib \
 			--enable-zlib \
 			$(FFMPEG_EXTRA) \
 			--enable-cross-compile \
-			--enable-pthreads \
 			--disable-static \
 			--enable-shared \
 			--enable-small \
