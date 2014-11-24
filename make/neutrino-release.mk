@@ -53,52 +53,52 @@ release_neutrino_cube_common:
 #	rm -f $(prefix)/release/bin/vfdctl
 
 #
-# release_cube_common_tunner
+# release_cube_common_tuner
 #
-release_neutrino_cube_common_tunner:
+release_neutrino_cube_common_tuner:
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/multituner/*.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/media/dvb/frontends/dvb-pll.ko $(prefix)/release/lib/modules/
 
 #
 # release_cuberevo_9500hd
 #
-release_neutrino_cuberevo_9500hd: release_neutrino_common_utils release_neutrino_cube_common release_neutrino_cube_common_tunner
+release_neutrino_cuberevo_9500hd: release_neutrino_common_utils release_neutrino_cube_common release_neutrino_cube_common_tuner
 	echo "cuberevo-9500hd" > $(prefix)/release/etc/hostname
 
 #
 # release_cuberevo_2000hd
 #
-release_neutrino_cuberevo_2000hd: release_neutrino_common_utils release_neutrino_cube_common release_neutrino_cube_common_tunner
+release_neutrino_cuberevo_2000hd: release_neutrino_common_utils release_neutrino_cube_common release_neutrino_cube_common_tuner
 	echo "cuberevo-2000hd" > $(prefix)/release/etc/hostname
 
 #
 # release_cuberevo_250hd
 #
-release_neutrino_cuberevo_250hd: release_neutrino_common_utils release_neutrino_cube_common release_neutrino_cube_common_tunner
+release_neutrino_cuberevo_250hd: release_neutrino_common_utils release_neutrino_cube_common release_neutrino_cube_common_tuner
 	echo "cuberevo-250hd" > $(prefix)/release/etc/hostname
 
 #
 # release_cuberevo_mini_fta
 #
-release_neutrino_cuberevo_mini_fta: release_neutrino_common_utils release_neutrino_cube_common release_neutrino_cube_common_tunner
+release_neutrino_cuberevo_mini_fta: release_neutrino_common_utils release_neutrino_cube_common release_neutrino_cube_common_tuner
 	echo "cuberevo-mini-fta" > $(prefix)/release/etc/hostname
 
 #
 # release_cuberevo_mini2
 #
-release_neutrino_cuberevo_mini2: release_neutrino_common_utils release_neutrino_cube_common release_neutrino_cube_common_tunner
+release_neutrino_cuberevo_mini2: release_neutrino_common_utils release_neutrino_cube_common release_neutrino_cube_common_tuner
 	echo "cuberevo-mini2" > $(prefix)/release/etc/hostname
 
 #
 # release_cuberevo_mini
 #
-release_neutrino_cuberevo_mini: release_neutrino_common_utils release_neutrino_cube_common release_neutrino_cube_common_tunner
+release_neutrino_cuberevo_mini: release_neutrino_common_utils release_neutrino_cube_common release_neutrino_cube_common_tuner
 	echo "cuberevo-mini" > $(prefix)/release/etc/hostname
 
 #
 # release_cuberevo
 #
-release_neutrino_cuberevo: release_neutrino_common_utils release_neutrino_cube_common release_neutrino_cube_common_tunner
+release_neutrino_cuberevo: release_neutrino_common_utils release_neutrino_cube_common release_neutrino_cube_common_tuner
 	echo "cuberevo" > $(prefix)/release/etc/hostname
 
 #
