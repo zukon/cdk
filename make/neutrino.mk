@@ -863,7 +863,6 @@ $(D)/neutrino-mp-tangos.do_prepare: | $(NEUTRINO_DEPS) libstb-hal-github
 	[ -d "$(archivedir)/neutrino-mp-tangos.git" ] || \
 	git clone https://github.com/TangoCash/neutrino-mp-cst-next.git $(archivedir)/neutrino-mp-tangos.git; \
 	cp -ra $(archivedir)/neutrino-mp-tangos.git $(sourcedir)/neutrino-mp-tangos; \
-	(cd $(sourcedir)/neutrino-mp-tangos; git checkout next; cd "$(buildprefix)";); \
 	cp -ra $(sourcedir)/neutrino-mp-tangos $(sourcedir)/neutrino-mp-tangos.org
 	for i in $(NEUTRINO_MP_TANGOS_PATCHES); do \
 		echo "==> Applying Patch: $(subst $(PATCHES)/,'',$$i)"; \
