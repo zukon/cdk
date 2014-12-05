@@ -19,9 +19,6 @@ NEUTRINO_MP_LIBSTB_GH_OLD_PATCHES +=
 NEUTRINO_MP_LIBSTB_GH_PATCHES += 
 
 # Neutrino MP from github
-NEUTRINO_MP_GH_PATCHES += 
-
-# Neutrino MP from github
 NEUTRINO_MP_GH_NEXT_CST_PATCHES += 
 
 # Neutrino MP from martii
