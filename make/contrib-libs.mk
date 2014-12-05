@@ -988,6 +988,7 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpe
 			--enable-demuxer=ac3 \
 			--enable-demuxer=avi \
 			--enable-demuxer=mov \
+			--enable-demuxer=image* \
 			--enable-demuxer=vc1 \
 			--enable-demuxer=mpegts \
 			--enable-demuxer=mpegtsraw \
