@@ -863,8 +863,9 @@ $(D)/libdreamdvd: $(D)/bootstrap $(D)/libdvdnav @DEPENDS_libdreamdvd@
 # ffmpeg
 #
 if ENABLE_ENIGMA2
-FFMPEG_EXTRA = --enable-librtmp
-LIBRTMPDUMP = librtmpdump
+FFMPEG_EXTRA  = --enable-librtmp
+FFMPEG_EXTRA += --enable-protocol=librtmp --enable-protocol=librtmpe --enable-protocol=librtmps --enable-protocol=librtmpt --enable-protocol=librtmpte
+LIBRTMPDUMP   = librtmpdump
 else
 FFMPEG_EXTRA = --disable-iconv
 LIBXML2 = libxml2
@@ -926,8 +927,21 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpe
 			--enable-muxer=mpeg2video \
 			--enable-muxer=ogg \
 			\
+			--disable-parsers \
+			--enable-parser=aac \
+			--enable-parser=aac_latm \
+			--enable-parser=ac3 \
+			--enable-parser=dca \
+			--enable-parser=dvbsub \
+			--enable-parser=dvdsub \
+			--enable-parser=flac \
+			--enable-parser=h264 \
 			--enable-parser=mjpeg \
-			--disable-parser=hevc \
+			--enable-parser=mpeg4video \
+			--enable-parser=mpegvideo \
+			--enable-parser=mpegaudio \
+			--enable-parser=vc1 \
+			--enable-parser=vorbis \
 			\
 			--disable-encoders \
 			--enable-encoder=aac \
@@ -950,7 +964,6 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpe
 			--enable-decoder=h263 \
 			--enable-decoder=h263i \
 			--enable-decoder=h264 \
-			--enable-decoder=iff_byterun1 \
 			--enable-decoder=text \
 			--enable-decoder=srt \
 			--enable-decoder=subrip \
@@ -969,10 +982,44 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpe
 			--enable-decoder=pcm_s16le \
 			--enable-decoder=pcm_s16le_planar \
 			\
-			--enable-demuxer=hds \
+			--disable-demuxers \
 			--enable-demuxer=mjpeg \
+			--enable-demuxer=aac \
+			--enable-demuxer=ac3 \
+			--enable-demuxer=avi \
+			--enable-demuxer=mov \
+			--enable-demuxer=vc1 \
+			--enable-demuxer=mpegts \
+			--enable-demuxer=mpegtsraw \
+			--enable-demuxer=mpegps \
+			--enable-demuxer=mpegvideo \
 			--enable-demuxer=wav \
+			--enable-demuxer=mp3 \
+			--enable-demuxer=pcm_s16be \
+			--enable-demuxer=pcm_s16le \
+			--enable-demuxer=matroska \
+			--enable-demuxer=flv \
+			--enable-demuxer=rm \
 			--enable-demuxer=rtsp \
+			--enable-demuxer=hds \
+			--enable-demuxer=hls \
+			--enable-demuxer=dts \
+			--enable-demuxer=wav \
+			--enable-demuxer=ogg \
+			--enable-demuxer=flac \
+			--enable-demuxer=srt \
+			\
+			--disable-protocols \
+			--enable-protocol=file \
+			--enable-protocol=http \
+			--enable-protocol=mmsh \
+			--enable-protocol=mmst \
+			--enable-protocol=rtmp \
+			--enable-protocol=rtmpe \
+			--enable-protocol=rtmps \
+			--enable-protocol=rtmpt \
+			--enable-protocol=rtmpte \
+			--enable-protocol=rtmpts \
 			\
 			--disable-bsfs \
 			--disable-indevs \
