@@ -1022,6 +1022,17 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpe
 			--enable-protocol=rtmpte \
 			--enable-protocol=rtmpts \
 			\
+			--disable-filters \
+			--enable-filter=fade \
+			--enable-filter=pad \
+			--enable-filter=aformat \
+			--enable-filter=movie \
+			--enable-filter=format \
+			--enable-filter=fps \
+			--enable-filter=framepack \
+			--enable-filter=resample \
+			--enable-filter=scale \
+			\
 			--disable-bsfs \
 			--disable-indevs \
 			--disable-outdevs \
