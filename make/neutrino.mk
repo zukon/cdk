@@ -13,9 +13,11 @@ $(targetprefix)/var/etc/.version:
 #
 #
 #
-NEUTRINO_DEPS  = bootstrap libcrypto libcurl libid3tag libmad libvorbisidec libpng libjpeg libgif libfreetype
+NEUTRINO_DEPS  = bootstrap libcrypto libcurl libpng libjpeg libgif libfreetype
 NEUTRINO_DEPS += ffmpeg lua libdvbsipp libsigc libopenthreads libusb libalsa
 NEUTRINO_DEPS += $(EXTERNALLCD_DEP)
+
+NEUTRINO_DEPS2 = libid3tag libmad libvorbisidec
 
 N_CFLAGS   = -Wall -W -Wshadow -pipe -Os -fno-strict-aliasing -funsigned-char
 N_CFLAGS  += -D__user=
@@ -273,7 +275,7 @@ yaud-neutrino-mp-martii-github: yaud-none lirc \
 #
 NEUTRINO_MP_MARTII_GH_PATCHES =
 
-$(D)/neutrino-mp-martii-github.do_prepare: | $(NEUTRINO_DEPS) libstb-hal-github
+$(D)/neutrino-mp-martii-github.do_prepare: | $(NEUTRINO_DEPS) $(NEUTRINO_DEPS2) libstb-hal-github
 	rm -rf $(sourcedir)/neutrino-mp-martii-github
 	rm -rf $(sourcedir)/neutrino-mp-martii-github.org
 	rm -rf $(N_OBJDIR)
@@ -429,7 +431,7 @@ libstb-hal-distclean:
 #
 NEUTRINO_MP_PATCHES =
 
-$(D)/neutrino-mp.do_prepare: | $(NEUTRINO_DEPS) libstb-hal
+$(D)/neutrino-mp.do_prepare: | $(NEUTRINO_DEPS)  $(NEUTRINO_DEPS2) libstb-hal
 	rm -rf $(sourcedir)/neutrino-mp
 	rm -rf $(sourcedir)/neutrino-mp.org
 	[ -d "$(archivedir)/neutrino-mp.git" ] && \
@@ -674,7 +676,7 @@ yaud-neutrino-hd2-exp: yaud-none lirc \
 #
 NEUTRINO_HD2_PATCHES =
 
-$(D)/neutrino-hd2-exp.do_prepare: | $(NEUTRINO_DEPS) $(MEDIAFW_DEP) libflac
+$(D)/neutrino-hd2-exp.do_prepare: | $(NEUTRINO_DEPS) $(NEUTRINO_DEPS2) $(MEDIAFW_DEP) libflac
 	rm -rf $(sourcedir)/nhd2-exp
 	rm -rf $(sourcedir)/nhd2-exp.org
 	[ -d "$(archivedir)/neutrino-hd2-exp.svn" ] && \
