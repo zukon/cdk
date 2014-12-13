@@ -36,7 +36,7 @@ $(D)/libbluray: $(D)/bootstrap @DEPENDS_libbluray@
 
 #
 # lua
-# BUILDMODE=dynamic
+#
 $(D)/lua: $(D)/bootstrap $(D)/libncurses $(archivedir)/luaposix.git @DEPENDS_lua@
 	@PREPARE_lua@
 	cd @DIR_lua@ && \
@@ -44,7 +44,7 @@ $(D)/lua: $(D)/bootstrap $(D)/libncurses $(archivedir)/luaposix.git @DEPENDS_lua
 		cd luaposix.git/ext; cp posix/posix.c include/lua52compat.h ../../src/; cd ../..; \
 		sed -i 's/<config.h>/"config.h"/' src/posix.c; \
 		sed -i '/^#define/d' src/lua52compat.h; \
-		$(MAKE) linux CC=$(target)-gcc LDFLAGS="-L$(targetprefix)/usr/lib" PKG_VERSION=5.2.3 && \
+		$(MAKE) linux CC=$(target)-gcc LDFLAGS="-L$(targetprefix)/usr/lib" BUILDMODE=dynamic PKG_VERSION=5.2.3 && \
 		@INSTALL_lua@
 	@CLEANUP_lua@
 	touch $@
