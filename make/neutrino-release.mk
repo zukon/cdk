@@ -819,6 +819,9 @@ endif
 	cp $(targetprefix)/usr/local/bin/neutrino $(prefix)/release/usr/local/bin/
 	cp $(targetprefix)/usr/local/bin/pzapit $(prefix)/release/usr/local/bin/
 	cp $(targetprefix)/usr/local/bin/sectionsdcontrol $(prefix)/release/usr/local/bin/
+	if [ -e $(targetprefix)/usr/local/bin/luaclient ]; then \
+		cp $(targetprefix)/usr/local/bin/luaclient $(prefix)/release/bin/; \
+	fi
 	if [ -e $(targetprefix)/usr/local/bin/rcsim ]; then \
 		cp $(targetprefix)/usr/local/bin/rcsim $(prefix)/release/bin/; \
 	fi
