@@ -977,51 +977,55 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpe
 			--enable-decoder=h263 \
 			--enable-decoder=h263i \
 			--enable-decoder=h264 \
-			--enable-decoder=text \
-			--enable-decoder=srt \
-			--enable-decoder=subrip \
-			--enable-decoder=subviewer \
-			--enable-decoder=subviewer1 \
-			--enable-decoder=xsub \
-			--enable-decoder=pgssub \
 			--enable-decoder=mjpeg \
 			--enable-decoder=mp3 \
 			--enable-decoder=mpeg1video \
 			--enable-decoder=mpeg2video \
+			--enable-decoder=msmpeg4v1 \
+			--enable-decoder=msmpeg4v2 \
+			--enable-decoder=msmpeg4v3 \
+			--enable-decoder=pcm_s16le \
+			--enable-decoder=pcm_s16be \
+			--enable-decoder=pcm_s16le_planar \
+			--enable-decoder=pcm_s16be_planar \
+			--enable-decoder=pgssub \
 			--enable-decoder=png \
+			--enable-decoder=srt \
+			--enable-decoder=subrip \
+			--enable-decoder=subviewer \
+			--enable-decoder=subviewer1 \
+			--enable-decoder=text \
 			--enable-decoder=theora \
 			--enable-decoder=vorbis \
 			--enable-decoder=wmv3 \
-			--enable-decoder=pcm_s16le \
-			--enable-decoder=pcm_s16le_planar \
+			--enable-decoder=xsub \
 			\
 			--disable-demuxers \
-			--enable-demuxer=mjpeg \
 			--enable-demuxer=aac \
 			--enable-demuxer=ac3 \
 			--enable-demuxer=avi \
-			--enable-demuxer=mov \
+			--enable-demuxer=dts \
+			--enable-demuxer=flac \
+			--enable-demuxer=flv \
+			--enable-demuxer=hds \
+			--enable-demuxer=hls \
 			--enable-demuxer=image* \
-			--enable-demuxer=vc1 \
+			--enable-demuxer=matroska \
+			--enable-demuxer=mjpeg \
+			--enable-demuxer=mov \
+			--enable-demuxer=mp3 \
 			--enable-demuxer=mpegts \
 			--enable-demuxer=mpegtsraw \
 			--enable-demuxer=mpegps \
 			--enable-demuxer=mpegvideo \
-			--enable-demuxer=wav \
-			--enable-demuxer=mp3 \
+			--enable-demuxer=ogg \
 			--enable-demuxer=pcm_s16be \
 			--enable-demuxer=pcm_s16le \
-			--enable-demuxer=matroska \
-			--enable-demuxer=flv \
 			--enable-demuxer=rm \
 			--enable-demuxer=rtsp \
-			--enable-demuxer=hds \
-			--enable-demuxer=hls \
-			--enable-demuxer=dts \
-			--enable-demuxer=wav \
-			--enable-demuxer=ogg \
-			--enable-demuxer=flac \
 			--enable-demuxer=srt \
+			--enable-demuxer=vc1 \
+			--enable-demuxer=wav \
 			\
 			--disable-protocols \
 			--enable-protocol=file \
@@ -1044,13 +1048,13 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpe
 			--enable-bzlib \
 			--enable-zlib \
 			$(FFMPEG_EXTRA) \
-			--enable-cross-compile \
 			--disable-static \
 			--enable-shared \
 			--enable-small \
 			--enable-stripping \
 			--disable-debug \
 			--disable-runtime-cpudetect \
+			--enable-cross-compile \
 			--cross-prefix=$(target)- \
 			--extra-cflags="-I$(targetprefix)/usr/include" \
 			--extra-ldflags="-L$(targetprefix)/usr/lib" \
