@@ -212,7 +212,7 @@ CUBEREVO250HDPATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-cuberevo_250hd_setup_stm24$(PATCH_STR).patch \
 		linux-sh4-i2c-st40-pio_stm24$(PATCH_STR).patch \
 		linux-sh4-cuberevo_rtl8201_stm24$(PATCH_STR).patch \
-		$(if $(P0215),linux-sh4-$(CUBEREVO_250HD)_sound_stm24$(PATCH_STR).patch)
+		$(if $(P0215),linux-sh4-cuberevo_250hd_sound_stm24$(PATCH_STR).patch)
 
 CUBEREVO2000HDPATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-cuberevo_2000hd_setup_stm24$(PATCH_STR).patch \
