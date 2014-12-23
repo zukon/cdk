@@ -969,6 +969,7 @@ TUXBOX_RULES_MAKE(zd1211)
 TUXBOX_RULES_MAKE(wpa_supplicant)
 TUXBOX_RULES_MAKE(ethtool)
 TUXBOX_RULES_MAKE(xupnpd)
+TUXBOX_RULES_MAKE(udpxy)
 
 #
 # localmacros

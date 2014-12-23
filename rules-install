@@ -234,6 +234,7 @@ wireless_tools;make:install:INSTALL_MAN=TARGETS/usr/share/man:PREFIX=TARGETS/usr
 wpa_supplicant;make:install:DESTDIR=TARGETS
 ethtool;make:install:DESTDIR=TARGETS
 xupnpd;make:install:DESTDIR=TARGETS
+udpxy;make:install:INSTALLROOT=TARGETS
 
 
 >>?;rules-install-local
