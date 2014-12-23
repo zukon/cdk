@@ -1150,6 +1150,14 @@ endif
 	fi
 
 #
+# udpxy
+#
+	if [ -e $(targetprefix)/usr/bin/udpxy ]; then \
+		cp -f $(targetprefix)/usr/bin/udpxy $(prefix)/release/usr/bin; \
+		cp -a $(targetprefix)/usr/bin/udpxrec $(prefix)/release/usr/bin; \
+	fi
+
+#
 # minidlna
 #
 	if [ -e $(targetprefix)/usr/sbin/minidlnad ]; then \
