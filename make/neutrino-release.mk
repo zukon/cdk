@@ -590,7 +590,6 @@ release_neutrino_base:
 	$(INSTALL_DIR) $(prefix)/release/etc/{init.d,network,mdev} && \
 	$(INSTALL_DIR) $(prefix)/release/etc/network/{if-down.d,if-post-down.d,if-pre-up.d,if-up.d} && \
 	$(INSTALL_DIR) $(prefix)/release/lib/{modules,udev,firmware} && \
-	$(INSTALL_DIR) $(prefix)/release/hdd/{movie,music,picture} && \
 	$(INSTALL_DIR) $(prefix)/release/media/{dvd,nfs,usb} && \
 	ln -sf /hdd $(prefix)/release/media/hdd && \
 	$(INSTALL_DIR) $(prefix)/release/mnt/{hdd,nfs,usb} && \
