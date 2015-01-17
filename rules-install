@@ -52,7 +52,7 @@ pixman;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libpixman-1.
 #
 # Multimedia Libraries and Drivers
 #
-libalsa;rewrite-pkgconfig:utils/alsa.pc;make:install;rewrite-libtool:TARGETS/usr/lib/libasound.la
+libalsa;rewrite-pkgconfig:utils/alsa.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libasound.la
 alsautils;make:install:DESTDIR=TARGETS
 libflac;rewrite-pkgconfig:src/libFLAC/flac.pc:src/libFLAC++/flac++.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libFLAC.la:TARGETS/usr/lib/libFLAC++.la
 a52dec;make:install:DESTDIR=TARGETS

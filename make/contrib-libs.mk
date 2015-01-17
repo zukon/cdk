@@ -2115,7 +2115,7 @@ $(D)/libalsa: $(D)/bootstrap @DEPENDS_libalsa@
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix=$(targetprefix)/usr \
+			--prefix=/usr \
 			--without-debug \
 			--with-debug=no \
 			--disable-aload \
