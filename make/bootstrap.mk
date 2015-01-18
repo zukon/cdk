@@ -65,23 +65,16 @@ $(archivedir)/stlinux24-sh4-libstdc++-dev-$(LIBGCC_VER).sh4.rpm
 crosstool: directories \
 $(hostprefix)/bin/unpack-rpm.sh \
 crosstool-rpminstall
-	set -e; cd $(crossprefix); rm -f sh4-linux/sys-root; ln -s ../target sh4-linux/sys-root
-	if test -e $(crossprefix)/$(target)/sys-root/usr/lib/libstdc++.so; then \
-		cp -a $(crossprefix)/$(target)/sys-root/usr/lib/libstdc++.s*[!y] $(targetprefix)/lib; \
+	if test -e $(crossprefix)/target/usr/lib/libstdc++.so; then \
+		cp -a $(crossprefix)/target/usr/lib/libstdc++.s*[!y] $(targetprefix)/lib; \
 	fi
-	if test -e $(crossprefix)/$(target)/sys-root/lib; then \
-		cp -a $(crossprefix)/$(target)/sys-root/lib/*so* $(targetprefix)/lib; \
-	else \
-		cp -a $(crossprefix)/$(target)/lib/*so* $(targetprefix)/lib; \
+	if test -e $(crossprefix)/target/lib; then \
+		cp -a $(crossprefix)/target/lib/*so* $(targetprefix)/lib; \
 	fi
-	if test -e $(crossprefix)/$(target)/sys-root/sbin/ldconfig; then \
-		cp -a $(crossprefix)/$(target)/sys-root/sbin/ldconfig $(targetprefix)/sbin; \
-		cp -a $(crossprefix)/$(target)/sys-root/etc/ld.so.conf $(targetprefix)/etc; \
-		cp -a $(crossprefix)/$(target)/sys-root/etc/host.conf $(targetprefix)/etc; \
-	elif test -e $(crossprefix)/$(target)/sbin/ldconfig; then \
-		cp -a $(crossprefix)/$(target)/sbin/ldconfig $(targetprefix)/sbin/; \
-		mkdir -p $(targetprefix)/etc; \
-		touch $(targetprefix)/etc/ld.so.conf; \
+	if test -e $(crossprefix)/target/sbin/ldconfig; then \
+		cp -a $(crossprefix)/target/sbin/ldconfig $(targetprefix)/sbin; \
+		cp -a $(crossprefix)/target/etc/ld.so.conf $(targetprefix)/etc; \
+		cp -a $(crossprefix)/target/etc/host.conf $(targetprefix)/etc; \
 	fi
 	touch .deps/$@
 
