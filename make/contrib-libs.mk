@@ -905,7 +905,7 @@ FFMPEG_EXTRA = --disable-iconv
 LIBXML2 = libxml2
 endif
 
-$(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(D)/libfdk_aac $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpeg@
+$(D)/ffmpeg: $(D)/bootstrap $(D)/libcrypto $(D)/libass $(D)/libfdk_aac $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpeg@
 	@PREPARE_ffmpeg@
 	cd @DIR_ffmpeg@ && \
 		$(BUILDENV) \
@@ -1068,6 +1068,7 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(D)/libfdk_aac $(LIBXML2) $(LIBRTMPDUMP
 			--disable-static \
 			--enable-gpl \
 			--enable-nonfree \
+			--enable-openssl \
 			--enable-libfdk-aac \
 			--enable-decoder=libfdk_aac \
 			--enable-shared \
