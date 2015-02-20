@@ -105,7 +105,7 @@ libdvbsi++-0.3.7.tar.bz2;http://www.saftware.de/libdvbsi++
 libmodplug-0.8.8.4.tar.gz;http://downloads.sourceforge.net/project/modplug-xmms/libmodplug/0.8.8.4
 lzo-2.06.tar.gz;http://www.oberhumer.com/opensource/lzo/download
 yajl.git;git://github.com/lloyd/yajl;f4b2b1af87483caac60e50e5352fc783d9b2de2d
-pcre-8.30.tar.bz2;http://ftp.csx.cam.ac.uk/pub/software/programming/pcre
+pcre-8.30.tar.bz2;http://sourceforge.net/projects/pcre/files/pcre/8.30
 libcdio-0.83.tar.gz;http://ftp.gnu.org/gnu/libcdio
 jasper-1.900.1.zip;http://www.ece.uvic.ca/~frodo/jasper/software
 mysql-5.1.40.tar.gz;http://downloads.mysql.com/archives/mysql-5.1
