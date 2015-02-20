@@ -104,6 +104,7 @@ cairo;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libcairo.la;r
 libexpat;rewrite-pkgconfig:expat.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libexpat.la
 libxmlccwrap;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libxmlccwrap.la
 ffmpeg;rewrite-pkgconfig:libavcodec/libavcodec.pc:libavdevice/libavdevice.pc:libavfilter/libavfilter.pc:libavformat/libavformat.pc:libavutil/libavutil.pc:libswresample/libswresample.pc:libswscale/libswscale.pc;make:install:DESTDIR=TARGETS
+libfdk_aac;rewrite-pkgconfig:fdk-aac.pc;make:install:DESTDIR=TARGETS;rewrite-libtool:TARGETS/usr/lib/libfdk-aac.la
 libcap;make:install:DESTDIR=TARGETS
 evebrowser;make:install:DESTDIR=TARGETS
 brofs;make:install:DESTDIR=TARGETS/usr/bin

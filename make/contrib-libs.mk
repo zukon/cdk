@@ -55,7 +55,7 @@ $(D)/lua: $(D)/bootstrap $(D)/libncurses $(archivedir)/luaposix.git @DEPENDS_lua
 $(D)/luacurl: $(D)/bootstrap $(D)/lua @DEPENDS_luacurl@
 	@PREPARE_luacurl@
 	[ -d "$(archivedir)/luacurl.git" ] && \
-	(cd $(archivedir)/luacurl.git; git pull ; cd "$(buildprefix)";); \
+	(cd $(archivedir)/luacurl.git; git pull; cd "$(buildprefix)";); \
 	cd @DIR_luacurl@ && \
 		sed -i -e "s/lua_strlen/lua_rawlen/g" -e "s/luaL_reg/luaL_Reg/g" luacurl.c && \
 		$(target)-gcc -I$(targetprefix)/usr/include -fPIC -shared -s -o $(targetprefix)/usr/lib/lua/5.2/luacurl.so luacurl.c -L$(targetprefix)/usr/lib -lcurl
@@ -854,7 +854,7 @@ $(D)/libdvdread: $(D)/bootstrap @DEPENDS_libdvdread@
 $(D)/libdreamdvd: $(D)/bootstrap $(D)/libdvdnav @DEPENDS_libdreamdvd@
 	@PREPARE_libdreamdvd@
 	[ -d "$(archivedir)/libdreamdvd.git" ] && \
-	(cd $(archivedir)/libdreamdvd.git; git pull ; cd "$(buildprefix)";); \
+	(cd $(archivedir)/libdreamdvd.git; git pull; cd "$(buildprefix)";); \
 	cd @DIR_libdreamdvd@ && \
 		aclocal && \
 		autoheader && \
@@ -873,6 +873,27 @@ $(D)/libdreamdvd: $(D)/bootstrap $(D)/libdvdnav @DEPENDS_libdreamdvd@
 	touch $@
 
 #
+# fdk-aac
+#
+$(D)/libfdk_aac: $(D)/bootstrap @DEPENDS_libfdk_aac@
+	@PREPARE_libfdk_aac@
+	[ -d "$(archivedir)/fdk-aac.git" ] && \
+	(cd $(archivedir)/fdk-aac.git; git pull; cd "$(buildprefix)";); \
+	cd @DIR_libfdk_aac@ && \
+		./autogen.sh \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--disable-shared \
+			--prefix=/usr \
+		&& \
+		$(MAKE) && \
+		@INSTALL_libfdk_aac@
+	@CLEANUP_libfdk_aac@
+	touch $@
+
+#
 # ffmpeg
 #
 if ENABLE_ENIGMA2
@@ -884,7 +905,7 @@ FFMPEG_EXTRA = --disable-iconv
 LIBXML2 = libxml2
 endif
 
-$(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpeg@
+$(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(D)/libfdk_aac $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpeg@
 	@PREPARE_ffmpeg@
 	cd @DIR_ffmpeg@ && \
 		$(BUILDENV) \
@@ -941,8 +962,6 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpe
 			--enable-muxer=ogg \
 			\
 			--disable-parsers \
-			--enable-parser=aac \
-			--enable-parser=aac_latm \
 			--enable-parser=ac3 \
 			--enable-parser=dca \
 			--enable-parser=dvbsub \
@@ -957,7 +976,6 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpe
 			--enable-parser=vorbis \
 			\
 			--disable-encoders \
-			--enable-encoder=aac \
 			--enable-encoder=h261 \
 			--enable-encoder=h263 \
 			--enable-encoder=h263p \
@@ -968,7 +986,6 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpe
 			--enable-encoder=png \
 			\
 			--disable-decoders \
-			--enable-decoder=aac \
 			--enable-decoder=dca \
 			--enable-decoder=dvbsub \
 			--enable-decoder=dvdsub \
@@ -1001,7 +1018,6 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpe
 			--enable-decoder=xsub \
 			\
 			--disable-demuxers \
-			--enable-demuxer=aac \
 			--enable-demuxer=ac3 \
 			--enable-demuxer=avi \
 			--enable-demuxer=dts \
@@ -1022,6 +1038,7 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpe
 			--enable-demuxer=pcm_s16be \
 			--enable-demuxer=pcm_s16le \
 			--enable-demuxer=rm \
+			--enable-demuxer=rtp \
 			--enable-demuxer=rtsp \
 			--enable-demuxer=srt \
 			--enable-demuxer=vc1 \
@@ -1049,6 +1066,10 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpe
 			--enable-zlib \
 			$(FFMPEG_EXTRA) \
 			--disable-static \
+			--enable-gpl \
+			--enable-nonfree \
+			--enable-libfdk-aac \
+			--enable-decoder=libfdk_aac \
 			--enable-shared \
 			--enable-small \
 			--enable-stripping \
@@ -1940,7 +1961,7 @@ $(D)/gst_plugins_dvbmediasink: $(D)/bootstrap $(D)/gstreamer $(D)/gst_plugins_ba
 $(D)/graphlcd: $(D)/bootstrap $(D)/libfreetype $(D)/libusb @DEPENDS_graphlcd@
 	@PREPARE_graphlcd@
 	[ -d "$(archivedir)/graphlcd-base-touchcol.git" ] && \
-	(cd $(archivedir)/graphlcd-base-touchcol.git; git pull ; git checkout touchcol; cd "$(buildprefix)";); \
+	(cd $(archivedir)/graphlcd-base-touchcol.git; git pull; git checkout touchcol; cd "$(buildprefix)";); \
 	cd @DIR_graphlcd@ && \
 		export TARGET=$(target)- && \
 		export LDFLAGS="-L$(targetprefix)/usr/lib -Wl,-rpath-link,$(targetprefix)/usr/lib" && \
@@ -2160,7 +2181,7 @@ $(D)/alsautils: $(D)/bootstrap @DEPENDS_alsautils@
 $(D)/libopenthreads: $(D)/bootstrap @DEPENDS_libopenthreads@
 	@PREPARE_libopenthreads@
 	[ -d "$(archivedir)/cst-public-libraries-openthreads.git" ] && \
-	(cd $(archivedir)/cst-public-libraries-openthreads.git; git pull ; cd "$(buildprefix)";); \
+	(cd $(archivedir)/cst-public-libraries-openthreads.git; git pull; cd "$(buildprefix)";); \
 	[ -d "$(archivedir)/cst-public-libraries-openthreads.git" ] || \
 	git clone --recursive git://c00lstreamtech.de/cst-public-libraries-openthreads.git $(archivedir)/cst-public-libraries-openthreads.git; \
 	cp -ra $(archivedir)/cst-public-libraries-openthreads.git $(buildprefix)/openthreads; \
@@ -2185,7 +2206,7 @@ $(D)/libopenthreads: $(D)/bootstrap @DEPENDS_libopenthreads@
 $(D)/librtmpdump: $(D)/bootstrap $(D)/libcrypto $(D)/libz @DEPENDS_librtmpdump@
 	@PREPARE_librtmpdump@
 	[ -d "$(archivedir)/rtmpdump.git" ] && \
-	(cd $(archivedir)/rtmpdump.git; git pull ; cd "$(buildprefix)";); \
+	(cd $(archivedir)/rtmpdump.git; git pull; cd "$(buildprefix)";); \
 	cd @DIR_librtmpdump@ && \
 		$(BUILDENV) \
 		make CROSS_COMPILE=$(target)- && \
