@@ -239,7 +239,8 @@ SAGEMCOM88PATCHES_24 = $(COMMONPATCHES_24) \
 ARIVALINK200PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-arivalink200_setup_stm24$(PATCH_STR).patch \
 		linux-sh4-i2c-st40-pio_stm24$(PATCH_STR).patch \
-		linux-sh4-ipbox_bdinfo_stm24$(PATCH_STR).patch
+		linux-sh4-ipbox_bdinfo_stm24$(PATCH_STR).patch \
+		linux-sh4-ipbox_dvb_ca_stm24$(PATCH_STR).patch
 
 FORTIS_DP7000PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-fortis_dp7000_setup_stm24$(PATCH_STR).patch
