@@ -641,6 +641,7 @@ release_enigma2_arivalink200: release_enigma2_common_utils
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-stx7109c3.ko $(prefix)/release/lib/modules/
 	cp $(targetprefix)/boot/video_7109.elf $(prefix)/release/boot/video.elf
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/*.ko $(prefix)/release/lib/modules/
+
 	rm -f $(prefix)/release/lib/firmware/dvb-fe-{avl2108,cx21143,stv6306}.fw
 	cp -p $(targetprefix)/usr/sbin/lircd $(prefix)/release/usr/bin/
 	cp -p $(targetprefix)/usr/sbin/lircmd $(prefix)/release/usr/bin/
@@ -649,6 +650,9 @@ release_enigma2_arivalink200: release_enigma2_common_utils
 	cp -p $(targetprefix)/usr/bin/irsend $(prefix)/release/usr/bin/
 	cp -p $(targetprefix)/usr/bin/irw $(prefix)/release/usr/bin/
 	mkdir -p $(prefix)/release/var/run/lirc
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/dvbt/as102/dvb-as102.ko $(prefix)/release/lib/modules/
+	cp $(buildprefix)/root/firmware/as102_data1_st.hex $(prefix)/release/lib/firmware/
+	cp $(buildprefix)/root/firmware/as102_data2_st.hex $(prefix)/release/lib/firmware/
 
 #
 # release_FORTIS_DP7000
