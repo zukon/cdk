@@ -149,7 +149,7 @@ SPARK_PATCHES_24 = $(COMMONPATCHES_24) \
 		$(if $(P0209),linux-sh4-lirc_stm.patch) \
 		$(if $(P0211)$(P0214)$(P0215),linux-sh4-lirc_stm_stm24$(PATCH_STR).patch) \
 		$(if $(P0211)$(P0214)$(P0215),linux-sh4-spark-af901x-NXP-TDA18218.patch) \
-		linux-sh4-spark-dvb-as102.patch
+		linux-sh4-USB-dvbT-as102.patch
 
 SPARK7162_PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
@@ -240,7 +240,8 @@ ARIVALINK200PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-arivalink200_setup_stm24$(PATCH_STR).patch \
 		linux-sh4-i2c-st40-pio_stm24$(PATCH_STR).patch \
 		linux-sh4-ipbox_bdinfo_stm24$(PATCH_STR).patch \
-		linux-sh4-ipbox_dvb_ca_stm24$(PATCH_STR).patch
+		linux-sh4-ipbox_dvb_ca_stm24$(PATCH_STR).patch \
+		linux-sh4-USB-dvbT-as102.patch
 
 FORTIS_DP7000PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-fortis_dp7000_setup_stm24$(PATCH_STR).patch
