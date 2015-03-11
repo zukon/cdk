@@ -946,9 +946,8 @@ endif
 	if [ -e $(targetprefix)/usr/bin/hotplug_e2_helper ]; then \
 		cp -dp $(targetprefix)/usr/bin/hotplug_e2_helper $(prefix)/release/sbin/hotplug; \
 		cp -dp $(targetprefix)/usr/bin/bdpoll $(prefix)/release/sbin/; \
-		rm -f $(prefix)/release/bin/hotplug; \
 	else \
-		cp -dp $(targetprefix)/bin/hotplug $(prefix)/release/sbin/; \
+		cp -dp $(targetprefix)/sbin/hotplug $(prefix)/release/sbin/; \
 	fi
 
 #
