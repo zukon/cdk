@@ -85,6 +85,7 @@ libvorbisidec;1.0.2+svn18153;libvorbisidec-1.0.2+svn18153;libvorbisidec_1.0.2+sv
 libcrypto;0.9.8zc;openssl-0.9.8zc;openssl-0.9.8zc.tar.gz;extract:openssl-0.9.8zc.tar.gz;patch:openssl-0.9.8.patch;patch:openssl-0.9.8-parallel-build.patch
 lua;5.2.3;lua-5.2.3;lua-5.2.3.tar.gz;extract:lua-5.2.3.tar.gz;patch:lua-5.2.3-luaposix-31.patch
 luacurl;1.2;luacurl-1.2;luacurl.git;extract:luacurl.git
+luacurl2;v3;luacurl-v3;luacurl2.git;extract:luacurl2.git
 luaexpat;1.3.0;luaexpat-1.3.0;luaexpat-1.3.0.tar.gz;extract:luaexpat-1.3.0.tar.gz;patch:luaexpat-1.3.0.patch
 howl;1.0.0;howl-1.0.0;howl-1.0.0.tar.gz;extract:howl-1.0.0.tar.gz
 libopenthreads;1.00;openthreads;;

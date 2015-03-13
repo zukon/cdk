@@ -63,6 +63,22 @@ $(D)/luacurl: $(D)/bootstrap $(D)/lua @DEPENDS_luacurl@
 	touch $@
 
 #
+# luacurl2
+#
+$(D)/luacurl2: $(D)/bootstrap $(D)/libcurl $(D)/lua @DEPENDS_luacurl2@
+	@PREPARE_luacurl2@
+	[ -d "$(archivedir)/luacurl2.git" ] && \
+	(cd $(archivedir)/luacurl2.git; git pull ; cd "$(buildprefix)";); \
+	cd @DIR_luacurl2@ && \
+		$(MAKE) CC=$(target)-gcc LDFLAGS="-L$(targetprefix)/usr/lib" \
+			LIBDIR=$(targetprefix)/usr/lib \
+			LUA_INC=$(targetprefix)/usr/include \
+		&& \
+		@INSTALL_luacurl2@
+	@CLEANUP_luacurl2@
+	touch $@
+
+#
 # luaexpat
 #
 $(D)/luaexpat: $(D)/bootstrap $(D)/lua $(D)/libexpat @DEPENDS_luaexpat@

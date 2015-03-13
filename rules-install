@@ -76,6 +76,7 @@ libvorbisidec;make:install:DESTDIR=TARGETS;install:-m644:vorbisidec.pc:TARGETS/u
 libcrypto;rewrite-pkgconfig:libcrypto.pc:libssl.pc:openssl.pc;make:install_sw:INSTALL_PREFIX=TARGETS
 lua;make:install:INSTALL_TOP=TARGETS/usr
 luacurl;make:install:DESTDIR=TARGETS/usr
+luacurl2;make:install:DESTDIR=TARGETS:LUA_CMOD=/usr/lib/lua/5.2:LUA_LMOD=/usr/share/lua/5.2
 luaexpat;make:install:DESTDIR=TARGETS/usr
 howl;rewrite-pkgconfig:howl.pc;make:install:prefix=TARGETS/usr;rewrite-libtool:TARGETS/usr/lib/libhowl.la:TARGETS/usr/lib/libhowl.la
 libopenthreads;rewrite-pkgconfig:packaging/pkgconfig/openthreads.pc;make:install:DESTDIR=TARGETS/usr
