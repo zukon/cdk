@@ -32,3 +32,17 @@ index 7fa8bcc..5f9d9fc 100644
      n = 1 << s->mdct_bits;
      n2 = n >> 1;
      n4 = n >> 2;
+diff --git a/libavcodec/aacps.c b/libavcodec/aacps.c
+index ea5a5d2..79ae203 100644
+--- a/libavcodec/aacps.c
++++ b/libavcodec/aacps.c
+@@ -626,7 +626,7 @@ static void map_val_20_to_34(float par[PS_MAX_NR_IIDICC])
+     par[ 1] = (par[ 0] + par[ 1]) * 0.5f;
+ }
+ 
+-static void decorrelation(PSContext *ps, float (*out)[32][2], const float (*s)[32][2], int is34)
++static void __attribute__((optimize(0))) decorrelation(PSContext *ps, float (*out)[32][2], const float (*s)[32][2], int is34)
+ {
+     LOCAL_ALIGNED_16(float, power, [34], [PS_QMF_TIME_SLOTS]);
+     LOCAL_ALIGNED_16(float, transient_gain, [34], [PS_QMF_TIME_SLOTS]);
+
