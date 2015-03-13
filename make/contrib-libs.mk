@@ -905,10 +905,9 @@ FFMPEG_EXTRA = --disable-iconv
 LIBXML2 = libxml2
 endif
 
-$(D)/ffmpeg: $(D)/bootstrap $(D)/libcrypto $(D)/libass $(D)/libfdk_aac $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpeg@
+$(D)/ffmpeg: $(D)/bootstrap $(D)/libcrypto $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpeg@
 	@PREPARE_ffmpeg@
 	cd @DIR_ffmpeg@ && \
-		$(BUILDENV) \
 		./configure \
 			--disable-ffserver \
 			--disable-ffplay \
@@ -962,6 +961,8 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libcrypto $(D)/libass $(D)/libfdk_aac $(LIBXML2
 			--enable-muxer=ogg \
 			\
 			--disable-parsers \
+			--enable-parser=aac \
+			--enable-parser=aac_latm \
 			--enable-parser=ac3 \
 			--enable-parser=dca \
 			--enable-parser=dvbsub \
@@ -976,6 +977,7 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libcrypto $(D)/libass $(D)/libfdk_aac $(LIBXML2
 			--enable-parser=vorbis \
 			\
 			--disable-encoders \
+			--enable-encoder=aac \
 			--enable-encoder=h261 \
 			--enable-encoder=h263 \
 			--enable-encoder=h263p \
@@ -986,6 +988,7 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libcrypto $(D)/libass $(D)/libfdk_aac $(LIBXML2
 			--enable-encoder=png \
 			\
 			--disable-decoders \
+			--enable-decoder=aac \
 			--enable-decoder=dca \
 			--enable-decoder=dvbsub \
 			--enable-decoder=dvdsub \
@@ -1018,6 +1021,7 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libcrypto $(D)/libass $(D)/libfdk_aac $(LIBXML2
 			--enable-decoder=xsub \
 			\
 			--disable-demuxers \
+			--enable-demuxer=aac \
 			--enable-demuxer=ac3 \
 			--enable-demuxer=avi \
 			--enable-demuxer=dts \
@@ -1059,6 +1063,7 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libcrypto $(D)/libass $(D)/libfdk_aac $(LIBXML2
 			--disable-filters \
 			--enable-filter=scale \
 			\
+			--disable-postproc \
 			--disable-bsfs \
 			--disable-indevs \
 			--disable-outdevs \
@@ -1066,11 +1071,7 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libcrypto $(D)/libass $(D)/libfdk_aac $(LIBXML2
 			--enable-zlib \
 			$(FFMPEG_EXTRA) \
 			--disable-static \
-			--enable-gpl \
-			--enable-nonfree \
 			--enable-openssl \
-			--enable-libfdk-aac \
-			--enable-decoder=libfdk_aac \
 			--enable-shared \
 			--enable-small \
 			--enable-stripping \
@@ -1078,8 +1079,8 @@ $(D)/ffmpeg: $(D)/bootstrap $(D)/libcrypto $(D)/libass $(D)/libfdk_aac $(LIBXML2
 			--disable-runtime-cpudetect \
 			--enable-cross-compile \
 			--cross-prefix=$(target)- \
-			--extra-cflags="-I$(targetprefix)/usr/include" \
-			--extra-ldflags="-L$(targetprefix)/usr/lib" \
+			--extra-cflags="-I$(targetprefix)/usr/include -ffunction-sections -fdata-sections" \
+			--extra-ldflags="-L$(targetprefix)/usr/lib -Wl,--gc-sections,-lrt" \
 			--target-os=linux \
 			--arch=sh4 \
 			--prefix=/usr \
