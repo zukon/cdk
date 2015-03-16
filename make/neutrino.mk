@@ -166,12 +166,12 @@ libstb-hal-cst-next-distclean:
 #
 # neutrino-mp-github-cst-next
 #
-yaud-neutrino-mp-github-cst-next: yaud-none lirc \
-		boot-elf neutrino-mp-github-next-cst release_neutrino
+yaud-neutrino-mp-cst-next: yaud-none lirc \
+		boot-elf neutrino-mp-next-cst release_neutrino
 	@TUXBOX_YAUD_CUSTOMIZE@
 
-yaud-neutrino-mp-github-cst-next-plugins: yaud-none lirc \
-		boot-elf neutrino-mp-github-cst-next neutrino-mp-plugins release_neutrino
+yaud-neutrino-mp-cst-next-plugins: yaud-none lirc \
+		boot-elf neutrino-mp-cst-next neutrino-mp-plugins release_neutrino
 	@TUXBOX_YAUD_CUSTOMIZE@
 
 NEUTRINO_MP_CST_NEXT_PATCHES =
