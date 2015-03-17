@@ -534,7 +534,7 @@ $(D)/neutrino-hd2-exp.do_prepare: | $(NEUTRINO_DEPS) $(NEUTRINO_DEPS2) $(MEDIAFW
 	[ -d "$(archivedir)/neutrino-hd2-exp.git" ] && \
 	(cd $(archivedir)/neutrino-hd2-exp.git; git pull ; cd "$(buildprefix)";); \
 	[ -d "$(archivedir)/neutrino-hd2-exp.git" ] || \
-	https://github.com/mohousch/neutrinohd2.git $(archivedir)/neutrino-hd2-exp.git; \
+	git clone https://github.com/mohousch/neutrinohd2.git $(archivedir)/neutrino-hd2-exp.git; \
 	cp -ra $(archivedir)/neutrino-hd2-exp.git $(sourcedir)/nhd2-exp; \
 	(cd $(sourcedir)/nhd2-exp; git checkout nhd2-exp; cd "$(buildprefix)";); \
 	cp -ra $(sourcedir)/nhd2-exp $(sourcedir)/nhd2-exp.org
@@ -651,7 +651,7 @@ $(D)/neutrino-mp-tangos.config.status:
 			--with-gamesdir=/var/tuxbox/games \
 			--with-plugindir=/var/tuxbox/plugins \
 			--with-stb-hal-includes=$(sourcedir)/libstb-hal-cst-next/include \
-			--with-stb-hal-build=$(sourcedir)/libstb-hal-cst-next \
+			--with-stb-hal-build=$(LH_OBJDIR) \
 			PKG_CONFIG=$(hostprefix)/bin/$(target)-pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			CPPFLAGS="$(N_CPPFLAGS)"

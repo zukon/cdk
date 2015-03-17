@@ -67,11 +67,10 @@ NEUTRINO_HD2_PLUGINS_PATCHES =
 $(D)/nhd2-plugins.do_prepare:
 	rm -rf $(sourcedir)/nhd2-plugins
 	rm -rf $(sourcedir)/nhd2-plugins.org
-	[ -d "$(archivedir)/nhd2-plugins.git" ] && \
-	(cd $(archivedir)/nhd2-plugins.git; svn up ; cd "$(buildprefix)";); \
-	[ -d "$(archivedir)/nhd2-plugins.git" ] || \
-	svn co http://neutrinohd2.googlecode.com/svn/branches/plugins $(archivedir)/nhd2-plugins.git; \
-	cp -ra $(archivedir)/nhd2-plugins.git $(sourcedir)/nhd2-plugins; \
+	(cd $(archivedir)/neutrino-hd2-exp.git; git pull ; cd "$(buildprefix)";); \
+	[ -d "$(archivedir)/neutrino-hd2-exp.git" ] || \
+	git clone https://github.com/mohousch/neutrinohd2.git $(archivedir)/neutrino-hd2-exp.git; \
+	cp -ra $(archivedir)/neutrino-hd2-exp.git $(sourcedir)/nhd2-plugins; \
 	(cd $(sourcedir)/nhd2-plugins; git checkout plugins; cd "$(buildprefix)";); \
 	cp -ra $(sourcedir)/nhd2-plugins $(sourcedir)/nhd2-plugins.org
 	for i in $(NEUTRINO_HD2_PLUGINS_PATCHES); do \
