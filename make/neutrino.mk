@@ -108,7 +108,7 @@ libstb-hal-github-old-distclean:
 
 ################################################################################
 #
-# libstb-hal-github
+# libstb-hal-cst-next
 #
 NEUTRINO_MP_LIBSTB_CST_NEXT_PATCHES =
 
@@ -613,7 +613,7 @@ yaud-neutrino-mp-tangos-all: yaud-none lirc \
 #
 NEUTRINO_MP_TANGOS_PATCHES =
 
-$(D)/neutrino-mp-tangos.do_prepare: | $(NEUTRINO_DEPS) libstb-hal-github
+$(D)/neutrino-mp-tangos.do_prepare: | $(NEUTRINO_DEPS) libstb-hal-cst-next
 	rm -rf $(sourcedir)/neutrino-mp-tangos
 	rm -rf $(sourcedir)/neutrino-mp-tangos.org
 	rm -rf $(N_OBJDIR)
@@ -650,8 +650,8 @@ $(D)/neutrino-mp-tangos.config.status:
 			--with-configdir=/var/tuxbox/config \
 			--with-gamesdir=/var/tuxbox/games \
 			--with-plugindir=/var/tuxbox/plugins \
-			--with-stb-hal-includes=$(sourcedir)/libstb-hal-github/include \
-			--with-stb-hal-build=$(sourcedir)/libstb-hal-github \
+			--with-stb-hal-includes=$(sourcedir)/libstb-hal-cst-next/include \
+			--with-stb-hal-build=$(sourcedir)/libstb-hal-cst-next \
 			PKG_CONFIG=$(hostprefix)/bin/$(target)-pkg-config \
 			PKG_CONFIG_PATH=$(targetprefix)/usr/lib/pkgconfig \
 			CPPFLAGS="$(N_CPPFLAGS)"
@@ -659,8 +659,8 @@ $(D)/neutrino-mp-tangos.config.status:
 $(sourcedir)/neutrino-mp-tangos/src/gui/version.h:
 	@rm -f $@; \
 	echo '#define BUILT_DATE "'`date`'"' > $@
-	@if test -d $(sourcedir)/libstb-hal-github ; then \
-		pushd $(sourcedir)/libstb-hal-github ; \
+	@if test -d $(sourcedir)/libstb-hal-cst-next ; then \
+		pushd $(sourcedir)/libstb-hal-cst-next ; \
 		HAL_REV=$$(git log | grep "^commit" | wc -l) ; \
 		popd ; \
 		pushd $(sourcedir)/neutrino-mp-tangos ; \
