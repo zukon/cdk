@@ -11,7 +11,7 @@ $(D)/neutrino-mp-plugins.do_prepare:
 	[ -d "$(archivedir)/neutrino-mp-plugins.git" ] && \
 	(cd $(archivedir)/neutrino-mp-plugins.git; git pull; cd "$(buildprefix)";); \
 	[ -d "$(archivedir)/neutrino-mp-plugins.git" ] || \
-	git clone https://github.com/TangoCash/nmp-plugins.git $(archivedir)/neutrino-mp-plugins.git; \
+	git clone https://github.com/Duckbox-Developers/neutrino-mp-plugins.git $(archivedir)/neutrino-mp-plugins.git; \
 	cp -ra $(archivedir)/neutrino-mp-plugins.git $(sourcedir)/neutrino-mp-plugins;\
 	cp -ra $(sourcedir)/neutrino-mp-plugins $(sourcedir)/neutrino-mp-plugins.org
 	touch $@
