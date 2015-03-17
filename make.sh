@@ -7,7 +7,7 @@ if [ "$1" == -h ] || [ "$1" == --help ]; then
  echo "Parameter 4: player (1-2)"
  echo "Parameter 5: Media Framework (1-4)"
  echo "Parameter 6: External LCD support (1-2)"
- echo "Parameter 7: Image (Enigma=1/Neutrino=2) (1-2)"
+ echo "Parameter 7: Image (Neutrino=1/Enigma=2) (1-2)"
  exit
 fi
 
@@ -375,6 +375,7 @@ case "$IMAGE" in
 		--enable-neutrino*)
 		echo "  make yaud-neutrino-mp"
 		echo "  make yaud-neutrino-mp-next"
+		echo "  make yaud-neutrino-mp-cst-next"
 		echo "  make yaud-neutrino-hd2-exp";;
 		--enable-enigma2*)
 		echo "  make yaud-enigma2-pli-nightly";;
