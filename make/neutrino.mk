@@ -542,6 +542,7 @@ $(D)/neutrino-hd2-exp.do_prepare: | $(NEUTRINO_DEPS) $(NEUTRINO_DEPS2) $(MEDIAFW
 		echo "==> Applying Patch: $(subst $(PATCHES)/,'',$$i)"; \
 		cd $(sourcedir)/nhd2-exp && patch -p1 -i $$i; \
 	done;
+	touch $@
 
 $(sourcedir)/nhd2-exp/config.status:
 	cd $(sourcedir)/nhd2-exp && \
