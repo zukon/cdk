@@ -121,19 +121,19 @@ $(D)/libboost: $(D)/bootstrap @DEPENDS_libboost@
 	touch $@
 
 #
-# libz
+# zlib
 #
-$(D)/libz: $(D)/bootstrap @DEPENDS_libz@
-	@PREPARE_libz@
-	cd @DIR_libz@ && \
+$(D)/zlib: $(D)/bootstrap @DEPENDS_zlib@
+	@PREPARE_zlib@
+	cd @DIR_zlib@ && \
 		CC=$(target)-gcc \
 		./configure \
 			--prefix=/usr \
 			--shared \
 		&& \
 		$(MAKE) && \
-		@INSTALL_libz@
-	@CLEANUP_libz@
+		@INSTALL_zlib@
+	@CLEANUP_zlib@
 	touch $@
 
 #
@@ -161,7 +161,7 @@ $(D)/libreadline: $(D)/bootstrap @DEPENDS_libreadline@
 #
 # libfreetype
 #
-$(D)/libfreetype: $(D)/bootstrap $(D)/libz $(D)/bzip2 $(D)/libpng @DEPENDS_libfreetype@
+$(D)/libfreetype: $(D)/bootstrap $(D)/zlib $(D)/bzip2 $(D)/libpng @DEPENDS_libfreetype@
 	@PREPARE_libfreetype@
 	cd @DIR_libfreetype@ && \
 		sed -i '/#define FT_CONFIG_OPTION_OLD_INTERNALS/d' include/config/ftoption.h && \
@@ -288,7 +288,7 @@ $(D)/libpng12: $(D)/bootstrap @DEPENDS_libpng12@
 #
 # libpng
 #
-$(D)/libpng: $(D)/bootstrap $(D)/libz @DEPENDS_libpng@
+$(D)/libpng: $(D)/bootstrap $(D)/zlib @DEPENDS_libpng@
 	@PREPARE_libpng@
 	cd @DIR_libpng@ && \
 		$(BUILDENV) \
@@ -479,7 +479,7 @@ $(D)/libmad: $(D)/bootstrap @DEPENDS_libmad@
 #
 # libid3tag
 #
-$(D)/libid3tag: $(D)/bootstrap $(D)/libz @DEPENDS_libid3tag@
+$(D)/libid3tag: $(D)/bootstrap $(D)/zlib @DEPENDS_libid3tag@
 	@PREPARE_libid3tag@
 	cd @DIR_libid3tag@ && \
 		touch NEWS AUTHORS ChangeLog && \
@@ -575,7 +575,7 @@ $(D)/orc: $(D)/bootstrap @DEPENDS_orc@
 # libglib2
 # You need libglib2.0-dev on host system
 #
-$(D)/glib2: $(D)/bootstrap $(D)/host_glib2_genmarshal $(D)/libz $(D)/libffi @DEPENDS_glib2@
+$(D)/glib2: $(D)/bootstrap $(D)/host_glib2_genmarshal $(D)/zlib $(D)/libffi @DEPENDS_glib2@
 	@PREPARE_glib2@
 	echo "glib_cv_va_copy=no" > @DIR_glib2@/config.cache
 	echo "glib_cv___va_copy=yes" >> @DIR_glib2@/config.cache
@@ -1365,7 +1365,7 @@ $(D)/libflac: $(D)/bootstrap @DEPENDS_libflac@
 #
 # libxml2_e2
 #
-$(D)/libxml2_e2: $(D)/bootstrap $(D)/libz @DEPENDS_libxml2_e2@
+$(D)/libxml2_e2: $(D)/bootstrap $(D)/zlib @DEPENDS_libxml2_e2@
 	@PREPARE_libxml2_e2@
 	cd @DIR_libxml2_e2@ && \
 		touch NEWS AUTHORS ChangeLog && \
@@ -1396,7 +1396,7 @@ $(D)/libxml2_e2: $(D)/bootstrap $(D)/libz @DEPENDS_libxml2_e2@
 #
 # libxml2 neutrino
 #
-$(D)/libxml2: $(D)/bootstrap $(D)/libz @DEPENDS_libxml2@
+$(D)/libxml2: $(D)/bootstrap $(D)/zlib @DEPENDS_libxml2@
 	@PREPARE_libxml2@
 	cd @DIR_libxml2@ && \
 		touch NEWS AUTHORS ChangeLog && \
@@ -2208,7 +2208,7 @@ $(D)/libopenthreads: $(D)/bootstrap @DEPENDS_libopenthreads@
 #
 # librtmpdump
 #
-$(D)/librtmpdump: $(D)/bootstrap $(D)/libcrypto $(D)/libz @DEPENDS_librtmpdump@
+$(D)/librtmpdump: $(D)/bootstrap $(D)/libcrypto $(D)/zlib @DEPENDS_librtmpdump@
 	@PREPARE_librtmpdump@
 	[ -d "$(archivedir)/rtmpdump.git" ] && \
 	(cd $(archivedir)/rtmpdump.git; git pull; cd "$(buildprefix)";); \
@@ -2459,7 +2459,7 @@ $(D)/libexif: $(D)/bootstrap @DEPENDS_libexif@
 #
 # minidlna
 #
-$(D)/minidlna: $(D)/bootstrap $(D)/libz $(D)/sqlite $(D)/libexif $(D)/libjpeg $(D)/libid3tag $(D)/libogg $(D)/libvorbis $(D)/libflac $(D)/ffmpeg @DEPENDS_minidlna@
+$(D)/minidlna: $(D)/bootstrap $(D)/zlib $(D)/sqlite $(D)/libexif $(D)/libjpeg $(D)/libid3tag $(D)/libogg $(D)/libvorbis $(D)/libflac $(D)/ffmpeg @DEPENDS_minidlna@
 	@PREPARE_minidlna@
 	cd @DIR_minidlna@ && \
 		$(BUILDENV) \
