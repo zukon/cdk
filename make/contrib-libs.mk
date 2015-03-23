@@ -1,9 +1,9 @@
 #
-# libcrypto
+# openssl
 #
-$(D)/libcrypto: $(D)/bootstrap @DEPENDS_libcrypto@
-	@PREPARE_libcrypto@
-	cd @DIR_libcrypto@ && \
+$(D)/openssl: $(D)/bootstrap @DEPENDS_openssl@
+	@PREPARE_openssl@
+	cd @DIR_openssl@ && \
 		$(BUILDENV) \
 		./Configure shared linux-sh no-hw no-engine \
 			--prefix=/usr \
@@ -11,8 +11,8 @@ $(D)/libcrypto: $(D)/bootstrap @DEPENDS_libcrypto@
 		&& \
 		$(MAKE) depend && \
 		$(MAKE) && \
-		@INSTALL_libcrypto@
-	@CLEANUP_libcrypto@
+		@INSTALL_openssl@
+	@CLEANUP_openssl@
 	touch $@
 
 #
@@ -908,7 +908,7 @@ FFMPEG_EXTRA = --disable-iconv
 LIBXML2 = libxml2
 endif
 
-$(D)/ffmpeg: $(D)/bootstrap $(D)/libcrypto $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpeg@
+$(D)/ffmpeg: $(D)/bootstrap $(D)/openssl $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpeg@
 	@PREPARE_ffmpeg@
 	cd @DIR_ffmpeg@ && \
 		./configure \
@@ -1551,7 +1551,7 @@ $(D)/pycrypto: $(D)/bootstrap $(D)/setuptools @DEPENDS_pycrypto@
 #
 # python
 #
-$(D)/python: $(D)/bootstrap $(D)/host_python $(D)/libncurses $(D)/libcrypto $(D)/sqlite $(D)/libreadline $(D)/bzip2 @DEPENDS_python@
+$(D)/python: $(D)/bootstrap $(D)/host_python $(D)/libncurses $(D)/openssl $(D)/sqlite $(D)/libreadline $(D)/bzip2 @DEPENDS_python@
 	@PREPARE_python@
 	( cd @DIR_python@ && \
 		CONFIG_SITE= \
@@ -2208,7 +2208,7 @@ $(D)/libopenthreads: $(D)/bootstrap @DEPENDS_libopenthreads@
 #
 # librtmpdump
 #
-$(D)/librtmpdump: $(D)/bootstrap $(D)/libcrypto $(D)/zlib @DEPENDS_librtmpdump@
+$(D)/librtmpdump: $(D)/bootstrap $(D)/openssl $(D)/zlib @DEPENDS_librtmpdump@
 	@PREPARE_librtmpdump@
 	[ -d "$(archivedir)/rtmpdump.git" ] && \
 	(cd $(archivedir)/rtmpdump.git; git pull; cd "$(buildprefix)";); \
