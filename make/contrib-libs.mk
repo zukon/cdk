@@ -52,30 +52,17 @@ $(D)/lua: $(D)/bootstrap $(D)/libncurses $(archivedir)/luaposix.git @DEPENDS_lua
 #
 # luacurl
 #
-$(D)/luacurl: $(D)/bootstrap $(D)/lua @DEPENDS_luacurl@
+$(D)/luacurl: $(D)/bootstrap $(D)/libcurl $(D)/lua @DEPENDS_luacurl@
 	@PREPARE_luacurl@
 	[ -d "$(archivedir)/luacurl.git" ] && \
 	(cd $(archivedir)/luacurl.git; git pull; cd "$(buildprefix)";); \
 	cd @DIR_luacurl@ && \
-		sed -i -e "s/lua_strlen/lua_rawlen/g" -e "s/luaL_reg/luaL_Reg/g" luacurl.c && \
-		$(target)-gcc -I$(targetprefix)/usr/include -fPIC -shared -s -o $(targetprefix)/usr/lib/lua/5.2/luacurl.so luacurl.c -L$(targetprefix)/usr/lib -lcurl
-	@CLEANUP_luacurl@
-	touch $@
-
-#
-# luacurl2
-#
-$(D)/luacurl2: $(D)/bootstrap $(D)/libcurl $(D)/lua @DEPENDS_luacurl2@
-	@PREPARE_luacurl2@
-	[ -d "$(archivedir)/luacurl2.git" ] && \
-	(cd $(archivedir)/luacurl2.git; git pull ; cd "$(buildprefix)";); \
-	cd @DIR_luacurl2@ && \
 		$(MAKE) CC=$(target)-gcc LDFLAGS="-L$(targetprefix)/usr/lib" \
 			LIBDIR=$(targetprefix)/usr/lib \
 			LUA_INC=$(targetprefix)/usr/include \
 		&& \
-		@INSTALL_luacurl2@
-	@CLEANUP_luacurl2@
+		@INSTALL_luacurl@
+	@CLEANUP_luacurl@
 	touch $@
 
 #
