@@ -602,8 +602,8 @@ release_neutrino_base:
 	ln -sf /usr/share $(prefix)/release/share && \
 	$(INSTALL_DIR) $(prefix)/release/var/{bin,boot,etc,httpd,lib,tuxbox,update} && \
 	$(INSTALL_DIR) $(prefix)/release/var/lib/nfs && \
-	$(INSTALL_DIR) $(prefix)/release/var/tuxbox/{config,plugins} && \
-	$(INSTALL_DIR) $(prefix)/release/var/tuxbox/config/{locale,zapit} && \
+	$(INSTALL_DIR) $(prefix)/release/var/tuxbox/{config,locale,plugins,themes} && \
+	$(INSTALL_DIR) $(prefix)/release/var/tuxbox/config/zapit && \
 	ln -sf /usr/share/tuxbox/neutrino/icons/logo $(prefix)/release/var/httpd/logos && \
 	touch $(prefix)/release/var/etc/.firstboot && \
 	cp -a $(targetprefix)/bin/* $(prefix)/release/bin/ && \
