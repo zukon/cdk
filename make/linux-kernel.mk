@@ -315,7 +315,7 @@ HOST_KERNEL_RPM = $(archivedir)/stlinux24-$(HOST_KERNEL)-source-sh4-$(HOST_KERNE
 $(D)/linux-kernel: $(D)/bootstrap $(buildprefix)/Patches/$(BUILDCONFIG)/$(HOST_KERNEL_CONFIG) $(HOST_KERNEL_RPM) | $(HOST_U_BOOT_TOOLS)
 	rm -rf linux-sh4*
 	unpack-rpm.sh $(buildtmp) $(STM_RELOCATE)/devkit/sources/kernel $(buildprefix) $(lastword $^)
-	$(if $(HOST_KERNEL_PATCHES),cd $(KERNEL_DIR) && cat $(HOST_KERNEL_PATCHES:%=$(buildprefix)/Patches/$(BUILDCONFIG$)/%) | patch -p1)
+	$(if $(HOST_KERNEL_PATCHES),cd $(KERNEL_DIR) && cat $(HOST_KERNEL_PATCHES:%=$(buildprefix)/Patches/$(BUILDCONFIG)/%) | patch -p1)
 	$(INSTALL) -m644 Patches/$(BUILDCONFIG)/$(HOST_KERNEL_CONFIG) $(KERNEL_DIR)/.config
 	ln -s $(KERNEL_DIR) $(buildprefix)/linux-sh4
 	-rm $(KERNEL_DIR)/localversion*
