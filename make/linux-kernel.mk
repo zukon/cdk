@@ -23,11 +23,11 @@ COMMONPATCHES_24 = \
 		linux-tune_stm24.patch \
 		linux-sh4-permit_gcc_command_line_sections_stm24.patch \
 		linux-sh4-mmap_stm24.patch \
-		$(if $(P0215),linux-ratelimit-bug_stm24$(PATCH_STR).patch) \
-		$(if $(P0215),linux-patch_swap_notify_core_support_stm24$(PATCH_STR).patch) \
+		$(if $(P0215)$(P0217),linux-ratelimit-bug_stm24$(PATCH_STR).patch) \
+		$(if $(P0215)$(P0217),linux-patch_swap_notify_core_support_stm24$(PATCH_STR).patch) \
 		$(if $(P0209),linux-sh4-dwmac_stm24_0209.patch) \
 		$(if $(P0209),linux-sh4-directfb_stm24$(PATCH_STR).patch) \
-		$(if $(P0211)$(P0214)$(P0215),linux-sh4-console_missing_argument_stm24$(PATCH_STR).patch)
+		$(if $(P0211)$(P0214)$(P0215)$(P0217),linux-sh4-console_missing_argument_stm24$(PATCH_STR).patch)
 
 #		$(if $(P0209)$(P0211),linux-sh4-remove_pcm_reader_stm24.patch)
 
@@ -147,7 +147,7 @@ SPARK_PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-spark_setup_stm24$(PATCH_STR).patch \
 		$(if $(P0209),linux-sh4-linux_yaffs2_stm24_0209.patch) \
 		$(if $(P0209),linux-sh4-lirc_stm.patch) \
-		$(if $(P0211)$(P0214)$(P0215),linux-sh4-lirc_stm_stm24$(PATCH_STR).patch)
+		$(if $(P0211)$(P0214)$(P0215)$(P0217),linux-sh4-lirc_stm_stm24$(PATCH_STR).patch)
 
 SPARK7162_PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
@@ -210,7 +210,7 @@ CUBEREVO250HDPATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-cuberevo_250hd_setup_stm24$(PATCH_STR).patch \
 		linux-sh4-i2c-st40-pio_stm24$(PATCH_STR).patch \
 		linux-sh4-cuberevo_rtl8201_stm24$(PATCH_STR).patch \
-		$(if $(P0215),linux-sh4-cuberevo_250hd_sound_stm24$(PATCH_STR).patch)
+		$(if $(P0215)$(P0217),linux-sh4-cuberevo_250hd_sound_stm24$(PATCH_STR).patch)
 
 CUBEREVO2000HDPATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-cuberevo_2000hd_setup_stm24$(PATCH_STR).patch \
@@ -298,23 +298,36 @@ endif !DEBUG
 HOST_KERNEL := host-kernel
 if ENABLE_P0209
 HOST_KERNEL_VERSION = 2.6.32.46$(KERNELSTMLABEL)-$(KERNELLABEL)
+HOST_KERNEL_REVISION = 8c676f1a85935a94de1fb103c0de1dd25ff69014
 endif
 if ENABLE_P0211
 HOST_KERNEL_VERSION = 2.6.32.59$(KERNELSTMLABEL)-$(KERNELLABEL)
+HOST_KERNEL_REVISION = 3bce06ff873fb5098c8cd21f1d0e8d62c00a4903
 endif
 if ENABLE_P0214
 HOST_KERNEL_VERSION = 2.6.32.61$(KERNELSTMLABEL)-$(KERNELLABEL)
+HOST_KERNEL_REVISION = 5cf7f6f209d832a4cf645125598f86213f556fb3
 endif
 if ENABLE_P0215
 HOST_KERNEL_VERSION = 2.6.32.61$(KERNELSTMLABEL)-$(KERNELLABEL)
+HOST_KERNEL_REVISION = 5384bd391266210e72b2ca34590bd9f543cdb5a3
+endif
+if ENABLE_P0217
+HOST_KERNEL_VERSION = 2.6.32.61$(KERNELSTMLABEL)-$(KERNELLABEL)
+HOST_KERNEL_REVISION = b43f8252e9f72e5b205c8d622db3ac97736351fc
 endif
 HOST_KERNEL_PATCHES = $(KERNELPATCHES_24)
 HOST_KERNEL_CONFIG = linux-sh4-$(subst _stm24_,_,$(KERNELVERSION))_$(MODNAME).config$(DEBUG_STR)
-HOST_KERNEL_RPM = $(archivedir)/stlinux24-$(HOST_KERNEL)-source-sh4-$(HOST_KERNEL_VERSION).noarch.rpm
 
-$(D)/linux-kernel: $(D)/bootstrap $(buildprefix)/Patches/$(BUILDCONFIG)/$(HOST_KERNEL_CONFIG) $(HOST_KERNEL_RPM) | $(HOST_U_BOOT_TOOLS)
+$(D)/linux-kernel: $(D)/bootstrap $(buildprefix)/Patches/$(BUILDCONFIG)/$(HOST_KERNEL_CONFIG) | $(HOST_U_BOOT_TOOLS)
 	rm -rf linux-sh4*
-	unpack-rpm.sh $(buildtmp) $(STM_RELOCATE)/devkit/sources/kernel $(buildprefix) $(lastword $^)
+	REPO=git://git.stlinux.com/stm/linux-sh4-2.6.32.y.git;protocol=git;branch=stmicro; \
+	[ -d "$(archivedir)/linux-sh4-2.6.32.y" ] && \
+	(echo "Updating STlinux kernel source"; cd $(archivedir)/linux-sh4-2.6.32.y; git pull; git checkout HEAD;); \
+	[ -d "$(archivedir)/linux-sh4-2.6.32.y" ] || \
+	(echo "Getting STlinux kernel source"; git clone $$REPO $(archivedir)/linux-sh4-2.6.32.y); \
+	cp -ra $(archivedir)/linux-sh4-2.6.32.y $(buildprefix)/$(KERNEL_DIR); \
+	(echo "Applying patch level P0$(KERNELLABEL)"; cd $(KERNEL_DIR); git checkout -q $(HOST_KERNEL_REVISION))
 	$(if $(HOST_KERNEL_PATCHES),cd $(KERNEL_DIR) && cat $(HOST_KERNEL_PATCHES:%=$(buildprefix)/Patches/$(BUILDCONFIG)/%) | patch -p1)
 	$(INSTALL) -m644 Patches/$(BUILDCONFIG)/$(HOST_KERNEL_CONFIG) $(KERNEL_DIR)/.config
 	ln -s $(KERNEL_DIR) $(buildprefix)/linux-sh4
