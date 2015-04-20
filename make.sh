@@ -162,7 +162,7 @@ esac
 ##############################################
 
 case $2 in
-	[1-5) REPLY=$2;;
+	[1-5]) REPLY=$2;;
 	*)	echo -e "\nKernel:"
 		echo "   1) STM 24 P0209"
 		echo "   2) STM 24 P0211 (recommended)"
