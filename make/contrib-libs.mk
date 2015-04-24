@@ -188,12 +188,21 @@ $(D)/libfreetype: $(D)/bootstrap $(D)/zlib $(D)/bzip2 $(D)/libpng @DEPENDS_libfr
 #
 # lirc
 #
+if ENABLE_NEUTRINO
+if ENABLE_SPARK7162
+LIRC_OPTS= -D__KERNEL_STRICT_NAMES -DUINPUT_NEUTRINO_HACK -DSPARK -I$(driverdir)/frontcontroller/aotom_spark
+else
+LIRC_OPTS= -D__KERNEL_STRICT_NAMES
+endif
+else
+LIRC_OPTS= -D__KERNEL_STRICT_NAMES
+endif
 $(D)/lirc: $(D)/bootstrap @DEPENDS_lirc@
 	@PREPARE_lirc@
 	cd @DIR_lirc@ && \
 		$(BUILDENV) \
 		ac_cv_path_LIBUSB_CONFIG= \
-		CFLAGS="$(TARGET_CFLAGS) -D__KERNEL_STRICT_NAMES" \
+		CFLAGS="$(TARGET_CFLAGS) $(LIRC_OPTS)" \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
