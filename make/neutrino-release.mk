@@ -641,6 +641,7 @@ release_neutrino_base:
 	cp $(buildprefix)/root/etc/modules.available $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/localtime $(prefix)/release/etc/ && \
 	ln -sf /proc/mounts $(prefix)/release/etc/mtab && \
+	cp -dp $(buildprefix)/root/etc/nsswitch.conf $(prefix)/release/etc/ && \
 	cp -dp $(buildprefix)/root/etc/passwd $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/profile $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/protocols $(prefix)/release/etc/ && \
