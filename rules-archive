@@ -119,10 +119,10 @@ sshfs-fuse-2.4.tar.bz2;http://fossies.org/linux/misc
 tinyxml_2_6_2.tar.gz;http://ignum.dl.sourceforge.net/project/tinyxml/tinyxml/2.6.2
 taglib-1.8.tar.gz;https://github.com/downloads/taglib/taglib
 libnfs.git;git://github.com/sahlberg/libnfs.git
-
 libxml2-2.8.0.tar.gz;http://xmlsoft.org/sources
 libxml2-2.9.0.tar.gz;http://xmlsoft.org/sources
 libxslt-1.1.28.tar.gz;http://xmlsoft.org/sources
+pugixml-1.6.tar.gz;http://github.com/zeux/pugixml/releases/download/v1.6
 
 #
 # contrib apps

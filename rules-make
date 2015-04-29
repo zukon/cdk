@@ -139,6 +139,7 @@ taglib;1.8;taglib-1.8;taglib-1.8.tar.gz;extract:taglib-1.8.tar.gz
 libxml2;2.8.0;libxml2-2.8.0;libxml2-2.8.0.tar.gz;extract:libxml2-2.8.0.tar.gz
 libxml2_e2;2.9.0;libxml2-2.9.0;libxml2-2.9.0.tar.gz;extract:libxml2-2.9.0.tar.gz;patch:libxml2-2.9.0.patch
 libxslt;1.1.28;libxslt-1.1.28;libxslt-1.1.28.tar.gz;extract:libxslt-1.1.28.tar.gz
+pugixml;1.6;pugixml-1.6;pugixml-1.6.tar.gz;extract:pugixml-1.6.tar.gz
 
 #
 # contrib apps

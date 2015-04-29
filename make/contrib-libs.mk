@@ -1712,6 +1712,25 @@ $(D)/libopenthreads: $(D)/bootstrap @DEPENDS_libopenthreads@
 	touch $@
 
 #
+# pugixml
+#
+$(D)/pugixml: $(D)/bootstrap @DEPENDS_pugixml@
+	@PREPARE_pugixml@
+	cd @DIR_pugixml@ && \
+		cmake \
+		--no-warn-unused-cli \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DBUILD_SHARED_LIBS=ON \
+		-DCMAKE_BUILD_TYPE=Linux \
+		-DCMAKE_C_COMPILER=$(target)-gcc \
+		-DCMAKE_CXX_COMPILER=$(target)-g++ \
+		scripts && \
+		$(MAKE) && \
+		@INSTALL_pugixml@
+	@CLEANUP_pugixml@
+	touch $@
+
+#
 # librtmpdump
 #
 $(D)/librtmpdump: $(D)/bootstrap $(D)/openssl $(D)/zlib @DEPENDS_librtmpdump@
