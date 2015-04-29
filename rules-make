@@ -254,7 +254,7 @@ libevent;2.0.20-stable;libevent-2.0.20-stable;libevent-2.0.20-stable.tar.gz;extr
 libnfsidmap;0.25;libnfsidmap-0.25;libnfsidmap-0.25.tar.gz;extract:libnfsidmap-0.25.tar.gz
 libsoup;2.33.90;libsoup-2.33.90;libsoup-2.33.90.tar.gz;extract:libsoup-2.33.90.tar.gz
 vsftpd;3.0.2;vsftpd-3.0.2;vsftpd-3.0.2.tar.gz:vsftpd_3.0.2.patch;extract:vsftpd-3.0.2.tar.gz;patch:vsftpd_3.0.2.patch
-ntp;4.2.6p5;ntp-4.2.6p5;ntp-4.2.6p5.tar.gz;extract:ntp-4.2.6p5.tar.gz;patch:ntp-4.2.6p5.patch
+ntp;4.2.8;ntp-4.2.8;ntp-4.2.8.tar.gz;extract:ntp-4.2.8.tar.gz;patch:ntp-4.2.8.patch
 samba;3.6.12;samba-3.6.12;samba-3.6.12.tar.gz:samba-3.6.12.patch;extract:samba-3.6.12.tar.gz;patch:samba-3.6.12.patch
 netio;1.26;netio126;netio126.zip;extract:netio126.zip:netio126
 lighttpd;1.4.15;lighttpd-1.4.15;lighttpd-1.4.15.tar.gz;extract:lighttpd-1.4.15.tar.gz

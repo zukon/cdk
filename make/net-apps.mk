@@ -184,6 +184,11 @@ $(D)/ntp: $(D)/bootstrap @DEPENDS_ntp@
 			--host=$(target) \
 			--target=$(target) \
 			--prefix=/usr \
+			--disable-tick \
+			--disable-tickadj \
+			--with-yielding-select=yes \
+			--without-ntpsnmpd \
+			--disable-debugging \
 		&& \
 		$(MAKE) && \
 		@INSTALL_ntp@
