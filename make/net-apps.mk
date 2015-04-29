@@ -241,6 +241,22 @@ $(D)/wireless_tools: $(D)/bootstrap @DEPENDS_wireless_tools@
 	touch $@
 
 #
+# libnl
+#
+$(D)/libnl: $(D)/bootstrap $(D)/openssl @DEPENDS_libnl@
+	@PREPARE_libnl@
+	cd @DIR_libnl@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=/usr \
+		$(MAKE) && \
+		@INSTALL_libnl@
+	@CLEANUP_libnl@
+	touch $@
+
+#
 # wpa_supplicant
 #
 $(D)/wpa_supplicant: $(D)/bootstrap $(D)/openssl $(D)/wireless_tools @DEPENDS_wpa_supplicant@
