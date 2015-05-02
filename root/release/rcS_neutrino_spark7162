@@ -3,7 +3,7 @@
 MODDIR=/lib/modules
 echo "init frontpanel"
 insmod $MODDIR/aotom.ko
-insmod $MODDIR/simu_button.ko
+#insmod $MODDIR/simu_button.ko
 
 if [ -e /var/etc/.firstboot ]; then
    echo "WAIT 1 min" >/dev/vfd
@@ -86,7 +86,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 
    echo "init lircd"
    mkdir -p /var/run/lirc
-   /usr/bin/lircd
+   /usr/bin/lircd -u
 
 #   major=$(awk "\$2==\"sparkid\" {print \$1}" /proc/devices)
 #   rm -f /dev/sparkid
@@ -94,7 +94,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 #   rm /f /dev/dvb/adapter0/ca1
 #   mknod /dev/dvb/adapter0/ca1 c 212 22
 
-   /bin/evremote2 spark 100 &
+#   /bin/evremote2 spark 100 &
 
    stfbcontrol a 255
 
