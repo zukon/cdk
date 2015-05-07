@@ -854,7 +854,7 @@ endif
 #
 # httpd/icons/locale/themes
 #
-	cp -aR $(targetprefix)/usr/share/tuxbox/neutrino/* $(prefix)/release/usr/share/tuxbox/neutrino
+	cp -aR $(targetprefix)/usr/local/share/tuxbox/neutrino/* $(prefix)/release/usr/share/tuxbox/neutrino
 
 #
 # backup/restore NMP
