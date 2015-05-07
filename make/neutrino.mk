@@ -213,6 +213,10 @@ $(D)/neutrino-mp-cst-next.config.status:
 			--with-configdir=/var/tuxbox/config \
 			--with-gamesdir=/var/tuxbox/games \
 			--with-plugindir=/var/tuxbox/plugins \
+			--with-iconsdir=/usr/share/tuxbox/neutrino/icons \
+			--with-localedir=/usr/share/tuxbox/neutrino/locale \
+			--with-private_httpddir=/usr/share/tuxbox/neutrino/httpd \
+			--with-themesdir=/usr/share/tuxbox/neutrino/themes \
 			--with-stb-hal-includes=$(sourcedir)/libstb-hal-cst-next/include \
 			--with-stb-hal-build=$(LH_OBJDIR) \
 			PKG_CONFIG=$(hostprefix)/bin/$(target)-pkg-config \
@@ -651,6 +655,10 @@ $(D)/neutrino-mp-tangos.config.status:
 			--with-configdir=/var/tuxbox/config \
 			--with-gamesdir=/var/tuxbox/games \
 			--with-plugindir=/var/tuxbox/plugins \
+			--with-iconsdir=/usr/share/tuxbox/neutrino/icons \
+			--with-localedir=/usr/share/tuxbox/neutrino/locale \
+			--with-private_httpddir=/usr/share/tuxbox/neutrino/httpd \
+			--with-themesdir=/usr/share/tuxbox/neutrino/themes \
 			--with-stb-hal-includes=$(sourcedir)/libstb-hal-cst-next/include \
 			--with-stb-hal-build=$(LH_OBJDIR) \
 			PKG_CONFIG=$(hostprefix)/bin/$(target)-pkg-config \
