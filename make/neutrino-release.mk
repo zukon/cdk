@@ -867,9 +867,6 @@ endif
 # WLAN
 #
 	if [ -e $(targetprefix)/usr/sbin/ifrename ]; then \
-		$(target)-strip --strip-unneeded $(targetprefix)/usr/local/sbin/wpa_cli; \
-		$(target)-strip --strip-unneeded $(targetprefix)/usr/local/sbin/wpa_passphrase; \
-		$(target)-strip --strip-unneeded $(targetprefix)/usr/local/sbin/wpa_supplicant; \
 		cp -dp $(targetprefix)/usr/sbin/ifrename $(prefix)/release/usr/sbin/; \
 		cp -dp $(targetprefix)/usr/sbin/iwconfig $(prefix)/release/usr/sbin/; \
 		cp -dp $(targetprefix)/usr/sbin/iwevent $(prefix)/release/usr/sbin/; \
