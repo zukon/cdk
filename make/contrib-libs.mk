@@ -1387,7 +1387,7 @@ $(D)/libxml2_e2: $(D)/bootstrap $(D)/zlib @DEPENDS_libxml2_e2@
 			--enable-shared \
 			--disable-static \
 			--datarootdir=/.remove \
-			--with-python=$(hostprefix)/bin/python \
+			--with-python=$(hostprefix) \
 			--without-c14n \
 			--without-debug \
 			--without-docbook \
@@ -1450,7 +1450,7 @@ $(D)/libxslt: $(D)/bootstrap $(D)/libxml2_e2 @DEPENDS_libxslt@
 			--with-libxml-prefix="$(hostprefix)" \
 			--with-libxml-include-prefix="$(targetprefix)/usr/include" \
 			--with-libxml-libs-prefix="$(targetprefix)/usr/lib" \
-			--with-python=$(hostprefix)/bin/python \
+			--with-python=$(hostprefix) \
 			--without-crypto \
 			--without-debug \
 			--without-mem-debug \
