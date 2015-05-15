@@ -264,10 +264,11 @@ $(D)/wpa_supplicant: $(D)/bootstrap $(D)/openssl $(D)/wireless_tools @DEPENDS_wp
 	cd @DIR_wpa_supplicant@/wpa_supplicant && \
 		$(INSTALL) -m 644 $(buildprefix)/Patches/wpa_supplicant.config .config && \
 		export CFLAGS=-I$(targetprefix)/usr/include && \
+		export CPPFLAGS=-I$(targetprefix)/usr/include && \
 		export LIBS="-L$(targetprefix)/usr/lib -Wl,-rpath-link,$(targetprefix)/usr/lib" && \
 		export LDFLAGS="-L$(targetprefix)/usr/lib" && \
-		export DESTDIR=$(targetprefix)/usr && \
-		$(MAKE) $(MAKE_OPTS) && \
+		make CC=$(target)-gcc TARGETPREFIX=$(targetprefix) && \
+		$(target)-strip --strip-unneeded wpa_supplicant && \
 		@INSTALL_wpa_supplicant@
 	@CLEANUP_wpa_supplicant@
 	touch $@
