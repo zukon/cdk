@@ -230,8 +230,7 @@ SAGEMCOM88_PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-sagemcom88_setup_stm24$(PATCH_STR).patch \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
 		linux-sh4-lmb_stm24$(PATCH_STR).patch \
-		linux-sh4-sagemcom88_sound_stm24$(PATCH_STR).patch \
-		linux-sh4-pcm_noise_fix_stm24$(PATCH_STR).patch
+		linux-sh4-sagemcom88_sound_stm24$(PATCH_STR).patch
 
 ARIVALINK200_PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-arivalink200_setup_stm24$(PATCH_STR).patch \

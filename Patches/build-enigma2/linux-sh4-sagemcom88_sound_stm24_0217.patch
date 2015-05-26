@@ -4769,6 +4769,17 @@ diff -ruN stm.org/pcm_player.c stm/pcm_player.c
  
  	/* Mute & shutdown DAC */
  
+@@ -695,9 +696,7 @@
+ 
+ 	dma_stop_channel(pcm_player->fdma_channel);
+ 
+-	/* Stop the clock & reset PCM player */
+-
+-	clk_disable(pcm_player->clock);
++	/* Reset PCM player */
+ 	set__AUD_PCMOUT_RST__SRSTP__RESET(pcm_player);
+ 
+ 	return 0;
 @@ -711,8 +710,10 @@
  	snd_stm_printd(1, "snd_stm_pcm_player_pause(substream=0x%p)\n",
  			substream);
