@@ -4,11 +4,8 @@
 $(D)/nfs_utils: $(D)/bootstrap $(D)/e2fsprogs $(NFS_UTILS_ADAPTED_ETC_FILES:%=root/etc/%) @DEPENDS_nfs_utils@
 	@PREPARE_nfs_utils@
 	cd @DIR_nfs_utils@ && \
-		$(BUILDENV) \
-		./configure \
+		$(CONFIGURE) \
 			CC_FOR_BUILD=$(target)-gcc \
-			--build=$(build) \
-			--host=$(target) \
 			--prefix=/usr \
 			--disable-gss \
 			--enable-ipv6=no \
@@ -30,10 +27,7 @@ $(D)/nfs_utils: $(D)/bootstrap $(D)/e2fsprogs $(NFS_UTILS_ADAPTED_ETC_FILES:%=ro
 $(D)/libevent: $(D)/bootstrap @DEPENDS_libevent@
 	@PREPARE_libevent@
 	cd @DIR_libevent@ && \
-		$(BUILDENV) \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
+		$(CONFIGURE) \
 			--prefix=$(prefix)/$*cdkroot/usr/ \
 		&& \
 		$(MAKE) && \
@@ -47,11 +41,8 @@ $(D)/libevent: $(D)/bootstrap @DEPENDS_libevent@
 $(D)/libnfsidmap: $(D)/bootstrap @DEPENDS_libnfsidmap@
 	@PREPARE_libnfsidmap@
 	cd @DIR_libnfsidmap@ && \
-		$(BUILDENV) \
+		$(CONFIGURE) \
 		ac_cv_func_malloc_0_nonnull=yes \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
 			--prefix=$(prefix)/$*cdkroot/usr/ \
 		&& \
 		$(MAKE) && \
@@ -78,10 +69,7 @@ $(D)/vsftpd: $(D)/bootstrap @DEPENDS_vsftpd@
 $(D)/ethtool: $(D)/bootstrap @DEPENDS_ethtool@
 	@PREPARE_ethtool@
 	cd @DIR_ethtool@ && \
-		$(BUILDENV) \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
+		$(CONFIGURE) \
 			--libdir=$(targetprefix)/usr/lib \
 			--prefix=/usr \
 		&& \
@@ -178,10 +166,7 @@ $(D)/netio: $(D)/bootstrap @DEPENDS_netio@
 $(D)/ntp: $(D)/bootstrap @DEPENDS_ntp@
 	@PREPARE_ntp@
 	cd @DIR_ntp@ && \
-		$(BUILDENV) \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
+		$(CONFIGURE) \
 			--target=$(target) \
 			--prefix=/usr \
 			--disable-tick \
@@ -235,7 +220,7 @@ $(D)/%lighttpd: $(D)/lighttpd.do_compile
 $(D)/wireless_tools: $(D)/bootstrap @DEPENDS_wireless_tools@
 	@PREPARE_wireless_tools@
 	cd @DIR_wireless_tools@ && \
-		$(MAKE) $(MAKE_OPTS) && \
+		$(MAKE) CC="$(target)-gcc" CFLAGS="$(TARGET_CFLAGS) -I." && \
 		@INSTALL_wireless_tools@
 	@CLEANUP_wireless_tools@
 	touch $@
@@ -246,10 +231,7 @@ $(D)/wireless_tools: $(D)/bootstrap @DEPENDS_wireless_tools@
 $(D)/libnl: $(D)/bootstrap $(D)/openssl @DEPENDS_libnl@
 	@PREPARE_libnl@
 	cd @DIR_libnl@ && \
-		$(BUILDENV) \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
+		$(CONFIGURE) \
 			--prefix=/usr \
 		$(MAKE) && \
 		@INSTALL_libnl@
