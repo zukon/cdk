@@ -144,7 +144,7 @@ pugixml;1.6;pugixml-1.6;pugixml-1.6.tar.gz;extract:pugixml-1.6.tar.gz
 #
 # contrib apps
 #
-libncurses;5.6;ncurses-5.6;ncurses-5.6.tar.gz;extract:ncurses-5.6.tar.gz
+libncurses;5.9;ncurses-5.9;ncurses-5.9.tar.gz;extract:ncurses-5.9.tar.gz
 bzip2;1.0.6;bzip2-1.0.6;bzip2-1.0.6.tar.gz:bzip2.patch;extract:bzip2-1.0.6.tar.gz;patch:bzip2.patch
 grep;2.5.1;grep-2.5.1;grep-2.5.1.tar.bz2:grep_2.5.1.ds2-6.diff.gz;extract:grep-2.5.1.tar.bz2
 openrdate;1.1.2;openrdate-1.1.2;openrdate-1.1.2.tar.gz;extract:openrdate-1.1.2.tar.gz
