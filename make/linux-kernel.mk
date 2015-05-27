@@ -322,7 +322,6 @@ $(D)/linux-kernel: $(D)/bootstrap $(buildprefix)/Patches/$(BUILDCONFIG)/$(HOST_K
 	(echo "Applying patch level P0$(KERNELLABEL)"; cd $(KERNEL_DIR); git checkout -q $(HOST_KERNEL_REVISION))
 	$(if $(HOST_KERNEL_PATCHES),cd $(KERNEL_DIR) && cat $(HOST_KERNEL_PATCHES:%=$(buildprefix)/Patches/$(BUILDCONFIG)/%) | patch -p1)
 	$(INSTALL) -m644 Patches/$(BUILDCONFIG)/$(HOST_KERNEL_CONFIG) $(KERNEL_DIR)/.config
-	ln -s $(KERNEL_DIR) $(buildprefix)/linux-sh4
 	-rm $(KERNEL_DIR)/localversion*
 	echo "$(KERNELSTMLABEL)" > $(KERNEL_DIR)/localversion-stm
 	$(MAKE) -C $(KERNEL_DIR) ARCH=sh oldconfig
@@ -335,14 +334,13 @@ $(D)/linux-kernel: $(D)/bootstrap $(buildprefix)/Patches/$(BUILDCONFIG)/$(HOST_K
 		ARCH=sh \
 		CROSS_COMPILE=$(target)- \
 		INSTALL_MOD_PATH=$(targetprefix)
-	$(INSTALL) -d $(prefix)/$*$(notdir $(bootprefix)) && \
-	$(INSTALL) -m644 $(KERNEL_DIR)/arch/sh/boot/uImage $(prefix)/$*$(notdir $(bootprefix))/vmlinux.ub && \
-	$(INSTALL) -m644 $(KERNEL_DIR)/vmlinux $(prefix)/$*cdkroot/boot/vmlinux-sh4-$(KERNELVERSION) && \
-	$(INSTALL) -m644 $(KERNEL_DIR)/System.map $(prefix)/$*cdkroot/boot/System.map-sh4-$(KERNELVERSION) && \
-	$(INSTALL) -m644 $(KERNEL_DIR)/COPYING $(prefix)/$*cdkroot/boot/LICENSE && \
-	cp $(KERNEL_DIR)/arch/sh/boot/uImage $(prefix)/$*cdkroot/boot/ && \
-	rm $(prefix)/$*cdkroot/lib/modules/$(KERNELVERSION)/build || true && \
-	rm $(prefix)/$*cdkroot/lib/modules/$(KERNELVERSION)/source || true
+	$(INSTALL) -m644 $(KERNEL_DIR)/arch/sh/boot/uImage $(bootprefix)/vmlinux.ub && \
+	$(INSTALL) -m644 $(KERNEL_DIR)/vmlinux $(targetprefix)/boot/vmlinux-sh4-$(KERNELVERSION) && \
+	$(INSTALL) -m644 $(KERNEL_DIR)/System.map $(targetprefix)/boot/System.map-sh4-$(KERNELVERSION) && \
+	$(INSTALL) -m644 $(KERNEL_DIR)/COPYING $(targetprefix)/boot/LICENSE && \
+	cp $(KERNEL_DIR)/arch/sh/boot/uImage $(targetprefix)/boot/ && \
+	rm $(targetprefix)/lib/modules/$(KERNELVERSION)/build || true && \
+	rm $(targetprefix)/lib/modules/$(KERNELVERSION)/source || true
 	touch $@
 
 $(D)/tfkernel.do_compile:

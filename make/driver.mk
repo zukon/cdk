@@ -18,7 +18,6 @@ $(D)/driver: $(driverdir)/Makefile $(D)/bootstrap $(D)/linux-kernel
 		CROSS_COMPILE=$(target)- \
 		BIN_DEST=$(targetprefix)/bin \
 		INSTALL_MOD_PATH=$(targetprefix) \
-		DEPMOD=$(DEPMOD) \
 		install
 	$(DEPMOD) -ae -b $(targetprefix) -F $(buildprefix)/$(KERNEL_DIR)/System.map -r $(KERNELVERSION)
 	touch $@

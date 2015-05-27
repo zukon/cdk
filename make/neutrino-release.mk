@@ -764,21 +764,21 @@ endif
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/pti/pti.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/pti/pti.ko $(prefix)/release/lib/modules || true
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/pti_np/pti.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/pti_np/pti.ko $(prefix)/release/lib/modules || true
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/smartcard/smartcard.ko $(prefix)/release/lib/modules || true
-	[ -e $(kernelprefix)/linux-sh4/fs/autofs4/autofs4.ko ] && cp $(kernelprefix)/linux-sh4/fs/autofs4/autofs4.ko $(prefix)/release/lib/modules || true
-	[ -e $(kernelprefix)/linux-sh4/drivers/net/tun.ko ] && cp $(kernelprefix)/linux-sh4/drivers/net/tun.ko $(prefix)/release/lib/modules || true
-	[ -e $(kernelprefix)/linux-sh4/drivers/usb/serial/ftdi_sio.ko ] && cp $(kernelprefix)/linux-sh4/drivers/usb/serial/ftdi_sio.ko $(prefix)/release/lib/modules || true
-	[ -e $(kernelprefix)/linux-sh4/drivers/usb/serial/pl2303.ko ] && cp $(kernelprefix)/linux-sh4/drivers/usb/serial/pl2303.ko $(prefix)/release/lib/modules || true
-	[ -e $(kernelprefix)/linux-sh4/drivers/usb/serial/usbserial.ko ] && cp $(kernelprefix)/linux-sh4/drivers/usb/serial/usbserial.ko $(prefix)/release/lib/modules || true
-	[ -e $(kernelprefix)/linux-sh4/fs/fuse/fuse.ko ] && cp $(kernelprefix)/linux-sh4/fs/fuse/fuse.ko $(prefix)/release/lib/modules || true
-	[ -e $(kernelprefix)/linux-sh4/fs/ntfs/ntfs.ko ] && cp $(kernelprefix)/linux-sh4/fs/ntfs/ntfs.ko $(prefix)/release/lib/modules || true
-	[ -e $(kernelprefix)/linux-sh4/fs/cifs/cifs.ko ] && cp $(kernelprefix)/linux-sh4/fs/cifs/cifs.ko $(prefix)/release/lib/modules || true
+	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/autofs4/autofs4.ko $(prefix)/release/lib/modules || true
+	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/net/tun.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/net/tun.ko $(prefix)/release/lib/modules || true
+	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/usb/serial/ftdi_sio.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/usb/serial/ftdi_sio.ko $(prefix)/release/lib/modules/ftdi.ko || true
+	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/usb/serial/pl2303.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/usb/serial/pl2303.ko $(prefix)/release/lib/modules || true
+	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/usb/serial/usbserial.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/drivers/usb/serial/usbserial.ko $(prefix)/release/lib/modules || true
+	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/fuse/fuse.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/fuse/fuse.ko $(prefix)/release/lib/modules || true
+	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/ntfs/ntfs.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/ntfs/ntfs.ko $(prefix)/release/lib/modules || true
+	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/cifs/cifs.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/cifs/cifs.ko $(prefix)/release/lib/modules || true
 if !ENABLE_UFS910
-	[ -e $(kernelprefix)/linux-sh4/fs/jfs/jfs.ko ] && cp $(kernelprefix)/linux-sh4/fs/jfs/jfs.ko $(prefix)/release/lib/modules || true
+	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/jfs/jfs.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/jfs/jfs.ko $(prefix)/release/lib/modules || true
 endif
-	[ -e $(kernelprefix)/linux-sh4/fs/nfsd/nfsd.ko ] && cp $(kernelprefix)/linux-sh4/fs/nfsd/nfsd.ko $(prefix)/release/lib/modules || true
-	[ -e $(kernelprefix)/linux-sh4/fs/exportfs/exportfs.ko ] && cp $(kernelprefix)/linux-sh4/fs/exportfs/exportfs.ko $(prefix)/release/lib/modules || true
-	[ -e $(kernelprefix)/linux-sh4/fs/nfs_common/nfs_acl.ko ] && cp $(kernelprefix)/linux-sh4/fs/nfs_common/nfs_acl.ko $(prefix)/release/lib/modules || true
-	[ -e $(kernelprefix)/linux-sh4/fs/nfs/nfs.ko ] && cp $(kernelprefix)/linux-sh4/fs/nfs/nfs.ko $(prefix)/release/lib/modules || true
+	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/nfsd/nfsd.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/nfsd/nfsd.ko $(prefix)/release/lib/modules || true
+	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/exportfs/exportfs.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/exportfs/exportfs.ko $(prefix)/release/lib/modules || true
+	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/nfs_common/nfs_acl.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/nfs_common/nfs_acl.ko $(prefix)/release/lib/modules || true
+	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/nfs/nfs.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/fs/nfs/nfs.ko $(prefix)/release/lib/modules || true
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt2870sta/rt2870sta.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt2870sta/rt2870sta.ko $(prefix)/release/lib/modules || true
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt3070sta/rt3070sta.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt3070sta/rt3070sta.ko $(prefix)/release/lib/modules || true
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt5370sta/rt5370sta.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt5370sta/rt5370sta.ko $(prefix)/release/lib/modules || true
@@ -1003,6 +1003,7 @@ endif
 	if [ -e $(targetprefix)/usr/bin/xupnpd ]; then \
 		cp -f $(targetprefix)/usr/bin/xupnpd $(prefix)/release/usr/bin; \
 		cp -aR $(targetprefix)/usr/share/xupnpd $(prefix)/release/usr/share; \
+		mkdir -p $(prefix)/release/usr/share/xupnpd/playlists; \
 	fi
 
 #
