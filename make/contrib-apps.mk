@@ -350,7 +350,7 @@ CONFIG_ZD1211B :=
 $(D)/zd1211: $(D)/bootstrap @DEPENDS_zd1211@
 	@PREPARE_zd1211@
 	cd @DIR_zd1211@ && \
-		$(MAKE) KERNEL_LOCATION=$(KERNEL_DIR) \
+		$(MAKE) KERNEL_LOCATION=$(buildprefix)/$(KERNEL_DIR) \
 			ZD1211B=$(ZD1211B) \
 			CROSS_COMPILE=$(target)- ARCH=sh \
 			BIN_DEST=$(targetprefix)/bin \
@@ -430,7 +430,7 @@ $(D)/fuse: $(D)/bootstrap @DEPENDS_fuse@
 	@PREPARE_fuse@
 	cd @DIR_fuse@ && \
 		$(CONFIGURE) \
-			CFLAGS="$(TARGET_CFLAGS) -I$(KERNEL_DIR)/arch/sh" \
+			CFLAGS="$(TARGET_CFLAGS) -I$(buildprefix)/$(KERNEL_DIR)/arch/sh" \
 			--target=$(target) \
 			--prefix=/usr \
 		&& \
