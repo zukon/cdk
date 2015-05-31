@@ -232,7 +232,7 @@ ntp;make:install:DESTDIR=TARGET
 samba;make:install:DESTDIR=TARGET
 netio;install:-m755:netio:TARGET/usr/bin;install:-m755:bin/linux-i386:HOST/bin/netio
 lighttpd;make:install:DESTDIR=TARGET
-wireless_tools;make:install:INSTALL_MAN=TARGET/usr/share/man:PREFIX=TARGET/usr
+wireless_tools;make:install:INSTALL_MAN=TARGET/.remove:PREFIX=TARGET/usr
 libnl;make:install:DESTDIR=TARGET
 wpa_supplicant;make:install:BINDIR=/usr/sbin:DESTDIR=TARGET
 ethtool;make:install:DESTDIR=TARGET
