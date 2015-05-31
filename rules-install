@@ -210,7 +210,7 @@ fdisk;make:install:DESTDIR=TARGET
 fuse;rewrite-pkgconfig:fuse.pc;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libfuse.la
 hddtemp;make:install:DESTDIR=TARGET
 hdparm;make:install:DESTDIR=TARGET
-jfsutils;make:install:mandir=/usr/share/man:DESTDIR=TARGET
+jfsutils;make:install:mandir=/.remove:DESTDIR=TARGET
 lm_sensors;make:user_install:MACHINE=sh:PREFIX=/usr:MANDIR=/usr/share/man:DESTDIR=TARGET
 sdparm;make:install:DESTDIR=TARGET
 parted;make:install
