@@ -205,7 +205,7 @@ libdpfax;make:install:DESTDIR=TARGET
 # File Systems and Disk Management
 #
 dosfstools;make:install:PREFIX=TARGET
-e2fsprogs;rewrite-pkgconfig:lib/blkid/blkid.pc:lib/et/com_err.pc:lib/e2p/e2p.pc:lib/ext2fs/ext2fs.pc:lib/quota/quota.pc:lib/ss/ss.pc:lib/uuid/uuid.pc;make:install:DESTDIR=TARGET
+e2fsprogs;rewrite-pkgconfig:lib/et/com_err.pc:lib/e2p/e2p.pc:lib/ext2fs/ext2fs.pc:lib/quota/quota.pc:lib/ss/ss.pc;make:install:DESTDIR=TARGET;rewrite-pkgconfig:TARGET/usr/lib/pkgconfig/blkid.pc:TARGET/usr/lib/pkgconfig/uuid.pc
 fdisk;make:install:DESTDIR=TARGET
 fuse;rewrite-pkgconfig:fuse.pc;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libfuse.la
 hddtemp;make:install:DESTDIR=TARGET
