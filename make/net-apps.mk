@@ -260,7 +260,7 @@ $(D)/wpa_supplicant: $(D)/bootstrap $(D)/openssl $(D)/wireless_tools @DEPENDS_wp
 #
 $(D)/xupnpd: $(D)/bootstrap @DEPENDS_xupnpd@
 	@PREPARE_xupnpd@
-	cd @DIR_xupnpd@ && \
+	cd @DIR_xupnpd@/src && \
 		$(BUILDENV) \
 		$(MAKE) TARGET=$(target) sh4 && \
 		@INSTALL_xupnpd@

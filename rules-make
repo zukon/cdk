@@ -264,7 +264,7 @@ libnl;2.0;libnl-2.0;libnl-2.0.tar.gz;extract:libnl-2.0.tar.gz
 wpa_supplicant;0.7.3;wpa_supplicant-0.7.3;wpa_supplicant-0.7.3.tar.gz;extract:wpa_supplicant-0.7.3.tar.gz
 #wpa_supplicant;1.0;wpa_supplicant-1.0;wpa_supplicant-1.0.tar.gz;extract:wpa_supplicant-1.0.tar.gz
 ethtool;6;ethtool-6;ethtool-6.tar.gz;extract:ethtool-6.tar.gz
-xupnpd;1.0;xupnpd-1.0;xupnpd.svn;extract:xupnpd.svn;patch:xupnpd.patch
+xupnpd;1.0;xupnpd-1.0;xupnpd.git;extract:xupnpd.git;patch:xupnpd.patch
 udpxy;1.0.23-0;udpxy-1.0.23-0;udpxy.1.0.23-0-prod.tar.gz;extract:udpxy.1.0.23-0-prod.tar.gz;patch:udpxy-1.0.23-0.patch
 
 
