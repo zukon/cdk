@@ -1345,6 +1345,11 @@ $(D)/libxslt: $(D)/bootstrap $(D)/libxml2_e2 @DEPENDS_libxslt@
 		&& \
 		$(MAKE) all && \
 		@INSTALL_libxslt@ && \
+		if [ -e "$(targetprefix)$(PYTHON_DIR)/site-packages/libxsltmod.la" ]; then \
+			sed -e "/^dependency_libs/ s,/usr/lib/libexslt.la,$(targetprefix)/usr/lib/libexslt.la,g" -i $(targetprefix)$(PYTHON_DIR)/site-packages/libxsltmod.la; \
+			sed -e "/^dependency_libs/ s,/usr/lib/libxslt.la,$(targetprefix)/usr/lib/libxslt.la,g" -i $(targetprefix)$(PYTHON_DIR)/site-packages/libxsltmod.la; \
+			sed -e "/^libdir/ s,$(PYTHON_DIR)/site-packages,$(targetprefix)$(PYTHON_DIR)/site-packages,g" -i $(targetprefix)$(PYTHON_DIR)/site-packages/libxsltmod.la; \
+		fi; \
 		sed -e "s,^prefix=,prefix=$(targetprefix)," < xslt-config > $(hostprefix)/bin/xslt-config && \
 		chmod 755 $(hostprefix)/bin/xslt-config && \
 		sed -e "/^dependency_libs/ s,/usr/lib/libxslt.la,$(targetprefix)/usr/lib/libxslt.la,g" -i $(targetprefix)/usr/lib/libexslt.la && \
