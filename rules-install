@@ -127,7 +127,7 @@ libnfs;make:install:DESTDIR=TARGET
 taglib;make:install:DESTDIR=TARGET
 libxml2;rewrite-pkgconfig:libxml-2.0.pc;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libxml2.la;rewrite-dependency:TARGET/usr/lib/libxml2.la
 libxml2_e2;rewrite-pkgconfig:libxml-2.0.pc;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libxml2.la;rewrite-dependency:TARGET/usr/lib/libxml2.la
-libxslt;rewrite-pkgconfig:libxslt.pc:libexslt.pc;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libxslt.la:TARGET/usr/lib/libexslt.la
+libxslt;rewrite-pkgconfig:libxslt.pc:libexslt.pc;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libxslt.la:TARGET/usr/lib/libexslt.la;rewrite-dependency:TARGET/usr/lib/libexslt.la
 pugixml;make:install:DESTDIR=TARGET
 
 #
