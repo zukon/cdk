@@ -273,10 +273,10 @@ $(D)/libpng12: $(D)/bootstrap @DEPENDS_libpng12@
 	cd @DIR_libpng12@ && \
 		$(CONFIGURE) \
 			--prefix=$(targetprefix)/usr \
+			--mandir=$(targetprefix)/.remove \
+			--bindir=$(hostprefix)/bin \
 		&& \
 		ECHO=echo $(MAKE) all && \
-		sed -e 's,^prefix="/usr",prefix="$(targetprefix)/usr",' < libpng-config > $(hostprefix)/bin/libpng-config && \
-		chmod 755 $(hostprefix)/bin/libpng-config && \
 		@INSTALL_libpng@
 	@CLEANUP_libpng12@
 	touch $@
@@ -1284,13 +1284,14 @@ $(D)/libxml2_e2: $(D)/bootstrap $(D)/zlib $(D)/python @DEPENDS_libxml2_e2@
 			--without-mem-debug \
 		&& \
 		$(MAKE) all && \
-		@INSTALL_libxml2_e2@ && \
+		sed -e "s,^prefix=,prefix=$(targetprefix)," < xml2-config > $(hostprefix)/bin/xml2-config && \
+		chmod 755 $(hostprefix)/bin/xml2-config && \
+		@INSTALL_libxml2_e2@
+		rm -f $(targetprefix)/usr/bin/xml2-config && \
 		if [ -e "$(targetprefix)$(PYTHON_DIR)/site-packages/libxml2mod.la" ]; then \
 			sed -e "/^dependency_libs/ s,/usr/lib/libxml2.la,$(targetprefix)/usr/lib/libxml2.la,g" -i $(targetprefix)$(PYTHON_DIR)/site-packages/libxml2mod.la; \
 			sed -e "/^libdir/ s,$(PYTHON_DIR)/site-packages,$(targetprefix)$(PYTHON_DIR)/site-packages,g" -i $(targetprefix)$(PYTHON_DIR)/site-packages/libxml2mod.la; \
 		fi; \
-		sed -e "s,^prefix=,prefix=$(targetprefix)," < xml2-config > $(hostprefix)/bin/xml2-config && \
-		chmod 755 $(hostprefix)/bin/xml2-config && \
 		sed -e "/^XML2_LIBDIR/ s,/usr/lib,$(targetprefix)/usr/lib,g" -i $(targetprefix)/usr/lib/xml2Conf.sh && \
 		sed -e "/^XML2_INCLUDEDIR/ s,/usr/include,$(targetprefix)/usr/include,g" -i $(targetprefix)/usr/lib/xml2Conf.sh
 	@CLEANUP_libxml2_e2@
@@ -1318,9 +1319,10 @@ $(D)/libxml2: $(D)/bootstrap $(D)/zlib @DEPENDS_libxml2@
 			--without-mem-debug \
 		&& \
 		$(MAKE) all && \
-		@INSTALL_libxml2@ && \
 		sed -e "s,^prefix=,prefix=$(targetprefix)," < xml2-config > $(hostprefix)/bin/xml2-config && \
 		chmod 755 $(hostprefix)/bin/xml2-config && \
+		@INSTALL_libxml2@
+		rm -f $(targetprefix)/usr/bin/xml2-config && \
 		sed -e "/^XML2_LIBDIR/ s,/usr/lib,$(targetprefix)/usr/lib,g" -i $(targetprefix)/usr/lib/xml2Conf.sh && \
 		sed -e "/^XML2_INCLUDEDIR/ s,/usr/include,$(targetprefix)/usr/include,g" -i $(targetprefix)/usr/lib/xml2Conf.sh
 	@CLEANUP_libxml2@
@@ -1345,14 +1347,15 @@ $(D)/libxslt: $(D)/bootstrap $(D)/libxml2_e2 @DEPENDS_libxslt@
 			--disable-static \
 		&& \
 		$(MAKE) all && \
-		@INSTALL_libxslt@ && \
+		sed -e "s,^prefix=,prefix=$(targetprefix)," < xslt-config > $(hostprefix)/bin/xslt-config && \
+		chmod 755 $(hostprefix)/bin/xslt-config && \
+		@INSTALL_libxslt@
+		rm -f $(targetprefix)/usr/bin/xslt-config
 		if [ -e "$(targetprefix)$(PYTHON_DIR)/site-packages/libxsltmod.la" ]; then \
 			sed -e "/^dependency_libs/ s,/usr/lib/libexslt.la,$(targetprefix)/usr/lib/libexslt.la,g" -i $(targetprefix)$(PYTHON_DIR)/site-packages/libxsltmod.la; \
 			sed -e "/^dependency_libs/ s,/usr/lib/libxslt.la,$(targetprefix)/usr/lib/libxslt.la,g" -i $(targetprefix)$(PYTHON_DIR)/site-packages/libxsltmod.la; \
 			sed -e "/^libdir/ s,$(PYTHON_DIR)/site-packages,$(targetprefix)$(PYTHON_DIR)/site-packages,g" -i $(targetprefix)$(PYTHON_DIR)/site-packages/libxsltmod.la; \
 		fi; \
-		sed -e "s,^prefix=,prefix=$(targetprefix)," < xslt-config > $(hostprefix)/bin/xslt-config && \
-		chmod 755 $(hostprefix)/bin/xslt-config && \
 		sed -e "/^XSLT_LIBDIR/ s,/usr/lib,$(targetprefix)/usr/lib,g" -i $(targetprefix)/usr/lib/xsltConf.sh && \
 		sed -e "/^XSLT_INCLUDEDIR/ s,/usr/include,$(targetprefix)/usr/include,g" -i $(targetprefix)/usr/lib/xsltConf.sh
 	@CLEANUP_libxslt@
@@ -1754,6 +1757,7 @@ $(D)/libpcre: $(D)/bootstrap @DEPENDS_libpcre@
 		sed -e "s,^prefix=,prefix=$(targetprefix)," < pcre-config > $(hostprefix)/bin/pcre-config && \
 		chmod 755 $(hostprefix)/bin/pcre-config && \
 		@INSTALL_libpcre@
+		rm -f $(targetprefix)/usr/bin/pcre-config
 	@CLEANUP_libpcre@
 	touch $@
 
