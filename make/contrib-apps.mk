@@ -31,7 +31,6 @@ $(D)/libncurses: $(D)/bootstrap @DEPENDS_libncurses@
 		sed -e 's,^prefix="/usr",prefix="$(targetprefix)/usr",' < misc/ncurses-config > $(hostprefix)/bin/ncurses5-config && \
 		chmod 755 $(hostprefix)/bin/ncurses5-config && \
 		@INSTALL_libncurses@
-		rm -f $(targetprefix)/usr/bin/ncurses5-config
 	@CLEANUP_libncurses@
 	touch $@
 
