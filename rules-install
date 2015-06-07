@@ -54,7 +54,7 @@ pixman;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libpixman-1.la
 #
 libalsa;rewrite-pkgconfig:utils/alsa.pc;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libasound.la
 alsautils;make:install:DESTDIR=TARGET
-libflac;rewrite-pkgconfig:src/libFLAC/flac.pc:src/libFLAC++/flac++.pc;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libFLAC.la:TARGET/usr/lib/libFLAC++.la
+libflac;rewrite-pkgconfig:src/libFLAC/flac.pc:src/libFLAC++/flac++.pc;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libFLAC.la:TARGET/usr/lib/libFLAC++.la;rewrite-dependency:TARGET/usr/lib/libFLAC++.la
 a52dec;make:install:DESTDIR=TARGET
 libao;rewrite-pkgconfig:libao.pc;make:install:prefix=TARGET/usr;rewrite-libtool:TARGET/usr/lib/libao.la:TARGET/usr/lib/libao.la
 libass;rewrite-pkgconfig:libass.pc;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libass.la

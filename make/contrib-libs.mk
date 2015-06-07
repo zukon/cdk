@@ -273,10 +273,10 @@ $(D)/libpng12: $(D)/bootstrap @DEPENDS_libpng12@
 	cd @DIR_libpng12@ && \
 		$(CONFIGURE) \
 			--prefix=$(targetprefix)/usr \
+			--mandir=$(targetprefix)/.remove \
+			--bindir=$(hostprefix)/bin \
 		&& \
 		ECHO=echo $(MAKE) all && \
-		sed -e 's,^prefix="/usr",prefix="$(targetprefix)/usr",' < libpng-config > $(hostprefix)/bin/libpng-config && \
-		chmod 755 $(hostprefix)/bin/libpng-config && \
 		@INSTALL_libpng@
 	@CLEANUP_libpng12@
 	touch $@
@@ -759,7 +759,6 @@ $(D)/libdvdcss: $(D)/bootstrap @DEPENDS_libdvdcss@
 $(D)/libdvdnav: $(D)/bootstrap $(D)/libdvdread @DEPENDS_libdvdnav@
 	@PREPARE_libdvdnav@
 	cd @DIR_libdvdnav@ && \
-		libtoolize --copy --ltdl && \
 		$(BUILDENV) \
 		./autogen.sh \
 			--build=$(build) \
@@ -801,7 +800,6 @@ $(D)/libdreamdvd: $(D)/bootstrap $(D)/libdvdnav @DEPENDS_libdreamdvd@
 		autoheader && \
 		autoconf && \
 		automake --foreign --add-missing && \
-		libtoolize --force && \
 		$(CONFIGURE) \
 			--build=$(build) \
 			--host=$(target) \
@@ -1291,6 +1289,7 @@ $(D)/libxml2_e2: $(D)/bootstrap $(D)/zlib $(D)/python @DEPENDS_libxml2_e2@
 		fi; \
 		sed -e "s,^prefix=,prefix=$(targetprefix)," < xml2-config > $(hostprefix)/bin/xml2-config && \
 		chmod 755 $(hostprefix)/bin/xml2-config && \
+		rm -f $(targetprefix)/usr/bin/xml2-config && \
 		sed -e "/^XML2_LIBDIR/ s,/usr/lib,$(targetprefix)/usr/lib,g" -i $(targetprefix)/usr/lib/xml2Conf.sh && \
 		sed -e "/^XML2_INCLUDEDIR/ s,/usr/include,$(targetprefix)/usr/include,g" -i $(targetprefix)/usr/lib/xml2Conf.sh
 	@CLEANUP_libxml2_e2@
@@ -1321,6 +1320,7 @@ $(D)/libxml2: $(D)/bootstrap $(D)/zlib @DEPENDS_libxml2@
 		@INSTALL_libxml2@ && \
 		sed -e "s,^prefix=,prefix=$(targetprefix)," < xml2-config > $(hostprefix)/bin/xml2-config && \
 		chmod 755 $(hostprefix)/bin/xml2-config && \
+		rm -f $(targetprefix)/usr/bin/xml2-config && \
 		sed -e "/^XML2_LIBDIR/ s,/usr/lib,$(targetprefix)/usr/lib,g" -i $(targetprefix)/usr/lib/xml2Conf.sh && \
 		sed -e "/^XML2_INCLUDEDIR/ s,/usr/include,$(targetprefix)/usr/include,g" -i $(targetprefix)/usr/lib/xml2Conf.sh
 	@CLEANUP_libxml2@
@@ -1751,9 +1751,10 @@ $(D)/libpcre: $(D)/bootstrap @DEPENDS_libpcre@
 			--enable-unicode-properties \
 		&& \
 		$(MAKE) all && \
+		@INSTALL_libpcre@ && \
 		sed -e "s,^prefix=,prefix=$(targetprefix)," < pcre-config > $(hostprefix)/bin/pcre-config && \
 		chmod 755 $(hostprefix)/bin/pcre-config && \
-		@INSTALL_libpcre@
+		rm -f $(targetprefix)/usr/bin/pcre-config
 	@CLEANUP_libpcre@
 	touch $@
 

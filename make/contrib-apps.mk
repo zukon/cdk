@@ -28,9 +28,10 @@ $(D)/libncurses: $(D)/bootstrap @DEPENDS_libncurses@
 		$(MAKE) libs HOSTCC=gcc \
 			HOSTCCFLAGS="$(CFLAGS) -DHAVE_CONFIG_H -I../ncurses -DNDEBUG -D_GNU_SOURCE -I../include" \
 			HOSTLDFLAGS="$(LDFLAGS)" && \
+		@INSTALL_libncurses@ && \
 		sed -e 's,^prefix="/usr",prefix="$(targetprefix)/usr",' < misc/ncurses-config > $(hostprefix)/bin/ncurses5-config && \
 		chmod 755 $(hostprefix)/bin/ncurses5-config && \
-		@INSTALL_libncurses@
+		rm -f $(targetprefix)/usr/bin/ncurses5-config
 	@CLEANUP_libncurses@
 	touch $@
 
@@ -631,7 +632,6 @@ $(D)/parted: $(D)/bootstrap $(D)/libreadline $(D)/e2fsprogs @DEPENDS_parted@
 $(D)/opkg: $(D)/bootstrap @DEPENDS_opkg@
 	@PREPARE_opkg@
 	cd @DIR_opkg@ && \
-		autoreconf -vi && \
 		$(CONFIGURE) \
 			--build=$(build) \
 			--host=$(target) \
