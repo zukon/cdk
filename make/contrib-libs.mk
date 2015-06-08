@@ -350,7 +350,7 @@ $(D)/libgif_e2: $(D)/bootstrap @DEPENDS_libgif_e2@
 $(D)/libcurl: $(D)/bootstrap $(D)/openssl $(D)/zlib @DEPENDS_libcurl@
 	@PREPARE_libcurl@
 	cd @DIR_libcurl@ && \
-		$(BUILDENV) LIBS="-lssl -lcrypto -lrtmp -lz" \
+		$(BUILDENV) LIBS="-lssl -lcrypto -lz" \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
