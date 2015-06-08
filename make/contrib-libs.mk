@@ -347,13 +347,17 @@ $(D)/libgif_e2: $(D)/bootstrap @DEPENDS_libgif_e2@
 #
 # libcurl
 #
-$(D)/libcurl: $(D)/bootstrap @DEPENDS_libcurl@
+$(D)/libcurl: $(D)/bootstrap $(D)/openssl $(D)/zlib @DEPENDS_libcurl@
 	@PREPARE_libcurl@
 	cd @DIR_libcurl@ && \
-		$(CONFIGURE) \
+		$(BUILDENV) LIBS="-lssl -lcrypto -lrtmp -lz" \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
 			--prefix=/usr \
+			--enable-silent-rules \
 			--disable-debug \
-			--disable-verbose \
+			--disable-curldebug \
 			--disable-manual \
 			--disable-file \
 			--disable-rtsp \
@@ -361,8 +365,9 @@ $(D)/libcurl: $(D)/bootstrap @DEPENDS_libcurl@
 			--disable-imap \
 			--disable-pop3 \
 			--disable-smtp \
-			--without-ssl \
+			--enable-shared \
 			--with-random \
+			--with-ssl=$(targetprefix) \
 			--mandir=/.remove \
 		&& \
 		$(MAKE) all && \
