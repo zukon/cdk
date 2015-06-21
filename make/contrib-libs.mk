@@ -5,7 +5,7 @@ $(D)/openssl: $(D)/bootstrap @DEPENDS_openssl@
 	@PREPARE_openssl@
 	cd @DIR_openssl@ && \
 		$(BUILDENV) \
-		./Configure shared linux-sh no-hw no-engine \
+		./Configure shared linux-sh no-hw \
 			--prefix=/usr \
 			--openssldir=/.remove \
 		&& \
