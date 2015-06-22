@@ -1524,13 +1524,10 @@ $(D)/brofs: $(D)/bootstrap @DEPENDS_brofs@
 $(D)/libcap: $(D)/bootstrap @DEPENDS_libcap@
 	@PREPARE_libcap@
 	cd @DIR_libcap@ && \
-		export CROSS_BASE=$(hostprefix); export TARGET=$(target); export TARGETPREFIX=$(targetprefix);\
-		$(MAKE) \
-		LIBDIR=$(targetprefix)/usr/lib \
-		INCDIR=$(targetprefix)/usr/include \
-		PAM_CAP=no \
-		LIBATTR=no
-		@INSTALL_libcap@
+		export CROSS_BASE=$(crossprefix) && \
+		export TARGET=$(target) && \
+		export TARGETPREFIX=$(targetprefix) && \
+		$(MAKE) -C libcap LIBATTR=no INCDIR=$(targetprefix)/usr/include LIBDIR=$(targetprefix)/usr/lib install
 	@CLEANUP_libcap@
 	touch $@
 
