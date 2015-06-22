@@ -27,7 +27,7 @@ N_CFLAGS  = -Wall -W -Wshadow -g0 -pipe -Os -fno-strict-aliasing -D__user= -DCPU
 
 N_CPPFLAGS = -I$(driverdir)/bpamem
 N_CPPFLAGS += -I$(targetprefix)/usr/include/
-N_CPPFLAGS += -I$(buildprefix)/$(KERNEL_DIR)/include
+#N_CPPFLAGS += -I$(buildprefix)/$(KERNEL_DIR)/include
 
 if BOXTYPE_SPARK
 N_CPPFLAGS += -I$(driverdir)/frontcontroller/aotom_spark
@@ -288,7 +288,7 @@ $(D)/neutrino-mp-martii-github.do_prepare: | $(NEUTRINO_DEPS) libstb-hal-cst-nex
 	[ -d "$(archivedir)/neutrino-mp-martii-github.git" ] && \
 	(cd $(archivedir)/neutrino-mp-martii-github.git; git pull; cd "$(buildprefix)";); \
 	[ -d "$(archivedir)/neutrino-mp-martii-github.git" ] || \
-	git clone https://github.com/MaxWiesel/neutrino-mp-martii.git $(archivedir)/neutrino-mp-martii-github.git; \
+	git clone https://github.com/MaxWiesel/neutrino-mp-martii-test.git $(archivedir)/neutrino-mp-martii-github.git; \
 	cp -ra $(archivedir)/neutrino-mp-martii-github.git $(sourcedir)/neutrino-mp-martii-github; \
 	cp -ra $(sourcedir)/neutrino-mp-martii-github $(sourcedir)/neutrino-mp-martii-github.org
 	for i in $(NEUTRINO_MP_MARTII_GH_PATCHES); do \
