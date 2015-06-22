@@ -634,7 +634,7 @@ $(D)/imagemagick: $(D)/bootstrap @DEPENDS_imagemagick@
 	cd @DIR_imagemagick@ && \
 		$(BUILDENV) \
 		CFLAGS="-O1" \
-		PKG_CONFIG=$(hostprefix)/bin/pkg-config \
+		PKG_CONFIG=$(hostprefix)/bin/$(target)-pkg-config \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
