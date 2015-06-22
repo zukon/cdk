@@ -490,6 +490,7 @@ $(D)/mencoder: $(D)/bootstrap @DEPENDS_mencoder@
 $(D)/jfsutils: $(D)/bootstrap $(D)/e2fsprogs @DEPENDS_jfsutils@
 	@PREPARE_jfsutils@
 	cd @DIR_jfsutils@ && \
+		sed "s@<unistd.h>@&\n#include <sys/types.h>@g" -i fscklog/extract.c && \
 		$(CONFIGURE) \
 			--prefix= \
 			--target=$(target) \
