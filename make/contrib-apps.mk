@@ -1,41 +1,4 @@
 #
-# libncurses
-#
-$(D)/libncurses: $(D)/bootstrap @DEPENDS_libncurses@
-	@PREPARE_libncurses@
-	cd @DIR_libncurses@ && \
-		$(CONFIGURE) \
-			--target=$(target) \
-			--prefix=/usr \
-			--with-terminfo-dirs=/usr/share/terminfo \
-			--with-shared \
-			--without-cxx \
-			--without-cxx-binding \
-			--without-ada \
-			--without-progs \
-			--without-tests \
-			--disable-big-core \
-			--without-profile \
-			--disable-rpath \
-			--disable-rpath-hack \
-			--enable-echo \
-			--enable-const \
-			--enable-overwrite \
-			--enable-pc-files \
-			--without-manpages \
-			--with-fallbacks='linux vt100 xterm' \
-		&& \
-		$(MAKE) libs HOSTCC=gcc \
-			HOSTCCFLAGS="$(CFLAGS) -DHAVE_CONFIG_H -I../ncurses -DNDEBUG -D_GNU_SOURCE -I../include" \
-			HOSTLDFLAGS="$(LDFLAGS)" && \
-		@INSTALL_libncurses@ && \
-		sed -e 's,^prefix="/usr",prefix="$(targetprefix)/usr",' < misc/ncurses-config > $(hostprefix)/bin/ncurses5-config && \
-		chmod 755 $(hostprefix)/bin/ncurses5-config && \
-		rm -f $(targetprefix)/usr/bin/ncurses5-config
-	@CLEANUP_libncurses@
-	touch $@
-
-#
 # grep
 #
 $(D)/grep: $(D)/bootstrap @DEPENDS_grep@
@@ -786,7 +749,7 @@ $(D)/avahi: $(D)/bootstrap $(D)/libexpat $(D)/libdaemon $(D)/dbus @DEPENDS_avahi
 	touch $@
 
 #
-#
+# mtd_utils
 #
 $(D)/mtd_utils: $(D)/bootstrap $(D)/zlib $(D)/lzo $(D)/e2fsprogs @DEPENDS_mtd_utils@
 	@PREPARE_mtd_utils@
