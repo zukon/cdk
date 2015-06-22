@@ -341,12 +341,14 @@ case $7 in
 	*)	echo -e "\nWhich Image do you want to build:"
 		echo "   1) Neutrino"
 		echo "   2) Enigma2 (includes WLAN drivers)"
-		read -p "Select Image to build (1-2)? ";;
+		echo "   3) tvheadend"
+		read -p "Select Image to build (1-3)? ";;
 esac
 
 case "$REPLY" in
 	1) IMAGE="--enable-neutrino";;
 	2) IMAGE="--enable-enigma2 --enable-wlandriver";;
+	3) IMAGE="--enable-tvheadend";;
 	*) IMAGE="--enable-neutrino";;
 esac
 
@@ -381,6 +383,8 @@ case "$IMAGE" in
 		echo "  make yaud-neutrino-hd2-exp";;
 		--enable-enigma2*)
 		echo "  make yaud-enigma2-pli-nightly";;
+		--enable-tvheadend*)
+		echo "  make yaud-tvheadend";;
 		*)
 esac
 echo "----------------------------------------"
