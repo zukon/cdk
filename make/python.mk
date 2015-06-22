@@ -9,7 +9,8 @@ $(D)/host_python: @DEPENDS_host_python@
 		OPT="$(HOST_CFLAGS)" \
 		./configure \
 			--without-cxx-main \
-			--without-threads && \
+			--without-threads \
+		&& \
 		$(MAKE) python Parser/pgen && \
 		mv python ./hostpython && \
 		mv Parser/pgen ./hostpgen && \
@@ -19,7 +20,8 @@ $(D)/host_python: @DEPENDS_host_python@
 			--prefix=$(hostprefix) \
 			--sysconfdir=$(hostprefix)/etc \
 			--without-cxx-main \
-			--without-threads && \
+			--without-threads \
+		&& \
 		$(MAKE) \
 			TARGET_OS=$(build) \
 			PYTHON_MODULES_INCLUDE="$(hostprefix)/include" \
