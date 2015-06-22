@@ -36,19 +36,6 @@ $(D)/libncurses: $(D)/bootstrap @DEPENDS_libncurses@
 	touch $@
 
 #
-# bzip2
-#
-$(D)/bzip2: $(D)/bootstrap @DEPENDS_bzip2@
-	@PREPARE_bzip2@
-	cd @DIR_bzip2@ && \
-	mv Makefile-libbz2_so Makefile && \
-		CC=$(target)-gcc AR=$(target)-ar RANLIB=$(target)-ranlib \
-		$(MAKE) all && \
-		@INSTALL_bzip2@
-	@CLEANUP_bzip2@
-	touch $@
-
-#
 # grep
 #
 $(D)/grep: $(D)/bootstrap @DEPENDS_grep@
