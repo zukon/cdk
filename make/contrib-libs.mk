@@ -1753,9 +1753,9 @@ $(D)/libpcre: $(D)/bootstrap @DEPENDS_libpcre@
 			--enable-unicode-properties \
 		&& \
 		$(MAKE) all && \
-		@INSTALL_libpcre@ && \
 		sed -e "s,^prefix=,prefix=$(targetprefix)," < pcre-config > $(hostprefix)/bin/pcre-config && \
 		chmod 755 $(hostprefix)/bin/pcre-config && \
+		@INSTALL_libpcre@
 		rm -f $(targetprefix)/usr/bin/pcre-config
 	@CLEANUP_libpcre@
 	touch $@
