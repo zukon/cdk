@@ -1287,14 +1287,14 @@ $(D)/libxml2_e2: $(D)/bootstrap $(D)/zlib $(D)/python @DEPENDS_libxml2_e2@
 			--without-mem-debug \
 		&& \
 		$(MAKE) all && \
-		@INSTALL_libxml2_e2@ && \
+		sed -e "s,^prefix=,prefix=$(targetprefix)," < xml2-config > $(hostprefix)/bin/xml2-config && \
+		chmod 755 $(hostprefix)/bin/xml2-config && \
+		@INSTALL_libxml2_e2@
+		rm -f $(targetprefix)/usr/bin/xml2-config && \
 		if [ -e "$(targetprefix)$(PYTHON_DIR)/site-packages/libxml2mod.la" ]; then \
 			sed -e "/^dependency_libs/ s,/usr/lib/libxml2.la,$(targetprefix)/usr/lib/libxml2.la,g" -i $(targetprefix)$(PYTHON_DIR)/site-packages/libxml2mod.la; \
 			sed -e "/^libdir/ s,$(PYTHON_DIR)/site-packages,$(targetprefix)$(PYTHON_DIR)/site-packages,g" -i $(targetprefix)$(PYTHON_DIR)/site-packages/libxml2mod.la; \
 		fi; \
-		sed -e "s,^prefix=,prefix=$(targetprefix)," < xml2-config > $(hostprefix)/bin/xml2-config && \
-		chmod 755 $(hostprefix)/bin/xml2-config && \
-		rm -f $(targetprefix)/usr/bin/xml2-config && \
 		sed -e "/^XML2_LIBDIR/ s,/usr/lib,$(targetprefix)/usr/lib,g" -i $(targetprefix)/usr/lib/xml2Conf.sh && \
 		sed -e "/^XML2_INCLUDEDIR/ s,/usr/include,$(targetprefix)/usr/include,g" -i $(targetprefix)/usr/lib/xml2Conf.sh
 	@CLEANUP_libxml2_e2@
