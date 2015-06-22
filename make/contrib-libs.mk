@@ -1322,9 +1322,9 @@ $(D)/libxml2: $(D)/bootstrap $(D)/zlib @DEPENDS_libxml2@
 			--without-mem-debug \
 		&& \
 		$(MAKE) all && \
-		@INSTALL_libxml2@ && \
 		sed -e "s,^prefix=,prefix=$(targetprefix)," < xml2-config > $(hostprefix)/bin/xml2-config && \
 		chmod 755 $(hostprefix)/bin/xml2-config && \
+		@INSTALL_libxml2@
 		rm -f $(targetprefix)/usr/bin/xml2-config && \
 		sed -e "/^XML2_LIBDIR/ s,/usr/lib,$(targetprefix)/usr/lib,g" -i $(targetprefix)/usr/lib/xml2Conf.sh && \
 		sed -e "/^XML2_INCLUDEDIR/ s,/usr/include,$(targetprefix)/usr/include,g" -i $(targetprefix)/usr/lib/xml2Conf.sh
