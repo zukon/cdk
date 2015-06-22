@@ -217,12 +217,8 @@ $(D)/libfreetype: $(D)/bootstrap $(D)/zlib $(D)/bzip2 $(D)/libpng @DEPENDS_libfr
 		&& \
 		$(MAKE) all && \
 		@INSTALL_libfreetype@
-		if [ -d $(targetprefix)/usr/include/freetype2/freetype ] ; then \
-			ln -sf ./freetype2/freetype $(targetprefix)/usr/include/freetype; \
-		else \
-			if [ ! -e $(targetprefix)/usr/include/freetype ] ; then \
-				ln -sf freetype2 $(targetprefix)/usr/include/freetype; \
-			fi; \
+		if [ ! -e $(targetprefix)/usr/include/freetype ] ; then \
+			ln -sf freetype2 $(targetprefix)/usr/include/freetype; \
 		fi; \
 		mv $(targetprefix)/usr/bin/freetype-config $(hostprefix)/bin/freetype-config
 	@CLEANUP_libfreetype@
