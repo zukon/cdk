@@ -638,7 +638,7 @@ release_neutrino_base:
 	cp -dp $(targetprefix)/etc/hostname $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/hosts $(prefix)/release/etc/ && \
 	cp $(buildprefix)/root/root_neutrino/etc/inetd.conf $(prefix)/release/etc/ && \
-	cp $(buildprefix)/root/etc/modules.available $(prefix)/release/etc/ && \
+	cp $(buildprefix)/root/root_neutrino/etc/modules.available $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/localtime $(prefix)/release/etc/ && \
 	ln -sf /proc/mounts $(prefix)/release/etc/mtab && \
 	cp -dp $(buildprefix)/root/etc/nsswitch.conf $(prefix)/release/etc/ && \
