@@ -76,7 +76,6 @@ if [ ! -e /var/etc/.firstboot ]; then
    insmod $MODDIR/stmalloc.ko
    insmod $MODDIR/platform.ko
    insmod $MODDIR/bpamem.ko
-   #insmod $MODDIR/cifs.ko
 
    echo "init frontpanel"
    insmod $MODDIR/boxtype.ko
@@ -87,9 +86,8 @@ if [ ! -e /var/etc/.firstboot ]; then
    #delay
    /bin/evremote2 10 140 &
 
-   #DVD-PLAYER EXIT-TASTE LOAD OR EJECT DVD
-   #mount /dev/sr0 /media/dvd
-   #fix this later if we got to manage a marusys raw device driver
+# Module aus modules.extra laden
+   [ -f /var/etc/modules.extra ] && eval `sed -e 's/#.*//' -e '/^\s*$/d' -e 's/^\(.*\)/insmod \0;/' < /var/etc/modules.extra`
 
   /etc/init.d/portmap start
 #  /etc/init.d/vsftpd start
@@ -100,7 +98,7 @@ if [ ! -e /var/etc/.firstboot ]; then
 
    until false
    do
-      echo "starting neutrino->"
+      echo "starting neutrino ->"
       /usr/local/bin/neutrino
       rtv=$?
       echo "neutrino ended <- RTV: " $rtv
