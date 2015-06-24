@@ -637,8 +637,6 @@ release_neutrino_base:
 	cp -dp $(targetprefix)/etc/host.conf $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/hostname $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/hosts $(prefix)/release/etc/ && \
-	cp $(buildprefix)/root/root_neutrino/etc/inetd.conf $(prefix)/release/etc/ && \
-	cp $(buildprefix)/root/root_neutrino/etc/modules.available $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/localtime $(prefix)/release/etc/ && \
 	ln -sf /proc/mounts $(prefix)/release/etc/mtab && \
 	cp -dp $(buildprefix)/root/etc/nsswitch.conf $(prefix)/release/etc/ && \
@@ -836,7 +834,11 @@ endif
 # channellist / tuxtxt
 #
 	cp -aR $(targetprefix)/var/tuxbox/config/* $(prefix)/release/var/tuxbox/config
-#	cp -aR $(buildprefix)/root/root_neutrino/* $(prefix)/release/
+
+#
+# copy root_neutrino
+#
+	cp -aR $(buildprefix)/root/root_neutrino/* $(prefix)/release/
 
 if !ENABLE_CUBEREVO_MINI2
 if !ENABLE_ATEVIO7500
