@@ -313,7 +313,8 @@ endif
 HOST_KERNEL_PATCHES = $(KERNELPATCHES_24)
 HOST_KERNEL_CONFIG = linux-sh4-$(subst _stm24_,_,$(KERNELVERSION))_$(MODNAME).config$(DEBUG_STR)
 
-$(D)/linux-kernel: $(D)/bootstrap $(buildprefix)/Patches/$(BUILDCONFIG)/$(HOST_KERNEL_CONFIG) | $(HOST_U_BOOT_TOOLS)
+$(D)/linux-kernel: $(D)/bootstrap $(buildprefix)/Patches/$(BUILDCONFIG)/$(HOST_KERNEL_CONFIG) | $(HOST_U_BOOT_TOOLS) \
+	$(if $(HOST_KERNEL_PATCHES),$(HOST_KERNEL_PATCHES:%=$(PATCHES)/$(BUILDCONFIG)/%))
 	rm -rf linux-sh4*
 	REPO=git://git.stlinux.com/stm/linux-sh4-2.6.32.y.git;protocol=git;branch=stmicro; \
 	[ -d "$(archivedir)/linux-sh4-2.6.32.y.git" ] && \
@@ -322,10 +323,14 @@ $(D)/linux-kernel: $(D)/bootstrap $(buildprefix)/Patches/$(BUILDCONFIG)/$(HOST_K
 	(echo "Getting STlinux kernel source"; git clone -n $$REPO $(archivedir)/linux-sh4-2.6.32.y.git); \
 	(echo "Copying kernel source code to build environment"; cp -ra $(archivedir)/linux-sh4-2.6.32.y.git $(buildprefix)/$(KERNEL_DIR)); \
 	(echo "Applying patch level P0$(KERNELLABEL)"; cd $(KERNEL_DIR); git checkout -q $(HOST_KERNEL_REVISION))
-	$(if $(HOST_KERNEL_PATCHES),cd $(KERNEL_DIR) && cat $(HOST_KERNEL_PATCHES:%=$(buildprefix)/Patches/$(BUILDCONFIG)/%) | patch -p1)
-	$(INSTALL) -m644 Patches/$(BUILDCONFIG)/$(HOST_KERNEL_CONFIG) $(KERNEL_DIR)/.config
-	-rm $(KERNEL_DIR)/localversion*
-	echo "$(KERNELSTMLABEL)" > $(KERNEL_DIR)/localversion-stm
+	set -e; cd $(KERNEL_DIR); \
+		for i in $(HOST_KERNEL_PATCHES); do \
+			echo -e "==> \033[31mApplying Patch:\033[0m $$i"; \
+			patch -p1 -i $(buildprefix)/Patches/$(BUILDCONFIG)/$$i; \
+		done
+	$(INSTALL) -m644 $(PATCHES)/$(BUILDCONFIG)/$(HOST_KERNEL_CONFIG) $(buildprefix)/$(KERNEL_DIR)/.config
+	-rm $(buildprefix)/$(KERNEL_DIR)/localversion*
+	echo "$(KERNELSTMLABEL)" > $(buildprefix)/$(KERNEL_DIR)/localversion-stm
 	$(MAKE) -C $(KERNEL_DIR) ARCH=sh oldconfig
 	$(MAKE) -C $(KERNEL_DIR) ARCH=sh include/asm
 	$(MAKE) -C $(KERNEL_DIR) ARCH=sh include/linux/version.h
@@ -335,6 +340,7 @@ $(D)/linux-kernel: $(D)/bootstrap $(buildprefix)/Patches/$(BUILDCONFIG)/$(HOST_K
 	$(MAKE) -C $(KERNEL_DIR) modules_install \
 		ARCH=sh \
 		CROSS_COMPILE=$(target)- \
+		DEPMOD=$(DEPMOD) \
 		INSTALL_MOD_PATH=$(targetprefix)
 	$(INSTALL) -m644 $(KERNEL_DIR)/arch/sh/boot/uImage $(bootprefix)/vmlinux.ub && \
 	$(INSTALL) -m644 $(KERNEL_DIR)/vmlinux $(targetprefix)/boot/vmlinux-sh4-$(KERNELVERSION) && \
