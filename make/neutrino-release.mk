@@ -637,8 +637,6 @@ release_neutrino_base:
 	cp -dp $(targetprefix)/etc/host.conf $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/hostname $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/hosts $(prefix)/release/etc/ && \
-	cp $(buildprefix)/root/root_neutrino/etc/inetd.conf $(prefix)/release/etc/ && \
-	cp $(buildprefix)/root/etc/modules.available $(prefix)/release/etc/ && \
 	cp -dp $(targetprefix)/etc/localtime $(prefix)/release/etc/ && \
 	ln -sf /proc/mounts $(prefix)/release/etc/mtab && \
 	cp -dp $(buildprefix)/root/etc/nsswitch.conf $(prefix)/release/etc/ && \
@@ -836,7 +834,11 @@ endif
 # channellist / tuxtxt
 #
 	cp -aR $(targetprefix)/var/tuxbox/config/* $(prefix)/release/var/tuxbox/config
-#	cp -aR $(buildprefix)/root/root_neutrino/* $(prefix)/release/
+
+#
+# copy root_neutrino
+#
+	cp -aR $(buildprefix)/root/root_neutrino/* $(prefix)/release/
 
 if !ENABLE_CUBEREVO_MINI2
 if !ENABLE_ATEVIO7500
@@ -1104,6 +1106,7 @@ $(D)/%release_neutrino: release_neutrino_base release_neutrino_$(TF7700)$(HL101)
 	find $(buildprefix)/own_build/neutrino-hd/ -mindepth 1 -maxdepth 1 -exec cp -at$(prefix)/release/ -- {} +
 #	receiver specific (only if directory exist)
 	[ -d "$(buildprefix)/own_build/neutrino-hd.$(BOXTYPE)" ] && find $(buildprefix)/own_build/neutrino-hd.$(BOXTYPE)/ -mindepth 1 -maxdepth 1 -exec cp -at$(prefix)/release/ -- {} + || true
+	echo $(BOXTYPE) > $(prefix)/release/etc/model
 	rm -f $(prefix)/release/for_your_own_changes
 
 # nicht die feine Art, aber funktioniert ;)
@@ -1135,12 +1138,7 @@ $(D)/%release_neutrino: release_neutrino_base release_neutrino_$(TF7700)$(HL101)
 
 	rm -f $(prefix)/release/bin/pic2m2v
 	rm -f $(prefix)/release/usr/lib/*.py
-	rm -f $(prefix)/release/usr/share/tuxbox/neutrino/httpd/images/rc_cst_v1.jpg
-	rm -f $(prefix)/release/usr/share/tuxbox/neutrino/httpd/images/rc_cst_v2.jpg
-	rm -f $(prefix)/release/usr/share/tuxbox/neutrino/httpd/images/rc_cst_v3.jpg
-	rm -f $(prefix)/release/usr/share/tuxbox/neutrino/httpd/images/rc_cst_v4.jpg
-	rm -f $(prefix)/release/usr/share/tuxbox/neutrino/httpd/images/rc_cst_v5.jpg
-	rm -f $(prefix)/release/usr/share/tuxbox/neutrino/httpd/images/rc_cst_v6.jpg
+	rm -f $(prefix)/release/usr/share/tuxbox/neutrino/httpd/images/rc_cst_v?.*
 if !ENABLE_SPARK
 if !ENABLE_SPARK7162
 	rm -f $(prefix)/release/usr/share/tuxbox/neutrino/httpd/images/rc_spark_new.jpg

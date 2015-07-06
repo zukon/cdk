@@ -1,4 +1,41 @@
 #
+# libncurses
+#
+$(D)/libncurses: $(D)/bootstrap @DEPENDS_libncurses@
+	@PREPARE_libncurses@
+	cd @DIR_libncurses@ && \
+		$(CONFIGURE) \
+			--target=$(target) \
+			--prefix=/usr \
+			--with-terminfo-dirs=/usr/share/terminfo \
+			--with-shared \
+			--without-cxx \
+			--without-cxx-binding \
+			--without-ada \
+			--without-progs \
+			--without-tests \
+			--disable-big-core \
+			--without-profile \
+			--disable-rpath \
+			--disable-rpath-hack \
+			--enable-echo \
+			--enable-const \
+			--enable-overwrite \
+			--enable-pc-files \
+			--without-manpages \
+			--with-fallbacks='linux vt100 xterm' \
+		&& \
+		$(MAKE) libs HOSTCC=gcc \
+			HOSTCCFLAGS="$(CFLAGS) -DHAVE_CONFIG_H -I../ncurses -DNDEBUG -D_GNU_SOURCE -I../include" \
+			HOSTLDFLAGS="$(LDFLAGS)" && \
+		sed -e 's,^prefix="/usr",prefix="$(targetprefix)/usr",' < misc/ncurses-config > $(hostprefix)/bin/ncurses5-config && \
+		chmod 755 $(hostprefix)/bin/ncurses5-config && \
+		@INSTALL_libncurses@
+		rm -f $(targetprefix)/usr/bin/ncurses5-config
+	@CLEANUP_libncurses@
+	touch $@
+
+#
 # openssl
 #
 $(D)/openssl: $(D)/bootstrap @DEPENDS_openssl@
@@ -132,6 +169,19 @@ $(D)/zlib: $(D)/bootstrap @DEPENDS_zlib@
 	touch $@
 
 #
+# bzip2
+#
+$(D)/bzip2: $(D)/bootstrap @DEPENDS_bzip2@
+	@PREPARE_bzip2@
+	cd @DIR_bzip2@ && \
+	mv Makefile-libbz2_so Makefile && \
+		CC=$(target)-gcc AR=$(target)-ar RANLIB=$(target)-ranlib \
+		$(MAKE) all && \
+		@INSTALL_bzip2@
+	@CLEANUP_bzip2@
+	touch $@
+
+#
 # libreadline
 #
 $(D)/libreadline: $(D)/bootstrap @DEPENDS_libreadline@
@@ -167,12 +217,8 @@ $(D)/libfreetype: $(D)/bootstrap $(D)/zlib $(D)/bzip2 $(D)/libpng @DEPENDS_libfr
 		&& \
 		$(MAKE) all && \
 		@INSTALL_libfreetype@
-		if [ -d $(targetprefix)/usr/include/freetype2/freetype ] ; then \
-			ln -sf ./freetype2/freetype $(targetprefix)/usr/include/freetype; \
-		else \
-			if [ ! -e $(targetprefix)/usr/include/freetype ] ; then \
-				ln -sf freetype2 $(targetprefix)/usr/include/freetype; \
-			fi; \
+		if [ ! -e $(targetprefix)/usr/include/freetype ] ; then \
+			ln -sf freetype2 $(targetprefix)/usr/include/freetype; \
 		fi; \
 		mv $(targetprefix)/usr/bin/freetype-config $(hostprefix)/bin/freetype-config
 	@CLEANUP_libfreetype@
@@ -350,10 +396,7 @@ $(D)/libgif_e2: $(D)/bootstrap @DEPENDS_libgif_e2@
 $(D)/libcurl: $(D)/bootstrap $(D)/openssl $(D)/zlib @DEPENDS_libcurl@
 	@PREPARE_libcurl@
 	cd @DIR_libcurl@ && \
-		$(BUILDENV) LIBS="-lssl -lcrypto -lz" \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
+		$(CONFIGURE) \
 			--prefix=/usr \
 			--enable-silent-rules \
 			--disable-debug \
@@ -1287,14 +1330,14 @@ $(D)/libxml2_e2: $(D)/bootstrap $(D)/zlib $(D)/python @DEPENDS_libxml2_e2@
 			--without-mem-debug \
 		&& \
 		$(MAKE) all && \
-		@INSTALL_libxml2_e2@ && \
+		sed -e "s,^prefix=,prefix=$(targetprefix)," < xml2-config > $(hostprefix)/bin/xml2-config && \
+		chmod 755 $(hostprefix)/bin/xml2-config && \
+		@INSTALL_libxml2_e2@
+		rm -f $(targetprefix)/usr/bin/xml2-config && \
 		if [ -e "$(targetprefix)$(PYTHON_DIR)/site-packages/libxml2mod.la" ]; then \
 			sed -e "/^dependency_libs/ s,/usr/lib/libxml2.la,$(targetprefix)/usr/lib/libxml2.la,g" -i $(targetprefix)$(PYTHON_DIR)/site-packages/libxml2mod.la; \
 			sed -e "/^libdir/ s,$(PYTHON_DIR)/site-packages,$(targetprefix)$(PYTHON_DIR)/site-packages,g" -i $(targetprefix)$(PYTHON_DIR)/site-packages/libxml2mod.la; \
 		fi; \
-		sed -e "s,^prefix=,prefix=$(targetprefix)," < xml2-config > $(hostprefix)/bin/xml2-config && \
-		chmod 755 $(hostprefix)/bin/xml2-config && \
-		rm -f $(targetprefix)/usr/bin/xml2-config && \
 		sed -e "/^XML2_LIBDIR/ s,/usr/lib,$(targetprefix)/usr/lib,g" -i $(targetprefix)/usr/lib/xml2Conf.sh && \
 		sed -e "/^XML2_INCLUDEDIR/ s,/usr/include,$(targetprefix)/usr/include,g" -i $(targetprefix)/usr/lib/xml2Conf.sh
 	@CLEANUP_libxml2_e2@
@@ -1322,9 +1365,9 @@ $(D)/libxml2: $(D)/bootstrap $(D)/zlib @DEPENDS_libxml2@
 			--without-mem-debug \
 		&& \
 		$(MAKE) all && \
-		@INSTALL_libxml2@ && \
 		sed -e "s,^prefix=,prefix=$(targetprefix)," < xml2-config > $(hostprefix)/bin/xml2-config && \
 		chmod 755 $(hostprefix)/bin/xml2-config && \
+		@INSTALL_libxml2@
 		rm -f $(targetprefix)/usr/bin/xml2-config && \
 		sed -e "/^XML2_LIBDIR/ s,/usr/lib,$(targetprefix)/usr/lib,g" -i $(targetprefix)/usr/lib/xml2Conf.sh && \
 		sed -e "/^XML2_INCLUDEDIR/ s,/usr/include,$(targetprefix)/usr/include,g" -i $(targetprefix)/usr/lib/xml2Conf.sh
@@ -1347,17 +1390,16 @@ $(D)/libxslt: $(D)/bootstrap $(D)/libxml2_e2 @DEPENDS_libxslt@
 			--without-crypto \
 			--without-debug \
 			--without-mem-debug \
-			--disable-static \
 		&& \
 		$(MAKE) all && \
-		@INSTALL_libxslt@ && \
+		sed -e "s,^prefix=,prefix=$(targetprefix)," < xslt-config > $(hostprefix)/bin/xslt-config && \
+		chmod 755 $(hostprefix)/bin/xslt-config && \
+		@INSTALL_libxslt@
 		if [ -e "$(targetprefix)$(PYTHON_DIR)/site-packages/libxsltmod.la" ]; then \
 			sed -e "/^dependency_libs/ s,/usr/lib/libexslt.la,$(targetprefix)/usr/lib/libexslt.la,g" -i $(targetprefix)$(PYTHON_DIR)/site-packages/libxsltmod.la; \
 			sed -e "/^dependency_libs/ s,/usr/lib/libxslt.la,$(targetprefix)/usr/lib/libxslt.la,g" -i $(targetprefix)$(PYTHON_DIR)/site-packages/libxsltmod.la; \
 			sed -e "/^libdir/ s,$(PYTHON_DIR)/site-packages,$(targetprefix)$(PYTHON_DIR)/site-packages,g" -i $(targetprefix)$(PYTHON_DIR)/site-packages/libxsltmod.la; \
 		fi; \
-		sed -e "s,^prefix=,prefix=$(targetprefix)," < xslt-config > $(hostprefix)/bin/xslt-config && \
-		chmod 755 $(hostprefix)/bin/xslt-config && \
 		sed -e "/^XSLT_LIBDIR/ s,/usr/lib,$(targetprefix)/usr/lib,g" -i $(targetprefix)/usr/lib/xsltConf.sh && \
 		sed -e "/^XSLT_INCLUDEDIR/ s,/usr/include,$(targetprefix)/usr/include,g" -i $(targetprefix)/usr/lib/xsltConf.sh
 	@CLEANUP_libxslt@
@@ -1524,13 +1566,10 @@ $(D)/brofs: $(D)/bootstrap @DEPENDS_brofs@
 $(D)/libcap: $(D)/bootstrap @DEPENDS_libcap@
 	@PREPARE_libcap@
 	cd @DIR_libcap@ && \
-		export CROSS_BASE=$(hostprefix); export TARGET=$(target); export TARGETPREFIX=$(targetprefix);\
-		$(MAKE) \
-		LIBDIR=$(targetprefix)/usr/lib \
-		INCDIR=$(targetprefix)/usr/include \
-		PAM_CAP=no \
-		LIBATTR=no
-		@INSTALL_libcap@
+		export CROSS_BASE=$(crossprefix) && \
+		export TARGET=$(target) && \
+		export TARGETPREFIX=$(targetprefix) && \
+		$(MAKE) -C libcap LIBATTR=no INCDIR=$(targetprefix)/usr/include LIBDIR=$(targetprefix)/usr/lib install
 	@CLEANUP_libcap@
 	touch $@
 
@@ -1756,9 +1795,9 @@ $(D)/libpcre: $(D)/bootstrap @DEPENDS_libpcre@
 			--enable-unicode-properties \
 		&& \
 		$(MAKE) all && \
-		@INSTALL_libpcre@ && \
 		sed -e "s,^prefix=,prefix=$(targetprefix)," < pcre-config > $(hostprefix)/bin/pcre-config && \
 		chmod 755 $(hostprefix)/bin/pcre-config && \
+		@INSTALL_libpcre@
 		rm -f $(targetprefix)/usr/bin/pcre-config
 	@CLEANUP_libpcre@
 	touch $@

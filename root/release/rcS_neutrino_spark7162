@@ -60,7 +60,6 @@ if [ ! -e /var/etc/.firstboot ]; then
    player=`cat /proc/stb/player/version`
    player=`cat /proc/stb/player/version | awk '{ print substr( $0, length($0) - 2, length($0) ) }'`
    echo "init player $player"
-
    insmod $MODDIR/mmelog.ko
    insmod $MODDIR/ksound.ko
    insmod $MODDIR/p2div64.ko
@@ -94,7 +93,8 @@ if [ ! -e /var/etc/.firstboot ]; then
 #   rm /f /dev/dvb/adapter0/ca1
 #   mknod /dev/dvb/adapter0/ca1 c 212 22
 
-#   /bin/evremote2 spark 100 &
+# Module aus modules.extra laden
+   [ -f /var/etc/modules.extra ] && eval `sed -e 's/#.*//' -e '/^\s*$/d' -e 's/^\(.*\)/insmod \0;/' < /var/etc/modules.extra`
 
    stfbcontrol a 255
 

@@ -1,54 +1,4 @@
 #
-# libncurses
-#
-$(D)/libncurses: $(D)/bootstrap @DEPENDS_libncurses@
-	@PREPARE_libncurses@
-	cd @DIR_libncurses@ && \
-		$(CONFIGURE) \
-			--target=$(target) \
-			--prefix=/usr \
-			--with-terminfo-dirs=/usr/share/terminfo \
-			--with-shared \
-			--without-cxx \
-			--without-cxx-binding \
-			--without-ada \
-			--without-progs \
-			--without-tests \
-			--disable-big-core \
-			--without-profile \
-			--disable-rpath \
-			--disable-rpath-hack \
-			--enable-echo \
-			--enable-const \
-			--enable-overwrite \
-			--enable-pc-files \
-			--without-manpages \
-			--with-fallbacks='linux vt100 xterm' \
-		&& \
-		$(MAKE) libs HOSTCC=gcc \
-			HOSTCCFLAGS="$(CFLAGS) -DHAVE_CONFIG_H -I../ncurses -DNDEBUG -D_GNU_SOURCE -I../include" \
-			HOSTLDFLAGS="$(LDFLAGS)" && \
-		@INSTALL_libncurses@ && \
-		sed -e 's,^prefix="/usr",prefix="$(targetprefix)/usr",' < misc/ncurses-config > $(hostprefix)/bin/ncurses5-config && \
-		chmod 755 $(hostprefix)/bin/ncurses5-config && \
-		rm -f $(targetprefix)/usr/bin/ncurses5-config
-	@CLEANUP_libncurses@
-	touch $@
-
-#
-# bzip2
-#
-$(D)/bzip2: $(D)/bootstrap @DEPENDS_bzip2@
-	@PREPARE_bzip2@
-	cd @DIR_bzip2@ && \
-	mv Makefile-libbz2_so Makefile && \
-		CC=$(target)-gcc AR=$(target)-ar RANLIB=$(target)-ranlib \
-		$(MAKE) all && \
-		@INSTALL_bzip2@
-	@CLEANUP_bzip2@
-	touch $@
-
-#
 # grep
 #
 $(D)/grep: $(D)/bootstrap @DEPENDS_grep@
@@ -540,6 +490,7 @@ $(D)/mencoder: $(D)/bootstrap @DEPENDS_mencoder@
 $(D)/jfsutils: $(D)/bootstrap $(D)/e2fsprogs @DEPENDS_jfsutils@
 	@PREPARE_jfsutils@
 	cd @DIR_jfsutils@ && \
+		sed "s@<unistd.h>@&\n#include <sys/types.h>@g" -i fscklog/extract.c && \
 		$(CONFIGURE) \
 			--prefix= \
 			--target=$(target) \
@@ -684,7 +635,7 @@ $(D)/imagemagick: $(D)/bootstrap @DEPENDS_imagemagick@
 	cd @DIR_imagemagick@ && \
 		$(BUILDENV) \
 		CFLAGS="-O1" \
-		PKG_CONFIG=$(hostprefix)/bin/pkg-config \
+		PKG_CONFIG=$(hostprefix)/bin/$(target)-pkg-config \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -799,7 +750,7 @@ $(D)/avahi: $(D)/bootstrap $(D)/libexpat $(D)/libdaemon $(D)/dbus @DEPENDS_avahi
 	touch $@
 
 #
-#
+# mtd_utils
 #
 $(D)/mtd_utils: $(D)/bootstrap $(D)/zlib $(D)/lzo $(D)/e2fsprogs @DEPENDS_mtd_utils@
 	@PREPARE_mtd_utils@

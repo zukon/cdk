@@ -7,7 +7,7 @@ if [ "$1" == -h ] || [ "$1" == --help ]; then
  echo "Parameter 4: player (1-2)"
  echo "Parameter 5: Media Framework (1-4)"
  echo "Parameter 6: External LCD support (1-2)"
- echo "Parameter 7: Image (Neutrino=1/Enigma=2) (1-2)"
+ echo "Parameter 7: Image (Enigma=1/2 Neutrino=3/4 Tvheadend=5 (1-5)"
  exit
 fi
 
@@ -337,18 +337,22 @@ esac
 ##############################################
 
 case $7 in
-	[1-2]) REPLY=$7;;
+	[1-5]) REPLY=$7;;
 	*)	echo -e "\nWhich Image do you want to build:"
-		echo "   1) Neutrino"
+		echo "   1) Enigma2"
 		echo "   2) Enigma2 (includes WLAN drivers)"
-		echo "   3) tvheadend"
+		echo "   3) Neutrino"
+		echo "   4) Neutrino (includes WLAN drivers)"
+		echo "   5) Tvheadend"
 		read -p "Select Image to build (1-3)? ";;
 esac
 
 case "$REPLY" in
-	1) IMAGE="--enable-neutrino";;
+	1) IMAGE="--enable-enigma2";;
 	2) IMAGE="--enable-enigma2 --enable-wlandriver";;
-	3) IMAGE="--enable-tvheadend";;
+	3) IMAGE="--enable-neutrino";;
+	4) IMAGE="--enable-neutrino --enable-wlandriver";;
+	5) IMAGE="--enable-tvheadend";;
 	*) IMAGE="--enable-neutrino";;
 esac
 
