@@ -538,10 +538,9 @@ $(D)/libvorbisidec: $(D)/bootstrap $(D)/libogg @DEPENDS_libvorbisidec@
 	@PREPARE_libvorbisidec@
 	cd @DIR_libvorbisidec@ && \
 		ACLOCAL_FLAGS="-I . -I $(targetprefix)/usr/share/aclocal" \
-		$(CONFIGURE) \
-			--prefix=/usr \
+		$(BUILDENV) ./autogen.sh $(CONFIGURE_OPTS) --prefix=/usr \
 		&& \
-		$(MAKE) && \
+		$(MAKE) all && \
 		@INSTALL_libvorbisidec@
 	@CLEANUP_libvorbisidec@
 	touch $@
