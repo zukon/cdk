@@ -56,7 +56,7 @@ $(D)/enigma2-pli-nightly.do_prepare: | $(ENIGMA2_DEPS)
 	echo "Revision        : "$$REVISION; \
 	echo ""; \
 	if [ "$$REPLY" != "1" ]; then \
-		REPO="git://git.code.sf.net/p/openpli/enigma2"; \
+		REPO="https://github.com/OpenPLi/enigma2.git"; \
 		rm -rf $(sourcedir)/enigma2-nightly; \
 		rm -rf $(sourcedir)/enigma2-nightly.org; \
 		[ -d "$(archivedir)/enigma2-pli-nightly.git" ] && \
