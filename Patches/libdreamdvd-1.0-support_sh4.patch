@@ -12,18 +12,20 @@
  	ddvd_set_video(pconfig, DDVD_4_3, DDVD_LETTERBOX, DDVD_PAL);
  	ddvd_set_lfb(pconfig, NULL, 720, 576, 1, 720);
  	struct ddvd_resume resume_info;
-@@ -622,8 +626,11 @@
+@@ -630,8 +634,11 @@
  	unsigned char *p_lfb = playerconfig->lfb;
  	enum ddvd_result res = DDVD_OK;
  	int msg;
+-	// try to load liba52.so.0 for softdecoding
+-	int have_liba52 = ddvd_load_liba52();
 +#if defined(__sh__)
 +#else
- 	// try to load liba52.so.0 for softdecoding
- 	int have_liba52 = ddvd_load_liba52();
++ 	// try to load liba52.so.0 for softdecoding
++ 	int have_liba52 = ddvd_load_liba52();
 +#endif
- 
- 	// decide which resize routine we should use
- 	// on 4bpp mode we use bicubic resize for sd skins because we get much better results with subtitles and the speed is ok
+ 	int audio_lock = 0;
+ 	int spu_lock = 0;
+
 @@ -740,7 +747,11 @@
  		Perror("AUDIO_PLAY");
  
