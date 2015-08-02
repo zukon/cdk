@@ -770,6 +770,7 @@ TUXBOX_RULES_MAKE(host_pkgconfig)
 TUXBOX_RULES_MAKE(host_module_init_tools)
 TUXBOX_RULES_MAKE(host_mtd_utils)
 TUXBOX_RULES_MAKE(host_glib2_genmarshal)
+TUXBOX_RULES_MAKE(host_libffi)
 TUXBOX_RULES_MAKE(uboot_tf7700)
 
 #
