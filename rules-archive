@@ -185,15 +185,15 @@ gst-plugins-ugly-0.10.19.tar.bz2;http://gstreamer.freedesktop.org/src/gst-plugin
 gst-fluendo-mpegdemux-0.10.71.tar.gz;http://core.fluendo.com/gstreamer/src/gst-fluendo-mpegdemux
 gst-ffmpeg-0.10.13.tar.bz2;http://gstreamer.freedesktop.org/src/gst-ffmpeg
 gmediarender-0.0.6.tar.bz2;http://savannah.nongnu.org/download/gmrender
-gst-plugin-subsink.git;git://git.code.sf.net/p/openpli/gstsubsink;8182abe751364f6eb1ed45377b0625102aeb68d5
+gst-plugin-subsink.git;git://github.com/OpenPLi/gst-plugin-subsink.git;8182abe751364f6eb1ed45377b0625102aeb68d5
 
 #
 # ENIGMA2
 #
-libtuxtxt.git;git://git.code.sf.net/p/openpli/tuxtxt
-enigma2-openpli-plugins-enigma2.git;git://git.code.sf.net/p/openpli/plugins-enigma2
+libtuxtxt.git;git://github.com/OpenPLi/tuxtxt.git
+enigma2-openpli-plugins-enigma2.git;git://github.com/OpenPLi/enigma2-plugins.git
 e2openplugin-OpenWebif.git;git://github.com/HDMU/e2openplugin-OpenWebif
-hotplug-e2-helper.git;git://git.code.sf.net/p/openpli/hotplug-e2-helper
+hotplug-e2-helper.git;git://github.com/OpenPLi/hotplug-e2-helper.git
 libdreamdvd.git;git://github.com/mirakels/libdreamdvd
 
 #
