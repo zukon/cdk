@@ -1315,8 +1315,6 @@ $(D)/libflac: $(D)/bootstrap @DEPENDS_libflac@
 $(D)/libxml2_e2: $(D)/bootstrap $(D)/zlib $(D)/python @DEPENDS_libxml2_e2@
 	@PREPARE_libxml2_e2@
 	cd @DIR_libxml2_e2@ && \
-		touch NEWS AUTHORS ChangeLog && \
-		autoreconf -fi && \
 		$(CONFIGURE) \
 			--prefix=/usr \
 			--enable-shared \
@@ -1348,8 +1346,6 @@ $(D)/libxml2_e2: $(D)/bootstrap $(D)/zlib $(D)/python @DEPENDS_libxml2_e2@
 $(D)/libxml2: $(D)/bootstrap $(D)/zlib @DEPENDS_libxml2@
 	@PREPARE_libxml2@
 	cd @DIR_libxml2@ && \
-		touch NEWS AUTHORS ChangeLog && \
-		autoreconf -fi && \
 		$(CONFIGURE) \
 			--prefix=/usr \
 			--enable-shared \
