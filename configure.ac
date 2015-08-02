@@ -567,12 +567,14 @@ fi
 if test -z "$TARGET_CFLAGS" -o -z "$TARGET_CXXFLAGS"; then
 	TARGET_CFLAGS="-pipe"
 	if test "$enable_debug" = "yes"; then
-		TARGET_CFLAGS="$TARGET_CFLAGS -O2 -g -gdwarf-2 -I$targetprefix/usr/include"
-		TARGET_LDFLAGS="-Wl,-rpath -Wl,/usr/lib -Wl,-rpath-link -Wl,$targetprefix/usr/lib -L$targetprefix/usr/lib -L$targetprefix/lib"
+		TARGET_CFLAGS="$TARGET_CFLAGS -O2 -g -gdwarf-2"
+		TARGET_LDFLAGS=""
 	else
-		TARGET_CFLAGS="$TARGET_CFLAGS -Os -I$targetprefix/usr/include"
-		TARGET_LDFLAGS="-Wl,-rpath -Wl,/usr/lib -Wl,-rpath-link -Wl,$targetprefix/usr/lib -L$targetprefix/usr/lib -L$targetprefix/lib"
+		TARGET_CFLAGS="$TARGET_CFLAGS -Os"
+		TARGET_LDFLAGS=""
 	fi
+	TARGET_LDFLAGS="$TARGET_LDFLAGS -Wl,-rpath -Wl,/usr/lib -Wl,-rpath-link -Wl,$targetprefix/usr/lib -L$targetprefix/usr/lib -L$targetprefix/lib"
+	TARGET_CFLAGS="$TARGET_CFLAGS -I$targetprefix/usr/include"
 	TARGET_CXXFLAGS="$TARGET_CFLAGS"
 fi
 AC_SUBST(CFLAGS)
