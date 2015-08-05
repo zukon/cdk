@@ -97,7 +97,6 @@ librtmpdump;2.4;rtmpdump-2.4;rtmpdump.git;extract:rtmpdump.git;patch:rtmpdump-2.
 lirc;0.9.0;lirc-0.9.0;lirc-0.9.0.tar.gz:lirc-0.9.0.patch;extract:lirc-0.9.0.tar.gz;patch:lirc-0.9.0.patch
 libsigc_e2;1.2.7;libsigc++-1.2.7;libsigc++-1.2.7.tar.gz;extract:libsigc++-1.2.7.tar.gz
 libsigc;2.3.2;libsigc++-2.3.2;libsigc++-2.3.2.tar.xz;extract:libsigc++-2.3.2.tar.xz
-#glib2;2.45.4;glib-2.45.4;glib-2.45.4.tar.xz:glib-2.45.4.patch;extract:glib-2.45.4.tar.xz;patch:glib-2.45.4.patch
 glib2;2.45.4;glib-2.45.4;glib-2.45.4.tar.xz;extract:glib-2.45.4.tar.xz
 libffi;3.2.1;libffi-3.2.1;libffi-3.2.1.tar.gz;extract:libffi-3.2.1.tar.gz;patch:libffi-3.1.patch
 orc;0.4.18;orc-0.4.18;orc-0.4.18.tar.gz;extract:orc-0.4.18.tar.gz
