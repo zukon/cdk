@@ -1184,9 +1184,6 @@ endif
 	if [ -d $(prefix)/release/usr/lib/glib-2.0 ]; then \
 		rm -rf $(prefix)/release/usr/lib/glib-2.0; \
 	fi
-	if [ -d $(prefix)/release/usr/lib/gio ]; then \
-		rm -rf $(prefix)/release/usr/lib/gio; \
-	fi
 	if [ -d $(prefix)/release/usr/lib/enchant ]; then \
 		rm -rf $(prefix)/release/usr/lib/enchant; \
 	fi

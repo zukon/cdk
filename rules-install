@@ -243,6 +243,8 @@ wpa_supplicant;make:install:BINDIR=/usr/sbin:DESTDIR=TARGET
 ethtool;make:install:DESTDIR=TARGET
 xupnpd;make:install:DESTDIR=TARGET
 udpxy;make:install:INSTALLROOT=TARGET/usr
-
-
+glibnetworking2;make:install:INSTALLROOT=TARGET
+gnutls;make:install:DESTDIR=TARGET
+nettle;make:install:DESTDIR=TARGET
+gmp;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libgmp.la
 >>?;rules-install-local

@@ -807,7 +807,6 @@ $(D)/libdvdnav: $(D)/bootstrap $(D)/libdvdread @DEPENDS_libdvdnav@
 	@PREPARE_libdvdnav@
 	cd @DIR_libdvdnav@ && \
 		$(BUILDENV) \
-		libtoolize --copy --ltdl && \
 		./autogen.sh \
 			--build=$(build) \
 			--host=$(target) \
@@ -1093,7 +1092,7 @@ $(D)/libass: $(D)/bootstrap $(D)/libfreetype $(D)/libfribidi @DEPENDS_libass@
 #
 # WebKitDFB
 #
-$(D)/webkitdfb: $(D)/bootstrap $(D)/glib2 $(D)/icu4c $(D)/libxml2_e2 $(D)/enchant $(D)/lite $(D)/libcurl $(D)/fontconfig $(D)/sqlite $(D)/libsoup $(D)/cairo $(D)/libjpeg @DEPENDS_webkitdfb@
+$(D)/webkitdfb: $(D)/bootstrap $(D)/glib2  $(D)/glibnw2 $(D)/icu4c $(D)/libxml2_e2 $(D)/enchant $(D)/lite $(D)/libcurl $(D)/fontconfig $(D)/sqlite $(D)/libsoup $(D)/cairo $(D)/libjpeg @DEPENDS_webkitdfb@
 	@PREPARE_webkitdfb@
 	cd @DIR_webkitdfb@ && \
 		$(CONFIGURE) \
@@ -2036,3 +2035,68 @@ $(D)/libplist: $(D)/bootstrap @DEPENDS_libplist@
 		@INSTALL_libplist@
 	@CLEANUP_libplist@
 	touch $@
+
+#
+# gmp
+#
+$(D)/gmp: $(D)/bootstrap @DEPENDS_gmp@
+	@PREPARE_gmp@
+	cd @DIR_gmp@ && \
+		$(CONFIGURE) \
+			--prefix=/usr \
+		&& \
+		$(MAKE) && \
+		@INSTALL_gmp@
+	@CLEANUP_gmp@
+	touch $@
+
+#
+# nettle
+#
+$(D)/nettle: $(D)/bootstrap $(D)/gmp @DEPENDS_nettle@
+	@PREPARE_nettle@
+	cd @DIR_nettle@ && \
+		$(CONFIGURE) \
+			--prefix=/usr/ \
+			--with-gmp=yes \
+		&& \
+		$(MAKE) && \
+		@INSTALL_nettle@
+	@CLEANUP_nettle@
+	touch $@
+
+#
+# gnutls
+#
+$(D)/gnutls: $(D)/bootstrap $(D)/nettle @DEPENDS_gnutls@
+	@PREPARE_gnutls@
+	cd @DIR_gnutls@ && \
+		$(CONFIGURE) \
+			--prefix=/usr/ \
+			--disable-rpath \
+		        --with-included-libtasn1 \
+		        --enable-local-libopts \
+		        --with-libpthread-prefix=${STAGING_DIR_HOST}${prefix} \
+        		--disable-guile \
+		        --disable-crywrap \
+		        --without-p11-kit \
+		&& \
+		$(MAKE) && \
+		@INSTALL_gnutls@
+	@CLEANUP_gnutls@
+	touch $@
+
+#
+# glibnetworking2
+#
+$(D)/glibnetworking2: $(D)/bootstrap $(D)/gnutls $(D)/glib2 @DEPENDS_glibnetworking2@
+	@PREPARE_glibnetworking2@
+	cd @DIR_glibnetworking2@ && \
+		$(CONFIGURE) \
+			--prefix=/usr/ \
+		&& \
+		$(MAKE) && \
+		@INSTALL_glibnetworking2@
+	@CLEANUP_glibnetworking2@
+	touch $@
+
