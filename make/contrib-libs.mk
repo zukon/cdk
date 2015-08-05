@@ -1092,7 +1092,7 @@ $(D)/libass: $(D)/bootstrap $(D)/libfreetype $(D)/libfribidi @DEPENDS_libass@
 #
 # WebKitDFB
 #
-$(D)/webkitdfb: $(D)/bootstrap $(D)/glib2  $(D)/glibnw2 $(D)/icu4c $(D)/libxml2_e2 $(D)/enchant $(D)/lite $(D)/libcurl $(D)/fontconfig $(D)/sqlite $(D)/libsoup $(D)/cairo $(D)/libjpeg @DEPENDS_webkitdfb@
+$(D)/webkitdfb: $(D)/bootstrap $(D)/glib2  $(D)/icu4c $(D)/libxml2_e2 $(D)/enchant $(D)/lite $(D)/libcurl $(D)/fontconfig $(D)/sqlite $(D)/libsoup $(D)/cairo $(D)/libjpeg @DEPENDS_webkitdfb@
 	@PREPARE_webkitdfb@
 	cd @DIR_webkitdfb@ && \
 		$(CONFIGURE) \
