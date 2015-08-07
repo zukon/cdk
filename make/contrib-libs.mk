@@ -1092,7 +1092,7 @@ $(D)/libass: $(D)/bootstrap $(D)/libfreetype $(D)/libfribidi @DEPENDS_libass@
 #
 # WebKitDFB
 #
-$(D)/webkitdfb: $(D)/bootstrap $(D)/glib2  $(D)/icu4c $(D)/libxml2_e2 $(D)/enchant $(D)/lite $(D)/libcurl $(D)/fontconfig $(D)/sqlite $(D)/libsoup $(D)/cairo $(D)/libjpeg @DEPENDS_webkitdfb@
+$(D)/webkitdfb: $(D)/bootstrap $(D)/glib2 $(D)/icu4c $(D)/libxml2_e2 $(D)/enchant $(D)/lite $(D)/libcurl $(D)/fontconfig $(D)/sqlite $(D)/libsoup $(D)/cairo $(D)/libjpeg @DEPENDS_webkitdfb@
 	@PREPARE_webkitdfb@
 	cd @DIR_webkitdfb@ && \
 		$(CONFIGURE) \
@@ -1683,7 +1683,7 @@ $(D)/libdvbsipp: $(D)/bootstrap @DEPENDS_libdvbsipp@
 		$(CONFIGURE) \
 			--prefix=$(targetprefix)/usr \
 		&& \
-		$(MAKE) all && \
+		$(MAKE) && \
 		@INSTALL_libdvbsipp@
 	@CLEANUP_libdvbsipp@
 	touch $@
@@ -2057,7 +2057,7 @@ $(D)/nettle: $(D)/bootstrap $(D)/gmp @DEPENDS_nettle@
 	@PREPARE_nettle@
 	cd @DIR_nettle@ && \
 		$(CONFIGURE) \
-			--prefix=/usr/ \
+			--prefix=/usr \
 			--with-gmp=yes \
 		&& \
 		$(MAKE) && \
@@ -2072,14 +2072,14 @@ $(D)/gnutls: $(D)/bootstrap $(D)/nettle @DEPENDS_gnutls@
 	@PREPARE_gnutls@
 	cd @DIR_gnutls@ && \
 		$(CONFIGURE) \
-			--prefix=/usr/ \
+			--prefix=/usr \
 			--disable-rpath \
-		        --with-included-libtasn1 \
-		        --enable-local-libopts \
-		        --with-libpthread-prefix=${STAGING_DIR_HOST}${prefix} \
-        		--disable-guile \
-		        --disable-crywrap \
-		        --without-p11-kit \
+			--with-included-libtasn1 \
+			--enable-local-libopts \
+			--with-libpthread-prefix=$(targetprefix)/usr \
+			--disable-guile \
+			--disable-crywrap \
+			--without-p11-kit \
 		&& \
 		$(MAKE) && \
 		@INSTALL_gnutls@

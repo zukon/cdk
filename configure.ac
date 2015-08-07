@@ -822,7 +822,8 @@ TUXBOX_RULES_MAKE(libvorbisidec)
 #
 # contrib libs
 #
-TUXBOX_RULES_MAKE(openssl)
+TUXBOX_RULES_MAKE(libncurses)
+TUXBOX_RULES_MAKE(gmp)
 TUXBOX_RULES_MAKE(lua)
 TUXBOX_RULES_MAKE(luacurl)
 TUXBOX_RULES_MAKE(luaexpat)
@@ -885,7 +886,6 @@ TUXBOX_RULES_MAKE(libxslt)
 #
 # contrib apps
 #
-TUXBOX_RULES_MAKE(libncurses)
 TUXBOX_RULES_MAKE(bzip2)
 TUXBOX_RULES_MAKE(grep)
 TUXBOX_RULES_MAKE(openrdate)
@@ -962,6 +962,13 @@ TUXBOX_RULES_MAKE(libgd2)
 TUXBOX_RULES_MAKE(libdpfax)
 
 #
+# Security
+#
+TUXBOX_RULES_MAKE(openssl)
+TUXBOX_RULES_MAKE(gnutls)
+TUXBOX_RULES_MAKE(nettle)
+
+#
 # File Systems and Disk Management
 #
 TUXBOX_RULES_MAKE(dosfstools)
@@ -1000,10 +1007,10 @@ TUXBOX_RULES_MAKE(ethtool)
 TUXBOX_RULES_MAKE(xupnpd)
 TUXBOX_RULES_MAKE(udpxy)
 TUXBOX_RULES_MAKE(glibnetworking)
-TUXBOX_RULES_MAKE(gnutls)
-TUXBOX_RULES_MAKE(nettle)
-TUXBOX_RULES_MAKE(gmp)
 
+#
+# TVHEADEND
+#
 TUXBOX_RULES_MAKE(tvheadend)
 
 #
@@ -1039,14 +1046,8 @@ summary:
 ----------------------------------------
 ccache support              : $enable_ccache
 target cpu/boxtype          : $CPU_MODEL / $BOXTYPE
-linux kernel                : ${KERNELVERSION%.*}
 kernelversion               : $KERNELVERSION
-localversion                : $KERNELSTMLABEL
-Patchlevel P0209            : $enable_p0209
-Patchlevel P0211            : $enable_p0211
-Patchlevel P0214            : $enable_p0214
-Patchlevel P0215            : $enable_p0215
-Patchlevel P0217            : $enable_p0217
+Patchlevel                  : P0$KERNELLABEL
 DEBUG                       : $enable_debug
 boot prefix                 : $bootprefix
 serversupport               : $serversupport
@@ -1065,7 +1066,7 @@ Multicom324                 : $enable_multicom324
 Multicom406                 : $enable_multicom406
 MediaFw Gstreamer           : $enable_mediafwgstreamer
 MediaFw                     : $MEDIAFW
-MediaFw Dep                 : $MEDIAFW_DEP
+MediaFw dependancy          : $MEDIAFW_DEP
 External LCD                : $enable_externallcd
 External LCD dependancy     : $EXTERNALLCD_DEP
 ----------------------------------------

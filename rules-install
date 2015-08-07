@@ -74,7 +74,8 @@ libvorbisidec;make:install:DESTDIR=TARGET;install:-m644:vorbisidec.pc:TARGET/usr
 #
 # contrib libs
 #
-openssl;rewrite-pkgconfig:libcrypto.pc:libssl.pc:openssl.pc;make:install_sw:INSTALL_PREFIX=TARGET
+libncurses;make:install.libs:DESTDIR=TARGET
+gmp;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libgmp.la
 lua;make:install:INSTALL_TOP=TARGET/usr
 luacurl;make:install:DESTDIR=TARGET:LUA_CMOD=/usr/lib/lua/5.2:LUA_LMOD=/usr/share/lua/5.2
 luaexpat;make:install:DESTDIR=TARGET/usr
@@ -134,7 +135,6 @@ pugixml;make:install:DESTDIR=TARGET
 #
 # contrib apps
 #
-libncurses;make:install.libs:DESTDIR=TARGET
 bzip2;make:install:PREFIX=TARGET/usr
 grep;make:install:DESTDIR=TARGET
 openrdate;make:install:DESTDIR=TARGET
@@ -207,6 +207,13 @@ libgd2;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libgd.la
 libdpfax;make:install:DESTDIR=TARGET
 
 #
+# Security
+#
+openssl;rewrite-pkgconfig:libcrypto.pc:libssl.pc:openssl.pc;make:install_sw:INSTALL_PREFIX=TARGET
+gnutls;rewrite-pkgconfig:lib/gnutls.pc;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libgnutls.la:TARGET/usr/lib/libgnutlsxx.la;rewrite-dependency:TARGET/usr/lib/libgnutlsxx.la
+nettle;rewrite-pkgconfig:nettle.pc:hogweed.pc;make:install:DESTDIR=TARGET
+
+#
 # File Systems and Disk Management
 #
 dosfstools;make:install:PREFIX=TARGET
@@ -244,7 +251,6 @@ ethtool;make:install:DESTDIR=TARGET
 xupnpd;make:install:DESTDIR=TARGET
 udpxy;make:install:INSTALLROOT=TARGET/usr
 glibnetworking;make:install:INSTALLROOT=TARGET
-gnutls;rewrite-pkgconfig:lib/gnutls.pc;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libgnutls.la:TARGET/usr/lib/libgnutlsxx.la;rewrite-dependency:TARGET/usr/lib/libgnutlsxx.la
-nettle;rewrite-pkgconfig:nettle.pc:hogweed.pc;make:install:DESTDIR=TARGET
-gmp;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libgmp.la
+
+
 >>?;rules-install-local
