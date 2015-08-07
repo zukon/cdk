@@ -244,7 +244,7 @@ ethtool;make:install:DESTDIR=TARGET
 xupnpd;make:install:DESTDIR=TARGET
 udpxy;make:install:INSTALLROOT=TARGET/usr
 glibnetworking2;make:install:INSTALLROOT=TARGET
-gnutls;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libgnutls.la
+gnutls;rewrite-pkgconfig:lib/gnutls.pc;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libgnutls.la:TARGET/usr/lib/libgnutlsxx.la;rewrite-dependency:TARGET/usr/lib/libgnutlsxx.la
 nettle;make:install:DESTDIR=TARGET
 gmp;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libgmp.la
 >>?;rules-install-local
