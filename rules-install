@@ -245,6 +245,6 @@ xupnpd;make:install:DESTDIR=TARGET
 udpxy;make:install:INSTALLROOT=TARGET/usr
 glibnetworking2;make:install:INSTALLROOT=TARGET
 gnutls;rewrite-pkgconfig:lib/gnutls.pc;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libgnutls.la:TARGET/usr/lib/libgnutlsxx.la;rewrite-dependency:TARGET/usr/lib/libgnutlsxx.la
-nettle;make:install:DESTDIR=TARGET
+nettle;rewrite-pkgconfig:nettle.pc:hogweed.pc;make:install:DESTDIR=TARGET
 gmp;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libgmp.la
 >>?;rules-install-local
