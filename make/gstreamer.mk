@@ -2,7 +2,7 @@
 #
 # gstreamer
 #
-$(D)/gstreamer: $(D)/bootstrap $(D)/glib2 $(D)/libxml2_e2 $(D)/glibnetworking2 @DEPENDS_gstreamer@
+$(D)/gstreamer: $(D)/bootstrap $(D)/glib2 $(D)/libxml2_e2 $(D)/glibnetworking @DEPENDS_gstreamer@
 	@PREPARE_gstreamer@
 	cd @DIR_gstreamer@ && \
 		$(CONFIGURE) \

@@ -243,7 +243,7 @@ wpa_supplicant;make:install:BINDIR=/usr/sbin:DESTDIR=TARGET
 ethtool;make:install:DESTDIR=TARGET
 xupnpd;make:install:DESTDIR=TARGET
 udpxy;make:install:INSTALLROOT=TARGET/usr
-glibnetworking2;make:install:INSTALLROOT=TARGET
+glibnetworking;make:install:INSTALLROOT=TARGET
 gnutls;rewrite-pkgconfig:lib/gnutls.pc;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libgnutls.la:TARGET/usr/lib/libgnutlsxx.la;rewrite-dependency:TARGET/usr/lib/libgnutlsxx.la
 nettle;rewrite-pkgconfig:nettle.pc:hogweed.pc;make:install:DESTDIR=TARGET
 gmp;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libgmp.la

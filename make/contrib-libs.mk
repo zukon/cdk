@@ -2087,16 +2087,16 @@ $(D)/gnutls: $(D)/bootstrap $(D)/nettle @DEPENDS_gnutls@
 	touch $@
 
 #
-# glibnetworking2
+# glibnetworking
 #
-$(D)/glibnetworking2: $(D)/bootstrap $(D)/gnutls $(D)/glib2 @DEPENDS_glibnetworking2@
-	@PREPARE_glibnetworking2@
-	cd @DIR_glibnetworking2@ && \
+$(D)/glibnetworking: $(D)/bootstrap $(D)/gnutls $(D)/glib2 @DEPENDS_glibnetworking@
+	@PREPARE_glibnetworking@
+	cd @DIR_glibnetworking@ && \
 		$(CONFIGURE) \
 			--prefix=/usr/ \
 		&& \
 		$(MAKE) && \
-		@INSTALL_glibnetworking2@
-	@CLEANUP_glibnetworking2@
+		@INSTALL_glibnetworking@
+	@CLEANUP_glibnetworking@
 	touch $@
 

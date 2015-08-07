@@ -271,7 +271,7 @@ wpa_supplicant;0.7.3;wpa_supplicant-0.7.3;wpa_supplicant-0.7.3.tar.gz;extract:wp
 ethtool;6;ethtool-6;ethtool-6.tar.gz;extract:ethtool-6.tar.gz
 xupnpd;1.0;xupnpd-1.0;xupnpd.git;extract:xupnpd.git;patch:xupnpd.patch
 udpxy;1.0.23-0;udpxy-1.0.23-0;udpxy.1.0.23-0-prod.tar.gz;extract:udpxy.1.0.23-0-prod.tar.gz;patch:udpxy-1.0.23-0.patch
-glibnetworking2;2.45.1;glib-networking-2.45.1;glib-networking-2.45.1.tar.xz;extract:glib-networking-2.45.1.tar.xz
+glibnetworking;2.45.1;glib-networking-2.45.1;glib-networking-2.45.1.tar.xz;extract:glib-networking-2.45.1.tar.xz
 gnutls;3.4.3;gnutls-3.4.3;gnutls-3.4.3.tar.xz;extract:gnutls-3.4.3.tar.xz
 nettle;3.1;nettle-3.1;nettle-3.1.tar.gz;extract:nettle-3.1.tar.gz
 gmp;6.0.0a;gmp-6.0.0;gmp-6.0.0a.tar.xz;extract:gmp-6.0.0a.tar.xz
