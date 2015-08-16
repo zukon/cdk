@@ -183,7 +183,8 @@ setuptools;5.2;setuptools-5.2;setuptools-5.2.tar.gz;extract:setuptools-5.2.tar.g
 twisted;13.2.0;Twisted-13.2.0;Twisted-13.2.0.tar.bz2;extract:Twisted-13.2.0.tar.bz2
 pilimaging;1.1.7;Imaging-1.1.7;Imaging-1.1.7.tar.gz;extract:Imaging-1.1.7.tar.gz;patch:Imaging-1.1.7-crosscompiling.patch
 pycrypto;2.5;pycrypto-2.5;pycrypto-2.5.tar.gz;extract:pycrypto-2.5.tar.gz;patch:python-pycrypto-no-usr-include.patch
-pyopenssl;0.13;pyOpenSSL-0.13;pyOpenSSL-0.13.tar.gz;extract:pyOpenSSL-0.13.tar.gz
+#pyopenssl;0.13;pyOpenSSL-0.13;pyOpenSSL-0.13.tar.gz;extract:pyOpenSSL-0.13.tar.gz
+pyopenssl;0.15.1;pyOpenSSL-0.15.1;pyOpenSSL-0.15.1.tar.gz;extract:pyOpenSSL-0.15.1.tar.gz
 pyusb;1.0.0a3;pyusb-1.0.0a3;pyusb-1.0.0a3.tar.gz;extract:pyusb-1.0.0a3.tar.gz
 #host_python;2.7.3;host-python-2.7.3;Python-2.7.3.tar.bz2:python_2.7.3.patch;extract:Python-2.7.3.tar.bz2;move:Python-2.7.3:host-python-2.7.3;patch:python_2.7.3.patch
 #python;2.7.3;python-2.7.3;Python-2.7.3.tar.bz2:python_2.7.3.patch;extract:Python-2.7.3.tar.bz2;move:Python-2.7.3:python-2.7.3;patch:python_2.7.3.patch;patch:python_2.7.3-ctypes-libffi-fix.patch;patch:python_2.7.3-pgettext.patch
