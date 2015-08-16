@@ -178,7 +178,8 @@ libplist;1.10;libplist-1.10;libplist-1.10.tar.gz;extract:libplist-1.10.tar.gz
 gdata;2.0.18;gdata-2.0.18;gdata-2.0.18.tar.gz;extract:gdata-2.0.18.tar.gz
 elementtree;1.2.6-20050316;elementtree-1.2.6-20050316;elementtree-1.2.6-20050316.tar.gz;extract:elementtree-1.2.6-20050316.tar.gz
 lxml;2.2.8;lxml-2.2.8;lxml-2.2.8.tgz;extract:lxml-2.2.8.tgz
-setuptools;0.6c11;setuptools-0.6c11;setuptools-0.6c11.tar.gz;extract:setuptools-0.6c11.tar.gz
+#setuptools;0.6c11;setuptools-0.6c11;setuptools-0.6c11.tar.gz;extract:setuptools-0.6c11.tar.gz
+setuptools;5.2;setuptools-5.2;setuptools-5.2.tar.gz;extract:setuptools-5.2.tar.gz
 twisted;13.2.0;Twisted-13.2.0;Twisted-13.2.0.tar.bz2;extract:Twisted-13.2.0.tar.bz2
 pilimaging;1.1.7;Imaging-1.1.7;Imaging-1.1.7.tar.gz;extract:Imaging-1.1.7.tar.gz;patch:Imaging-1.1.7-crosscompiling.patch
 pycrypto;2.5;pycrypto-2.5;pycrypto-2.5.tar.gz;extract:pycrypto-2.5.tar.gz;patch:python-pycrypto-no-usr-include.patch

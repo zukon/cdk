@@ -844,9 +844,9 @@ $(D)/libdvdread: $(D)/bootstrap @DEPENDS_libdvdread@
 	@PREPARE_libdvdread@
 	cd @DIR_libdvdread@ && \
 		$(CONFIGURE) \
+			--prefix=/usr \
 			--enable-static \
 			--enable-shared \
-			--prefix=/usr \
 		&& \
 		$(MAKE) && \
 		@INSTALL_libdvdread@
