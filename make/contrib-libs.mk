@@ -671,7 +671,7 @@ $(D)/lcms: $(D)/bootstrap $(D)/libjpeg @DEPENDS_lcms@
 $(D)/directfb: $(D)/bootstrap $(D)/libfreetype @DEPENDS_directfb@
 	@PREPARE_directfb@
 	cd @DIR_directfb@ && \
-		libtoolize --copy --ltdl && \
+		libtoolize --copy --ltdl --force && \
 		autoreconf -fi && \
 		$(BUILDENV) \
 		./configure \
@@ -807,7 +807,7 @@ $(D)/libdvdnav: $(D)/bootstrap $(D)/libdvdread @DEPENDS_libdvdnav@
 	@PREPARE_libdvdnav@
 	cd @DIR_libdvdnav@ && \
 		$(BUILDENV) \
-		libtoolize --copy --ltdl && \
+		libtoolize --copy --ltdl --force && \
 		./autogen.sh \
 			--build=$(build) \
 			--host=$(target) \
@@ -1183,7 +1183,7 @@ $(D)/enchant: $(D)/bootstrap $(D)/glib2 @DEPENDS_enchant@
 $(D)/lite: $(D)/bootstrap $(D)/directfb @DEPENDS_lite@
 	@PREPARE_lite@
 	cd @DIR_lite@ && \
-		libtoolize --copy --ltdl && \
+		libtoolize --copy --ltdl --force && \
 		autoreconf -fi && \
 		$(CONFIGURE) \
 			--prefix=/usr \
