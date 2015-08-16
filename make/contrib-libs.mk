@@ -36,6 +36,23 @@ $(D)/libncurses: $(D)/bootstrap @DEPENDS_libncurses@
 	touch $@
 
 #
+# openssl_e2
+#
+$(D)/openssl_e2: $(D)/bootstrap @DEPENDS_openssl_e2@
+	@PREPARE_openssl_e2@
+	cd @DIR_openssl_e2@ && \
+		$(BUILDENV) \
+		./Configure -DL_ENDIAN shared no-hw no-engine linux-generic32 \
+			--prefix=/usr \
+			--openssldir=/etc/ssl \
+			--openssldir=/.remove \
+		&& \
+		$(MAKE) && \
+		@INSTALL_openssl_e2@
+	@CLEANUP_openssl_e2@
+	touch $@
+
+#
 # openssl
 #
 $(D)/openssl: $(D)/bootstrap @DEPENDS_openssl@
