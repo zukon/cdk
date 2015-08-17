@@ -410,7 +410,7 @@ $(D)/libgif_e2: $(D)/bootstrap @DEPENDS_libgif_e2@
 #
 # libcurl
 #
-$(D)/libcurl: $(D)/bootstrap $(D)/$(OPENSSL) $(D)/zlib @DEPENDS_libcurl@
+$(D)/libcurl: $(D)/bootstrap $(OPENSSL) $(D)/zlib @DEPENDS_libcurl@
 	@PREPARE_libcurl@
 	cd @DIR_libcurl@ && \
 		$(CONFIGURE) \
@@ -908,7 +908,7 @@ LIBXML2 = libxml2
 OPENSSL = openssl
 endif
 
-$(D)/ffmpeg: $(D)/bootstrap $(D)/$(OPENSSL) $(D)/libass  $(D)/$(LIBXML2)  $(D)/$(LIBRTMPDUMP) @DEPENDS_ffmpeg@
+$(D)/ffmpeg: $(D)/bootstrap $(OPENSSL) $(D)/libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpeg@
 	@PREPARE_ffmpeg@
 	cd @DIR_ffmpeg@ && \
 		./configure \
@@ -1683,7 +1683,7 @@ $(D)/pugixml: $(D)/bootstrap @DEPENDS_pugixml@
 #
 # librtmpdump
 #
-$(D)/librtmpdump: $(D)/bootstrap $(D)/zlib $(D)/$(OPENSSL) @DEPENDS_librtmpdump@
+$(D)/librtmpdump: $(D)/bootstrap $(D)/zlib $(OPENSSL) @DEPENDS_librtmpdump@
 	@PREPARE_librtmpdump@
 	[ -d "$(archivedir)/rtmpdump.git" ] && \
 	(cd $(archivedir)/rtmpdump.git; git pull; cd "$(buildprefix)";); \
