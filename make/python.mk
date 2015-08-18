@@ -40,9 +40,10 @@ $(D)/python: $(D)/bootstrap $(D)/host_python $(D)/libncurses $(D)/zlib $(OPENSSL
 	@PREPARE_python@
 	( cd @DIR_python@ && \
 		CONFIG_SITE= \
+		$(BUILDENV) \
 		autoreconf --verbose --install --force Modules/_ctypes/libffi && \
 		autoconf && \
-		$(CONFIGURE) \
+		./configure \
 			--build=$(build) \
 			--host=$(target) \
 			--target=$(target) \
@@ -50,14 +51,13 @@ $(D)/python: $(D)/bootstrap $(D)/host_python $(D)/libncurses $(D)/zlib $(OPENSSL
 			--sysconfdir=/etc \
 			--enable-shared \
 			--enable-ipv6 \
-			--without-cxx-main \
 			--with-threads \
 			--with-pymalloc \
 			--with-signal-module \
 			--with-wctype-functions \
 			ac_sys_system=Linux \
 			ac_sys_release=2 \
-			ac_cv_file__dev_ptmx=yes \
+			ac_cv_file__dev_ptmx=no \
 			ac_cv_file__dev_ptc=no \
 			ac_cv_no_strict_aliasing_ok=yes \
 			ac_cv_pthread=yes \
@@ -67,18 +67,16 @@ $(D)/python: $(D)/bootstrap $(D)/host_python $(D)/libncurses $(D)/zlib $(OPENSSL
 			ac_cv_have_lchflags=no \
 			ac_cv_py_format_size_t=yes \
 			ac_cv_broken_sem_getvalue=no \
-			MACHDEP=linux2 \
 			HOSTPYTHON=$(hostprefix)/bin/python \
-			OPT="$(TARGET_CFLAGS)" \
 		&& \
 		$(MAKE) $(MAKE_OPTS) \
-			TARGET_OS=$(target) \
 			PYTHON_MODULES_INCLUDE="$(targetprefix)/usr/include" \
 			PYTHON_MODULES_LIB="$(targetprefix)/usr/lib $(targetprefix)/lib" \
 			CROSS_COMPILE_TARGET=yes \
 			CROSS_COMPILE=$(target) \
-			HOSTARCH=sh4-linux \
-			CFLAGS="$(TARGET_CFLAGS) -fno-inline" \
+			MACHDEP=linux2 \
+			HOSTARCH=$(target) \
+			CFLAGS="$(TARGET_CFLAGS)" \
 			LDFLAGS="$(TARGET_LDFLAGS)" \
 			LD="$(target)-gcc" \
 			HOSTPYTHON=$(hostprefix)/bin/python \
