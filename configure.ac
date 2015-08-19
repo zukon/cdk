@@ -839,7 +839,6 @@ TUXBOX_RULES_MAKE(libsigc_e2)
 TUXBOX_RULES_MAKE(libsigc)
 TUXBOX_RULES_MAKE(glib2)
 TUXBOX_RULES_MAKE(libffi)
-TUXBOX_RULES_MAKE(orc)
 TUXBOX_RULES_MAKE(libiconv)
 TUXBOX_RULES_MAKE(libmng)
 TUXBOX_RULES_MAKE(lcms)
@@ -928,6 +927,7 @@ TUXBOX_RULES_MAKE(zope_interface)
 #
 # gstreamer
 #
+TUXBOX_RULES_MAKE(orc)
 TUXBOX_RULES_MAKE(gstreamer)
 TUXBOX_RULES_MAKE(gst_plugins_base)
 TUXBOX_RULES_MAKE(gst_plugins_good)
