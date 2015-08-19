@@ -162,15 +162,12 @@ gdata-2.0.18.tar.gz;https://gdata-python-client.googlecode.com/files
 elementtree-1.2.6-20050316.tar.gz;http://effbot.org/media/downloads
 lxml-2.2.8.tgz;http://launchpad.net/lxml/2.2/2.2.8/+download
 libxmlccwrap-0.0.12.tar.gz;http://www.ant.uni-bremen.de/whomes/rinas/libxmlccwrap/download
-setuptools-0.6c11.tar.gz;http://pypi.python.org/packages/source/s/setuptools
 setuptools-5.2.tar.gz;http://pypi.python.org/packages/source/s/setuptools
 Twisted-13.2.0.tar.bz2;http://twistedmatrix.com/Releases/Twisted/13.2
 Imaging-1.1.7.tar.gz;http://effbot.org/downloads
 pycrypto-2.5.tar.gz;http://pypi.python.org/packages/source/p/pycrypto
-pyOpenSSL-0.13.tar.gz;http://pypi.python.org/packages/source/p/pyOpenSSL
 pyOpenSSL-0.15.1.tar.gz;http://pypi.python.org/packages/source/p/pyOpenSSL
 pyusb-1.0.0a3.tar.gz;http://pypi.python.org/packages/source/p/pyusb
-Python-2.7.3.tar.bz2;http://www.python.org/ftp/python/2.7.3
 Python-2.7.9.tar.xz;http://www.python.org/ftp/python/2.7.9
 python-wifi-0.5.0.tar.bz2;http://freefr.dl.sourceforge.net/project/pythonwifi.berlios
 Cheetah-2.4.4.tar.gz;http://pypi.python.org/packages/source/C/Cheetah
@@ -240,7 +237,6 @@ xfsprogs-3.1.8.tar.gz;http://ftp.gwdg.de/pub/linux/misc/xfs/xfs/cmd_tars
 # Networking Libraries / Networking Utilities
 #
 autofs-4.1.4.tar.gz;http://kernel.org/pub/linux/daemons/autofs/v4
-autofs-5.0.7.tar.gz;http://kernel.org/pub/linux/daemons/autofs/v5
 curl-7.42.1.tar.bz2;http://curl.haxx.se/download
 portmap_6.0.0.orig.tar.gz;http://ftp.de.debian.org/debian/pool/main/p/portmap
 portmap_6.0.0-2.diff.gz ;http://debian.osuosl.org/debian/pool/main/p/portmap
@@ -257,8 +253,6 @@ zd1211lnxdrv_2_15_0_0.tar.gz;http://www.lutec.eu/treiber
 wireless_tools.29.tar.gz;http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux
 libnl-2.0.tar.gz;http://www.carisma.slowglass.com/~tgr/libnl/files
 wpa_supplicant-0.7.3.tar.gz;http://hostap.epitest.fi/releases
-wpa_supplicant-1.0.tar.gz;http://hostap.epitest.fi/releases
-wpa_supplicant-2.1.tar.gz;http://hostap.epitest.fi/releases
 ethtool-6.tar.gz;http://downloads.openwrt.org/sources
 xupnpd.git;git://github.com/clark15b/xupnpd
 udpxy.1.0.23-0-prod.tar.gz;http://www.udpxy.com/download/1_23
