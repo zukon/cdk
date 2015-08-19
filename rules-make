@@ -100,7 +100,6 @@ libsigc_e2;1.2.7;libsigc++-1.2.7;libsigc++-1.2.7.tar.gz;extract:libsigc++-1.2.7.
 libsigc;2.3.2;libsigc++-2.3.2;libsigc++-2.3.2.tar.xz;extract:libsigc++-2.3.2.tar.xz
 glib2;2.45.4;glib-2.45.4;glib-2.45.4.tar.xz;extract:glib-2.45.4.tar.xz
 libffi;3.2.1;libffi-3.2.1;libffi-3.2.1.tar.gz;extract:libffi-3.2.1.tar.gz;patch:libffi-3.1.patch
-orc;0.4.24;orc-0.4.24;orc-0.4.24.tar.xz;extract:orc-0.4.24.tar.xz
 libiconv;1.14;libiconv-1.14;libiconv-1.14.tar.gz;extract:libiconv-1.14.tar.gz
 libmng;1.0.10;libmng-1.0.10;libmng-1.0.10.tar.bz2;extract:libmng-1.0.10.tar.bz2
 lcms;1.17;lcms-1.17;lcms-1.17.tar.gz:lcms.patch;extract:lcms-1.17.tar.gz;patch:lcms.patch
@@ -194,15 +193,17 @@ zope_interface;4.1.1;zope.interface-4.1.1;zope.interface-4.1.1.tar.gz;extract:zo
 #
 # GSTREAMER
 #
-gstreamer;0.10.36;gstreamer-0.10.36;gstreamer-0.10.36.tar.bz2;extract:gstreamer-0.10.36.tar.bz2;patch:gstreamer-0.10.36.patch
-gst_plugins_base;0.10.36;gst-plugins-base-0.10.36;gst-plugins-base-0.10.36.tar.bz2;extract:gst-plugins-base-0.10.36.tar.bz2;patch:gst-plugins-base-0.10.36.patch
-gst_plugins_good;0.10.31;gst-plugins-good-0.10.31;gst-plugins-good-0.10.31.tar.bz2;extract:gst-plugins-good-0.10.31.tar.bz2;patch:gst-plugins-good-0.10.31.patch
-gst_plugins_bad;0.10.23;gst-plugins-bad-0.10.23;gst-plugins-bad-0.10.23.tar.bz2;extract:gst-plugins-bad-0.10.23.tar.bz2;patch:gst-plugins-bad-0.10.23.patch
-gst_plugins_ugly;0.10.19;gst-plugins-ugly-0.10.19;gst-plugins-ugly-0.10.19.tar.bz2;extract:gst-plugins-ugly-0.10.19.tar.bz2
-gst_ffmpeg;0.10.13;gst-ffmpeg-0.10.13;gst-ffmpeg-0.10.13.tar.bz2;extract:gst-ffmpeg-0.10.13.tar.bz2;patch:gst-ffmpeg-0.10.13.patch
+orc;0.4.24;orc-0.4.24;orc-0.4.24.tar.xz;extract:orc-0.4.24.tar.xz
 gst_gmediarender;0.0.6;gmediarender-0.0.6;gmediarender-0.0.6.tar.bz2;extract:gmediarender-0.0.6.tar.bz2;patch:gst-gmediarender-0.0.6.patch
+#gst_plugins_dvbmediasink;0.10.1;gst-plugins-dvbmediasink-0.10.1;;link:../apps/libs/gst-plugins-dvbmediasink-0.10.1:gst-plugins-dvbmediasink-0.10.1
+gst_plugins_dvbmediasink;1.0;gst-plugins-dvbmediasink-1.0;;link:../apps/libs/gst-plugins-dvbmediasink-1.0:gst-plugins-dvbmediasink-1.0
+gstreamer;1.5.2;gstreamer-1.5.2;gstreamer-1.5.2.tar.xz;extract:gstreamer-1.5.2.tar.xz
+gst_plugins_base;1.5.2;gst-plugins-base-1.5.2;gst-plugins-base-1.5.2.tar.xz;extract:gst-plugins-base-1.5.2.tar.xz
+gst_plugins_good;1.5.2;gst-plugins-good-1.5.2;gst-plugins-good-1.5.2.tar.xz;extract:gst-plugins-good-1.5.2.tar.xz
+gst_plugins_bad;1.5.2;gst-plugins-bad-1.5.2;gst-plugins-bad-1.5.2.tar.xz;extract:gst-plugins-bad-1.5.2.tar.xz
+gst_plugins_ugly;1.5.2;gst-plugins-ugly-1.5.2;gst-plugins-ugly-1.5.2.tar.xz;extract:gst-plugins-ugly-1.5.2.tar.xz
+gst_libav;1.5.2;gst-libav-1.5.2;gst-libav-1.5.2.tar.xz;extract:gst-libav-1.5.2.tar.xz
 gst_plugins_fluendo_mpegdemux;0.10.71;gst-fluendo-mpegdemux-0.10.71;gst-fluendo-mpegdemux-0.10.71.tar.gz;extract:gst-fluendo-mpegdemux-0.10.71.tar.gz;patch:gst-plugins-fluendo-mpegdemux-0.10.71.patch
-gst_plugins_dvbmediasink;0.10.1;gst-plugins-dvbmediasink-0.10.1;;link:../apps/libs/gst-plugins-dvbmediasink:gst-plugins-dvbmediasink-0.10.1
 gst_plugin_subsink;1.0;gst-plugin-subsink-1.0;gst-plugin-subsink.git;extract:gst-plugin-subsink.git
 
 #
