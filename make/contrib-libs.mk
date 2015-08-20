@@ -8,6 +8,7 @@ $(D)/libncurses: $(D)/bootstrap @DEPENDS_libncurses@
 			--target=$(target) \
 			--prefix=/usr \
 			--with-terminfo-dirs=/usr/share/terminfo \
+			--with-pkg-config=/usr/lib/pkgconfig \
 			--with-shared \
 			--without-cxx \
 			--without-cxx-binding \
@@ -25,7 +26,8 @@ $(D)/libncurses: $(D)/bootstrap @DEPENDS_libncurses@
 			--without-manpages \
 			--with-fallbacks='linux vt100 xterm' \
 		&& \
-		$(MAKE) libs HOSTCC=gcc \
+		$(MAKE) libs \
+			HOSTCC=gcc \
 			HOSTCCFLAGS="$(CFLAGS) -DHAVE_CONFIG_H -I../ncurses -DNDEBUG -D_GNU_SOURCE -I../include" \
 			HOSTLDFLAGS="$(LDFLAGS)" && \
 		sed -e 's,^prefix="/usr",prefix="$(targetprefix)/usr",' < misc/ncurses-config > $(hostprefix)/bin/ncurses5-config && \
