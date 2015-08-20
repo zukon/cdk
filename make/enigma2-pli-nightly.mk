@@ -46,7 +46,7 @@ $(D)/enigma2-pli-nightly.do_prepare: | $(ENIGMA2_DEPS)
 	read -p "Select          : "; \
 	[ "$$REPLY" == "0" ] && DIFF="0"; \
 	[ "$$REPLY" == "1" ] && DIFF="1" && REVISION=""; \
-	[ "$$REPLY" == "2" ] && DIFF="2" && REVISION="715a3024ad7ae3e89dad039bfb8ae49350552c39"; \
+	[ "$$REPLY" == "2" ] && DIFF="2" && REVISION="cd5505a4b8aba823334032bb6fd7901557575455"; \
 	echo "Revision        : "$$REVISION; \
 	echo ""; \
 	if [ "$$REPLY" != "1" ]; then \
