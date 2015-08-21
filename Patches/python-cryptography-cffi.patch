@@ -1,0 +1,18 @@
+--- a/setup.py
++++ b/setup.py
+@@ -104,7 +104,6 @@
+     """
+ 
+     def finalize_options(self):
+-        self.distribution.ext_modules = get_ext_modules()
+         build.finalize_options(self)
+ 
+ 
+@@ -116,7 +115,6 @@
+     """
+ 
+     def finalize_options(self):
+-        self.distribution.ext_modules = get_ext_modules()
+         install.finalize_options(self)
+ 
+ 
