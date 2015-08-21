@@ -202,6 +202,16 @@ $(D)/python_enum34: $(D)/bootstrap $(D)/python $(D)/python_setuptools $(D)/pytho
 	touch $@
 
 #
+# python_pyasn1
+#
+$(D)/python_pyasn1: $(D)/bootstrap $(D)/python $(D)/python_setuptools $(D)/python_enum34 @DEPENDS_python_pyasn1@
+	@PREPARE_python_pyasn1@
+	cd @DIR_python_pyasn1@ && \
+		$(PYTHON_INSTALL)
+	@CLEANUP_python_pyasn1@
+	touch $@
+
+#
 # python_cryptography
 #
 $(D)/python_cryptography: $(D)/bootstrap $(D)/libffi $(D)/python $(D)/python_setuptools $(D)/python_pyopenssl $(D)/python_six $(D)/python_pycparser @DEPENDS_python_cryptography@
