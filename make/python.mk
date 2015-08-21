@@ -182,6 +182,16 @@ $(D)/python_six: $(D)/bootstrap $(D)/python $(D)/python_setuptools @DEPENDS_pyth
 	touch $@
 
 #
+# python_cffi
+#
+$(D)/python_cffi: $(D)/bootstrap $(D)/python $(D)/python_setuptools @DEPENDS_python_cffi@
+	@PREPARE_python_cffi@
+	cd @DIR_python_cffi@ && \
+		$(PYTHON_INSTALL)
+	@CLEANUP_python_cffi@
+	touch $@
+
+#
 # python_cryptography
 #
 $(D)/python_cryptography: $(D)/bootstrap $(D)/libffi $(D)/python $(D)/python_setuptools $(D)/python_pyopenssl $(D)/python_six $(D)/python_pycparser @DEPENDS_python_cryptography@
