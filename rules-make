@@ -191,6 +191,7 @@ python_mechanize;0.2.5;mechanize-0.2.5;mechanize-0.2.5.tar.gz;extract:mechanize-
 python_zope_interface;4.1.1;zope.interface-4.1.1;zope.interface-4.1.1.tar.gz;extract:zope.interface-4.1.1.tar.gz
 python_six;1.9.0;six-1.9.0;six-1.9.0.tar.gz;extract:six-1.9.0.tar.gz
 python_cffi;1.2.1;cffi-1.2.1;cffi-1.2.1.tar.gz;extract:cffi-1.2.1.tar.gz
+python_enum34;1.0.4;enum34-1.0.4;enum34-1.0.4.tar.gz;extract:enum34-1.0.4.tar.gz
 python_cryptography;0.8.1;cryptography-0.8.1;cryptography-0.8.1.tar.gz;extract:cryptography-0.8.1.tar.gz;patch:python-cryptography-cffi.patch
 
 #

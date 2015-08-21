@@ -192,6 +192,16 @@ $(D)/python_cffi: $(D)/bootstrap $(D)/python $(D)/python_setuptools @DEPENDS_pyt
 	touch $@
 
 #
+# python_enum34
+#
+$(D)/python_enum34: $(D)/bootstrap $(D)/python $(D)/python_setuptools $(D)/python_cffi @DEPENDS_python_enum34@
+	@PREPARE_python_enum34@
+	cd @DIR_python_enum34@ && \
+		$(PYTHON_INSTALL)
+	@CLEANUP_python_enum34@
+	touch $@
+
+#
 # python_cryptography
 #
 $(D)/python_cryptography: $(D)/bootstrap $(D)/libffi $(D)/python $(D)/python_setuptools $(D)/python_pyopenssl $(D)/python_six $(D)/python_pycparser @DEPENDS_python_cryptography@
