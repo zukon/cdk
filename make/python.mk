@@ -212,6 +212,16 @@ $(D)/python_pyasn1: $(D)/bootstrap $(D)/python $(D)/python_setuptools $(D)/pytho
 	touch $@
 
 #
+# python_pycparser
+#
+$(D)/python_pycparser: $(D)/bootstrap $(D)/python $(D)/python_setuptools $(D)/python_pyasn1 @DEPENDS_python_pycparser@
+	@PREPARE_python_pycparser@
+	cd @DIR_python_pycparser@ && \
+		$(PYTHON_INSTALL)
+	@CLEANUP_python_pycparser@
+	touch $@
+
+#
 # python_cryptography
 #
 $(D)/python_cryptography: $(D)/bootstrap $(D)/libffi $(D)/python $(D)/python_setuptools $(D)/python_pyopenssl $(D)/python_six $(D)/python_pycparser @DEPENDS_python_cryptography@
