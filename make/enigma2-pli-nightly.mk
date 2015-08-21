@@ -9,8 +9,9 @@ yaud-enigma2-pli-nightly: yaud-none host_python lirc \
 # enigma2-pli-nightly
 #
 ENIGMA2_DEPS  = bootstrap libncurses libcurl libid3tag libmad libpng libjpeg libgif_e2 libfreetype libfribidi libsigc_e2 libreadline
-ENIGMA2_DEPS += libexpat libdvbsipp python libxml2_e2 libxslt elementtree lxml zope_interface twisted pyopenssl pythonwifi pilimaging
-ENIGMA2_DEPS += pyusb pycrypto pythonmechanize libdreamdvd tuxtxt32bpp sdparm hotplug_e2 wpa_supplicant wireless_tools minidlna opkg ethtool
+ENIGMA2_DEPS += libexpat libdvbsipp python libxml2_e2 libxslt python_elementtree python_lxml python_zope_interface
+ENIGMA2_DEPS += python_twisted python_pyopenssl python_wifi python_imaging python_pyusb python_pycrypto python_mechanize python_cryptography
+ENIGMA2_DEPS += libdreamdvd tuxtxt32bpp sdparm hotplug_e2 wpa_supplicant wireless_tools minidlna opkg ethtool
 ENIGMA2_DEPS += $(MEDIAFW_DEP) $(EXTERNALLCD_DEP)
 
 E_CONFIG_OPTS = --enable-duckbox

@@ -973,25 +973,13 @@ endif
 	rm -rf $(prefix)/release$(PYTHON_DIR)/sqlite3/test
 	rm -rf $(prefix)/release$(PYTHON_DIR)/unittest/test
 	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/twisted/{test,conch,mail,names,news,words,flow,lore,pair,runner}
-	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/Cheetah-2.4.4-py$(PYTHON_VERSION).egg-info
 	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/Cheetah/Tests
-	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/elementtree-1.2.6_20050316-py$(PYTHON_VERSION).egg-info
 	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/lxml
-	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/lxml-2.2.8-py$(PYTHON_VERSION).egg-info
 	rm -f $(prefix)/release$(PYTHON_DIR)/site-packages/libxml2mod.so
 	rm -f $(prefix)/release$(PYTHON_DIR)/site-packages/libxsltmod.so
 	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/OpenSSL/test
-	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/PIL/PIL-1.1.7-py$(PYTHON_VERSION).egg-info
-	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/pyOpenSSL-0.13-py$(PYTHON_VERSION).egg-info
-	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/python_wifi-0.5.0-py$(PYTHON_VERSION).egg-info
-	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/pycrypto-2.5-py$(PYTHON_VERSION).egg-info
-	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/pyusb-1.0.0a3-py$(PYTHON_VERSION).egg-info
-	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/mechanize-0.2.5-py2.7.egg-info
 	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/setuptools
-	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/setuptools-0.6c11-py$(PYTHON_VERSION).egg-info
 	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/zope/interface/tests
-	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/zope.interface-4.0.1-py$(PYTHON_VERSION).egg-info
-	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/Twisted-13.0.0-py$(PYTHON_VERSION).egg-info
 	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/twisted/application/test
 	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/twisted/conch/test
 	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/twisted/internet/test
@@ -1010,6 +998,7 @@ endif
 	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/twisted/trial/test
 	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/twisted/web/test
 	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/twisted/words/test
+	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/*-py$(PYTHON_VERSION).egg-info
 
 #
 # Dont remove pyo files, remove pyc instead

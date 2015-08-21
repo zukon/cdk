@@ -157,6 +157,7 @@ libplist-1.10.tar.gz;http://cgit.sukimashita.com/libplist.git/snapshot
 #
 # PYTHON
 #
+Python-2.7.9.tar.xz;http://www.python.org/ftp/python/2.7.9
 gdata-2.0.18.tar.gz;https://gdata-python-client.googlecode.com/files
 elementtree-1.2.6-20050316.tar.gz;http://effbot.org/media/downloads
 lxml-2.2.8.tgz;http://launchpad.net/lxml/2.2/2.2.8/+download
@@ -167,11 +168,13 @@ Imaging-1.1.7.tar.gz;http://effbot.org/downloads
 pycrypto-2.5.tar.gz;http://pypi.python.org/packages/source/p/pycrypto
 pyOpenSSL-0.15.1.tar.gz;http://pypi.python.org/packages/source/p/pyOpenSSL
 pyusb-1.0.0a3.tar.gz;http://pypi.python.org/packages/source/p/pyusb
-Python-2.7.9.tar.xz;http://www.python.org/ftp/python/2.7.9
 python-wifi-0.5.0.tar.bz2;http://freefr.dl.sourceforge.net/project/pythonwifi.berlios
 Cheetah-2.4.4.tar.gz;http://pypi.python.org/packages/source/C/Cheetah
 mechanize-0.2.5.tar.gz;http://pypi.python.org/packages/source/m/mechanize
 zope.interface-4.1.1.tar.gz;http://pypi.python.org/packages/source/z/zope.interface
+six-1.9.0.tar.gz;https://pypi.python.org/packages/source/s/six
+cryptography-0.8.1.tar.gz;https://pypi.python.org/packages/source/c/cryptography
+
 
 #
 # GSTREAMER
