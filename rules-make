@@ -183,7 +183,7 @@ python_setuptools;5.2;setuptools-5.2;setuptools-5.2.tar.gz;extract:setuptools-5.
 python_twisted;13.2.0;Twisted-13.2.0;Twisted-13.2.0.tar.bz2;extract:Twisted-13.2.0.tar.bz2
 python_imaging;1.1.7;Imaging-1.1.7;Imaging-1.1.7.tar.gz;extract:Imaging-1.1.7.tar.gz;patch:python-imaging-1.1.7-crosscompiling.patch
 python_pycrypto;2.5;pycrypto-2.5;pycrypto-2.5.tar.gz;extract:pycrypto-2.5.tar.gz;patch:python-pycrypto-no-usr-include.patch
-python_pyopenssl;0.15.1;pyOpenSSL-0.15.1;pyOpenSSL-0.15.1.tar.gz;extract:pyOpenSSL-0.15.1.tar.gz
+python_pyopenssl;0.13;pyOpenSSL-0.13;pyOpenSSL-0.13.tar.gz;extract:pyOpenSSL-0.13.tar.gz;patch:python_pyopenssl_x509_revoked_dup.patch
 python_pyusb;1.0.0a3;pyusb-1.0.0a3;pyusb-1.0.0a3.tar.gz;extract:pyusb-1.0.0a3.tar.gz
 python_wifi;0.5.0;python-wifi-0.5.0;python-wifi-0.5.0.tar.bz2;extract:python-wifi-0.5.0.tar.bz2
 python_cheetah;2.4.4;Cheetah-2.4.4;Cheetah-2.4.4.tar.gz;extract:Cheetah-2.4.4.tar.gz
