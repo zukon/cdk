@@ -95,7 +95,7 @@ $(D)/python: $(D)/bootstrap $(D)/host_python $(D)/libncurses $(D)/zlib $(OPENSSL
 $(D)/python_setuptools: $(D)/bootstrap $(D)/python @DEPENDS_python_setuptools@
 	@PREPARE_python_setuptools@
 	cd @DIR_python_setuptools@ && \
-		$(hostprefix)/bin/python ./setup.py build install --root=$(targetprefix) --prefix=/usr
+		$(PYTHON_INSTALL)
 	@CLEANUP_python_setuptools@
 	touch $@
 
@@ -120,7 +120,7 @@ $(D)/libxmlccwrap: $(D)/bootstrap $(D)/libxml2_e2 $(D)/libxslt @DEPENDS_libxmlcc
 $(D)/python_lxml: $(D)/bootstrap $(D)/python $(D)/python_setuptools @DEPENDS_python_lxml@
 	@PREPARE_python_lxml@
 	cd @DIR_python_lxml@ && \
-		$(PYTHON_BUILD)
+		$(PYTHON_BUILD) \
 			--with-xml2-config=$(hostprefix)/bin/xml2-config \
 			--with-xslt-config=$(hostprefix)/bin/xslt-config && \
 		$(PYTHON_INSTALL)
