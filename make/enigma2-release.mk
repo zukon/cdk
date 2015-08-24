@@ -1059,8 +1059,6 @@ endif
 #
 if ENABLE_MEDIAFWGSTREAMER
 	if [ -d $(prefix)/release/usr/lib/gstreamer-1.0 ]; then \
-		#removed rm \
-		rm -rf $(prefix)/release/usr/lib/libgstfft*; \
 		rm -rf $(prefix)/release/usr/lib/gstreamer-1.0/*; \
 		cp -a $(targetprefix)/usr/bin/gst-* $(prefix)/release/usr/bin/; \
 		sh4-linux-strip --strip-unneeded $(prefix)/release/usr/bin/gst-launch*; \
