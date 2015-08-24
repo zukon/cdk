@@ -193,6 +193,7 @@ python_six;1.9.0;six-1.9.0;six-1.9.0.tar.gz;extract:six-1.9.0.tar.gz
 python_cffi;1.2.1;cffi-1.2.1;cffi-1.2.1.tar.gz;extract:cffi-1.2.1.tar.gz
 python_enum34;1.0.4;enum34-1.0.4;enum34-1.0.4.tar.gz;extract:enum34-1.0.4.tar.gz
 python_pyasn1;0.1.8;pyasn1-0.1.8;pyasn1-0.1.8.tar.gz;extract:pyasn1-0.1.8.tar.gz
+python_pyasn1_modules;0.0.7;pyasn1-modules-0.0.7;pyasn1-modules-0.0.7.tar.gz;extract:pyasn1-modules-0.0.7.tar.gz
 python_pycparser;2.14;pycparser-2.14;pycparser-2.14.tar.gz;extract:pycparser-2.14.tar.gz
 python_cryptography;0.8.1;cryptography-0.8.1;cryptography-0.8.1.tar.gz;extract:cryptography-0.8.1.tar.gz;patch:python-cryptography-cffi.patch
 
