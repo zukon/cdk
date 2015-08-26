@@ -203,7 +203,7 @@ python_cryptography;0.8.1;cryptography-0.8.1;cryptography-0.8.1.tar.gz;extract:c
 orc;0.4.24;orc-0.4.24;orc-0.4.24.tar.xz;extract:orc-0.4.24.tar.xz
 gst_gmediarender;0.0.6;gmediarender-0.0.6;gmediarender-0.0.6.tar.bz2;extract:gmediarender-0.0.6.tar.bz2;patch:gst-gmediarender-0.0.6.patch
 #gst_plugins_dvbmediasink;0.10.1;gst-plugins-dvbmediasink-0.10.1;;link:../apps/libs/gst-plugins-dvbmediasink-0.10.1:gst-plugins-dvbmediasink-0.10.1
-gst_plugins_dvbmediasink;1.0;gst-plugins-dvbmediasink-1.0;;link:../apps/libs/gst-plugins-dvbmediasink-1.0:gst-plugins-dvbmediasink-1.0
+gst_plugins_dvbmediasink;1.0;gst-plugins-dvbmediasink-1.0;gst-plugins-dvbmediasink.git;extract:gst-plugins-dvbmediasink.git;patch:gst-1.0-plugins-dvbmediasink-sh4.patch
 gstreamer;1.5.2;gstreamer-1.5.2;gstreamer-1.5.2.tar.xz;extract:gstreamer-1.5.2.tar.xz
 gst_plugins_base;1.5.2;gst-plugins-base-1.5.2;gst-plugins-base-1.5.2.tar.xz;extract:gst-plugins-base-1.5.2.tar.xz
 gst_plugins_good;1.5.2;gst-plugins-good-1.5.2;gst-plugins-good-1.5.2.tar.xz;extract:gst-plugins-good-1.5.2.tar.xz
