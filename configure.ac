@@ -46,7 +46,7 @@ AM_CONDITIONAL(ENABLE_TVHEADEND,test "$enable_tvheadend" = "yes")
 AC_SUBST(TVHEADEND)
 
 AC_ARG_ENABLE(wlandriver,
-	AS_HELP_STRING(--enable-wlandriver, Setting up the CDK to build wlandriver),
+	AS_HELP_STRING(--enable-wlandriver, Setting up the CDK to build WLAN drivers),
 	[case "${enableval}" in
 		yes) WLANDRIVER=wlandriver ;;
 	esac],[enable_wlandriver=no])
@@ -1051,23 +1051,23 @@ AC_MSG_RESULT([
 $ccacheinfo
 summary:
 ----------------------------------------
-ccache support              : $enable_ccache
-target cpu/boxtype          : $CPU_MODEL / $BOXTYPE
-kernelversion               : $KERNELVERSION
+Ccache support              : $enable_ccache
+Target CPU/boxtype          : $CPU_MODEL / $BOXTYPE
+Kernelversion               : $KERNELVERSION
 Patchlevel                  : P0$KERNELLABEL
 DEBUG                       : $enable_debug
-boot prefix                 : $bootprefix
-serversupport               : $serversupport
-host prefix                 : $hostprefix
-cross prefix                : $crossprefix
-target prefix               : $targetprefix
-build prefix                : $buildprefix
-target apps directory       : $appsdir
-driver directory            : $driverdir
-source directory            : $sourcedir
-buildtmp directory          : $buildtmp
-customization directory     : $customizationsdir
-archive directory           : $archivedir
+Boot prefix                 : $bootprefix
+Serversupport               : $serversupport
+Host prefix                 : $hostprefix
+Cross prefix                : $crossprefix
+Target prefix               : $targetprefix
+Build prefix                : $buildprefix
+Target apps directory       : $appsdir
+Driver directory            : $driverdir
+Source directory            : $sourcedir
+Buildtmp directory          : $buildtmp
+Customization directory     : $customizationsdir
+Archive directory           : $archivedir
 Player191                   : $enable_player191
 Multicom324                 : $enable_multicom324
 Multicom406                 : $enable_multicom406

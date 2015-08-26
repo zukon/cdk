@@ -178,7 +178,7 @@ case "$REPLY" in
 	3)  KERNEL="--enable-p0214";;
 	4)  KERNEL="--enable-p0215";;
 	5)  KERNEL="--enable-p0217";;
-	*)  KERNEL="--enable-p0215";;
+	*)  KERNEL="--enable-p0217";;
 esac
 CONFIGPARAM="$CONFIGPARAM $KERNEL"
 
