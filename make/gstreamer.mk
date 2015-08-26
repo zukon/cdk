@@ -269,6 +269,12 @@ $(D)/gst_plugins_dvbmediasink: $(D)/bootstrap $(D)/gstreamer $(D)/gst_plugins_ba
 		automake --add-missing --copy --force-missing --foreign && \
 		$(CONFIGURE) \
 			--prefix=/usr \
+			--with-wma \
+			--with-wmv \
+			--with-pcm \
+			--with-dtsdownmix \
+			--with-eac3 \
+			--with-mpeg4v2 \
 			--with-gstversion=1.0 \
 		&& \
 		$(MAKE) && \
