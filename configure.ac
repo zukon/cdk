@@ -818,6 +818,7 @@ TUXBOX_RULES_MAKE(libogg)
 TUXBOX_RULES_MAKE(libsamplerate)
 TUXBOX_RULES_MAKE(libvorbis)
 TUXBOX_RULES_MAKE(libvorbisidec)
+TUXBOX_RULES_MAKE(libdca)
 
 #
 # contrib libs
