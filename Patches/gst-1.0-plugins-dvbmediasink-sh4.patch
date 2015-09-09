@@ -116,6 +116,23 @@ index 271e9b9..ccbf266 100644
  		pfd[0].fd = self->unlockfd[0];
  		pfd[0].events = POLLIN;
  		pfd[1].fd = self->fd;
+@@ -904,12 +963,16 @@
+ 		{
+ 			GST_LOG_OBJECT(self, "going into poll, have %d bytes to write", len - written);
+ 		}
++#if CHECK_DRAIN
+ 		if (poll(pfd, 2, -1) < 0)
+ 		{
+ 			if (errno == EINTR) continue;
+ 			retval = -1;
+ 			break;
+ 		}
++#else
++		pfd[1].revents = POLLOUT;
++#endif
+ 		if (pfd[0].revents & POLLIN)
+ 		{
+ 			/* read all stop commands */
 diff --git a/gstdvbaudiosink.h b/gstdvbaudiosink.h
 index dfce273..d4fe562 100644
 --- a/gstdvbaudiosink.h
