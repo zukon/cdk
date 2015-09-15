@@ -307,6 +307,16 @@ $(D)/python_zope_interface: $(D)/bootstrap $(D)/python $(D)/python_setuptools @D
 	touch $@
 
 #
+# python_requests
+#
+$(D)/python_requests: $(D)/bootstrap $(D)/python $(D)/python_setuptools @DEPENDS_requests@
+	@PREPARE_python_requests@
+	cd @DIR_python_requests@ && \
+		$(PYTHON_INSTALL)
+	@CLEANUP_python_requests@
+	touch $@
+
+#
 # python_singledispatch
 #
 $(D)/python_singledispatch: $(D)/bootstrap $(D)/python $(D)/python_setuptools @DEPENDS_singledispatch@
