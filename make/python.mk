@@ -307,6 +307,16 @@ $(D)/python_zope_interface: $(D)/bootstrap $(D)/python $(D)/python_setuptools @D
 	touch $@
 
 #
+# python_singledispatch
+#
+$(D)/python_singledispatch: $(D)/bootstrap $(D)/python $(D)/python_setuptools @DEPENDS_singledispatch@
+	@PREPARE_python_singledispatch@
+	cd @DIR_python_singledispatch@ && \
+		$(PYTHON_INSTALL)
+	@CLEANUP_python_singledispatch@
+	touch $@
+
+#
 # python_livestreamer
 #
 $(D)/python_livestreamer: $(D)/bootstrap $(D)/python $(D)/python_setuptools @DEPENDS_python_livestreamer@
