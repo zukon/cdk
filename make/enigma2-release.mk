@@ -975,6 +975,7 @@ endif
 	rm -rf $(prefix)/release$(PYTHON_DIR)/unittest/test
 	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/twisted/{test,conch,mail,names,news,words,flow,lore,pair,runner}
 	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/Cheetah/Tests
+	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/livestreamer_cli
 	rm -rf $(prefix)/release$(PYTHON_DIR)/site-packages/lxml
 	rm -f $(prefix)/release$(PYTHON_DIR)/site-packages/libxml2mod.so
 	rm -f $(prefix)/release$(PYTHON_DIR)/site-packages/libxsltmod.so
