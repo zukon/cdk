@@ -319,7 +319,7 @@ $(D)/python_requests: $(D)/bootstrap $(D)/python $(D)/python_setuptools @DEPENDS
 #
 # python_singledispatch
 #
-$(D)/python_singledispatch: $(D)/bootstrap $(D)/python $(D)/python_setuptools @DEPENDS_singledispatch@
+$(D)/python_singledispatch: $(D)/bootstrap $(D)/python $(D)/python_setuptools @DEPENDS_python_singledispatch@
 	@PREPARE_python_singledispatch@
 	cd @DIR_python_singledispatch@ && \
 		$(PYTHON_INSTALL)
