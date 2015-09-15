@@ -317,3 +317,17 @@ $(D)/python_livestreamer: $(D)/bootstrap $(D)/python $(D)/python_setuptools @DEP
 		$(PYTHON_INSTALL)
 	@CLEANUP_python_livestreamer@
 	touch $@
+
+#
+# python_livestreamersrv
+#
+$(D)/python_livestreamersrv: $(D)/bootstrap $(D)/python $(D)/python_setuptools $(D)/python_livestreamer @DEPENDS_python_livestreamersrv@
+	@PREPARE_python_livestreamersrv@
+	[ -d "$(archivedir)/livestreamersrv.git" ] && \
+	(cd $(archivedir)/livestreamersrv.git; git pull; cd "$(buildprefix)";); \
+	cd @DIR_python_livestreamersrv@ && \
+		cp -rd livestreamersrv $(targetprefix)/usr/sbin && \
+		cp -rd offline.mp4 $(targetprefix)/usr/share
+	@CLEANUP_python_livestreamersrv@
+	touch $@
+
