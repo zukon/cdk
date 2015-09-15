@@ -180,6 +180,7 @@ pyasn1-0.1.8.tar.gz;https://pypi.python.org/packages/source/p/pyasn1
 pyasn1-modules-0.0.7.tar.gz;https://pypi.python.org/packages/source/p/pyasn1-modules
 pycparser-2.14.tar.gz;https://pypi.python.org/packages/source/p/pycparser
 cryptography-0.8.1.tar.gz;https://pypi.python.org/packages/source/c/cryptography
+livestreamer.git;git://github.com/chrippa/livestreamer
 
 #
 # GSTREAMER

@@ -931,6 +931,7 @@ TUXBOX_RULES_MAKE(python_wifi)
 TUXBOX_RULES_MAKE(python_cheetah)
 TUXBOX_RULES_MAKE(python_mechanize)
 TUXBOX_RULES_MAKE(python_zope_interface)
+TUXBOX_RULES_MAKE(python_livestreamer)
 
 #
 # gstreamer

@@ -305,3 +305,15 @@ $(D)/python_zope_interface: $(D)/bootstrap $(D)/python $(D)/python_setuptools @D
 		$(PYTHON_INSTALL)
 	@CLEANUP_python_zope_interface@
 	touch $@
+
+#
+# python_livestreamer
+#
+$(D)/python_livestreamer: $(D)/bootstrap $(D)/python $(D)/python_setuptools @DEPENDS_python_livestreamer@
+	@PREPARE_python_livestreamer@
+	[ -d "$(archivedir)/livestreamer.git" ] && \
+	(cd $(archivedir)/livestreamer.git; git pull; cd "$(buildprefix)";); \
+	cd @DIR_python_livestreamer@ && \
+		$(PYTHON_INSTALL)
+	@CLEANUP_python_livestreamer@
+	touch $@

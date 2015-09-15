@@ -197,6 +197,7 @@ python_pyasn1;0.1.8;pyasn1-0.1.8;pyasn1-0.1.8.tar.gz;extract:pyasn1-0.1.8.tar.gz
 python_pyasn1_modules;0.0.7;pyasn1-modules-0.0.7;pyasn1-modules-0.0.7.tar.gz;extract:pyasn1-modules-0.0.7.tar.gz
 python_pycparser;2.14;pycparser-2.14;pycparser-2.14.tar.gz;extract:pycparser-2.14.tar.gz
 python_cryptography;0.8.1;cryptography-0.8.1;cryptography-0.8.1.tar.gz;extract:cryptography-0.8.1.tar.gz
+python_livestreamer;1.0;livestreamer-1.0;livestreamer.git;extract:livestreamer.git
 
 #
 # GSTREAMER
