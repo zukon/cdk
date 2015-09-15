@@ -749,7 +749,9 @@ release_enigma2_base:
 	cp -dp $(targetprefix)/sbin/blkid $(prefix)/release/sbin/ && \
 	cp -p $(targetprefix)/usr/bin/ffmpeg $(prefix)/release/sbin/ && \
 	cp -p $(targetprefix)/usr/bin/opkg-cl $(prefix)/release/usr/bin/opkg && \
-	cp -p $(targetprefix)/usr/bin/python $(prefix)/release/usr/bin/ && \
+	cp -dp $(targetprefix)/usr/bin/python$(PYTHON_VERSION) $(prefix)/release/usr/bin/ && \
+	cp -dp $(targetprefix)/usr/bin/python2 $(prefix)/release/usr/bin/ && \
+	cp -dp $(targetprefix)/usr/bin/python $(prefix)/release/usr/bin/ && \
 	cp -p $(targetprefix)/usr/sbin/ethtool $(prefix)/release/usr/sbin/ && \
 	cp -p $(targetprefix)/usr/sbin/livestreamersrv $(prefix)/release/usr/sbin/ && \
 	cp -dp $(targetprefix)/sbin/mkfs $(prefix)/release/sbin/
