@@ -309,7 +309,7 @@ $(D)/python_zope_interface: $(D)/bootstrap $(D)/python $(D)/python_setuptools @D
 #
 # python_requests
 #
-$(D)/python_requests: $(D)/bootstrap $(D)/python $(D)/python_setuptools @DEPENDS_requests@
+$(D)/python_requests: $(D)/bootstrap $(D)/python $(D)/python_setuptools @DEPENDS_python_requests@
 	@PREPARE_python_requests@
 	cd @DIR_python_requests@ && \
 		$(PYTHON_INSTALL)
