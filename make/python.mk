@@ -317,6 +317,16 @@ $(D)/python_requests: $(D)/bootstrap $(D)/python $(D)/python_setuptools @DEPENDS
 	touch $@
 
 #
+# python_requests
+#
+$(D)/python_futures: $(D)/bootstrap $(D)/python $(D)/python_setuptools @DEPENDS_python_futures@
+	@PREPARE_python_futures@
+	cd @DIR_python_futures@ && \
+		$(PYTHON_INSTALL)
+	@CLEANUP_python_futures@
+	touch $@
+
+#
 # python_singledispatch
 #
 $(D)/python_singledispatch: $(D)/bootstrap $(D)/python $(D)/python_setuptools @DEPENDS_python_singledispatch@
