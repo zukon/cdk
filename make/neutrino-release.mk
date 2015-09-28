@@ -729,7 +729,7 @@ endif
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/net/ipv6/ipv6.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel/net/ipv6/ipv6.ko $(prefix)/release/lib/modules || true
 
 #
-# multicom 323
+# multicom 324
 #
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/multicom/embxshell/embxshell.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/multicom/embxshell/embxshell.ko $(prefix)/release/lib/modules || true
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/multicom/embxmailbox/embxmailbox.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/multicom/embxmailbox/embxmailbox.ko $(prefix)/release/lib/modules || true
@@ -926,6 +926,14 @@ endif
 #
 	if [ -e $(targetprefix)/usr/sbin/minidlnad ]; then \
 		cp -f $(targetprefix)/usr/sbin/minidlnad $(prefix)/release/usr/sbin/; \
+	fi
+
+#
+# openvpn
+#
+	if [ -e $(targetprefix)/usr/sbin/openvpn ]; then \
+		cp -f $(targetprefix)/usr/sbin/openvpn $(prefix)/release/usr/sbin; \
+		$(INSTALL_DIR) $(prefix)/release/etc/openvpn; \
 	fi
 
 #

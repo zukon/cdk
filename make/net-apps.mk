@@ -282,7 +282,7 @@ $(D)/udpxy: $(D)/bootstrap @DEPENDS_udpxy@
 #
 # openvpn
 #
-$(D)/openvpn: $(D)/bootstrap $(OPENSSL) @DEPENDS_openvpn@
+$(D)/openvpn: $(D)/bootstrap $(OPENSSL) $(D)/lzo @DEPENDS_openvpn@
 	@PREPARE_openvpn@
 	cd @DIR_openvpn@ && \
 		$(CONFIGURE) \
