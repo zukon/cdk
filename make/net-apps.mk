@@ -290,7 +290,6 @@ $(D)/openvpn: $(D)/bootstrap $(OPENSSL) $(D)/lzo @DEPENDS_openvpn@
 			--host=$(target) \
 			--target=$(target) \
 			--prefix=/usr \
-			--disable-lzo \
 			--disable-plugin-auth-pam \
 			--enable-password-save \
 		&& \
