@@ -313,6 +313,7 @@ endif
 HOST_KERNEL_PATCHES = $(KERNELPATCHES_24)
 HOST_KERNEL_CONFIG = linux-sh4-$(subst _stm24_,_,$(KERNELVERSION))_$(MODNAME).config$(DEBUG_STR)
 
+##make -C $(KERNEL_DIR) headers_install ARCH=sh INSTALL_HDR_PATH=$(targetprefix)/usr
 $(D)/linux-kernel: $(D)/bootstrap $(buildprefix)/Patches/$(BUILDCONFIG)/$(HOST_KERNEL_CONFIG) | $(HOST_U_BOOT_TOOLS) \
 	$(if $(HOST_KERNEL_PATCHES),$(HOST_KERNEL_PATCHES:%=$(PATCHES)/$(BUILDCONFIG)/%))
 	rm -rf linux-sh4*
