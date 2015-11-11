@@ -401,6 +401,14 @@ AC_ARG_ENABLE(cuberevo_9500hd,
 AM_CONDITIONAL(ENABLE_CUBEREVO_9500HD,test "$enable_cuberevo_9500hd" = "yes")
 AC_SUBST(CUBEREVO_9500HD)
 
+AC_ARG_ENABLE(cuberevo_3000hd,
+	AS_HELP_STRING(--enable-cuberevo_3000hd, enable cuberevo 3000hd stuff),
+	[case "${enableval}" in
+		yes) CUBEREVO_3000HD=cuberevo_3000hd ;;
+	esac],[enable_cuberevo_3000hd=no])
+AM_CONDITIONAL(ENABLE_CUBEREVO_3000HD,test "$enable_cuberevo_3000hd" = "yes")
+AC_SUBST(CUBEREVO_3000HD)
+
 AC_ARG_ENABLE(homecast5101,
 	AS_HELP_STRING(--enable-homecast5101, enable homecast 5101 stuff),
 	[case "${enableval}" in
