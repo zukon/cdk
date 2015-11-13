@@ -32,7 +32,7 @@ sysvinit_2.88dsf.orig.tar.gz;ftp://ftp.debian.org/debian/pool/main/s/sysvinit
 #
 # Graphics and Font Libraries
 #
-freetype-2.6.tar.bz2;http://prdownloads.sourceforge.net/sourceforge/freetype
+freetype-2.6.1.tar.bz2;http://prdownloads.sourceforge.net/sourceforge/freetype
 fontconfig-2.8.0.tar.gz;http://www.freedesktop.org/software/fontconfig/release
 fribidi-0.19.7.tar.bz2;http://fribidi.org/download
 giflib-4.1.6.tar.bz2;http://heanet.dl.sourceforge.net/sourceforge/giflib

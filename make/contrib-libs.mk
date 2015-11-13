@@ -230,7 +230,7 @@ $(D)/libfreetype: $(D)/bootstrap $(D)/zlib $(D)/bzip2 $(D)/libpng @DEPENDS_libfr
 		sed -i  -e "/AUX.*.gxvalid/s@^# @@" \
 			-e "/AUX.*.otvalid/s@^# @@" \
 			modules.cfg && \
-		sed -ri -e 's:.*(#.*SUBPIXEL.*) .*:\1:' include/config/ftoption.h && \
+		sed -ri -e 's:.*(#.*SUBPIXEL.*) .*:\1:' include/freetype/config/ftoption.h && \
 		$(CONFIGURE) \
 			--build=$(build) \
 			--host=$(target) \
