@@ -75,16 +75,15 @@ $(D)/host_glib2_genmarshal: @DEPENDS_host_glib2_genmarshal@
 	touch $@
 
 #
-# mkcramfs
+# host_cramfs
 #
-mkcramfs: @MKCRAMFS@
-
-$(hostprefix)/bin/mkcramfs: @DEPENDS_cramfs@
-	@PREPARE_cramfs@
-	cd @DIR_cramfs@ && \
+$(D)/host_cramfs: @DEPENDS_host_cramfs@
+	@PREPARE_host_cramfs@
+	cd @DIR_host_cramfs@ && \
 		$(MAKE) mkcramfs && \
-		@INSTALL_cramfs@
-#	@CLEANUP_cramfs@
+		@INSTALL_host_cramfs@
+	@CLEANUP_host_cramfs@
+	touch $@
 
 #
 # MKSQUASHFS with LZMA support

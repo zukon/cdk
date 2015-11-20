@@ -26,7 +26,7 @@ ipkg_utils;050831;ipkg-utils-050831;ipkg-utils-050831.tar.gz;extract:ipkg-utils-
 ipkg_host;0.99.163;ipkg-host;ipkg-0.99.163.tar.gz:ipkg-host.patch;dirextract:ipkg-0.99.163.tar.gz;patch:ipkg-host.patch
 ccache;3.1.9;ccache-3.1.9;ccache-3.1.9.tar.gz;extract:ccache-3.1.9.tar.gz
 #squashfs;3.0;mksquashfs;squashfs3.0.tar.gz:mksquashfs_lzma.patch:lzma442.tar.bz2:mksquashfs_lzma_zlib-stream.patch;dircreate:mksquashfs;extract:lzma442.tar.bz2;patch:mksquashfs_lzma_zlib-stream.patch;extract:squashfs3.0.tar.gz;patch:mksquashfs_lzma.patch
-cramfs;1.1;cramfs-1.1;cramfs-1.1.tar.gz;extract:cramfs-1.1.tar.gz
+host_cramfs;1.1;cramfs-1.1;cramfs-1.1.tar.gz;extract:cramfs-1.1.tar.gz
 host_squashfs;4.0;squashfs4.0;squashfs4.0.tar.gz:squashfs-tools-4.0-lzma.patch:lzma465.tar.bz2;dirextract:lzma465.tar.bz2;extract:squashfs4.0.tar.gz;patch:squashfs-tools-4.0-lzma.patch
 host_pkgconfig;0.28;pkg-config-0.28;pkg-config-0.28.tar.gz;extract:pkg-config-0.28.tar.gz;patch:pkg-config-0.28.patch
 host_module_init_tools;3.16;module-init-tools-3.16;module-init-tools-3.16.tar.bz2;extract:module-init-tools-3.16.tar.bz2;patch:module-init-tools-no-man.patch
