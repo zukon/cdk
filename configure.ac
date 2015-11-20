@@ -771,9 +771,9 @@ TUXBOX_RULES_MAKE(host_u_boot_tools)
 #
 # core
 #
-TUXBOX_RULES_MAKE(squashfs)
 TUXBOX_RULES_MAKE(ccache)
 TUXBOX_RULES_MAKE(cramfs)
+TUXBOX_RULES_MAKE(host_squashfs)
 TUXBOX_RULES_MAKE(host_pkgconfig)
 TUXBOX_RULES_MAKE(host_module_init_tools)
 TUXBOX_RULES_MAKE(host_mtd_utils)
