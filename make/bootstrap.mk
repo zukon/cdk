@@ -74,8 +74,8 @@ crosstool-rpminstall
 		cp -a $(crossprefix)/target/usr/lib/libutil.so $(targetprefix)/usr/lib; \
 		cp -a $(crossprefix)/target/usr/lib/libpthread.so $(targetprefix)/usr/lib; \
 		cp -a $(crossprefix)/target/usr/lib/libresolv.so $(targetprefix)/usr/lib; \
-		cp -a $(crossprefix)/target/usr/lib/libc.so $(targetprefix)/usr/lib/libc.so; \
-		cp -a $(crossprefix)/target/usr/lib/libc_nonshared.a $(targetprefix)/usr/lib/libc_nonshared.a; \
+		ln -s $(crossprefix)/target/usr/lib/libc.so $(targetprefix)/usr/lib/libc.so; \
+		ln -s $(crossprefix)/target/usr/lib/libc_nonshared.a $(targetprefix)/usr/lib/libc_nonshared.a; \
 	fi
 	if test -e $(crossprefix)/target/lib; then \
 		cp -a $(crossprefix)/target/lib/*so* $(targetprefix)/lib; \
