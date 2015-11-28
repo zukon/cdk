@@ -4,7 +4,6 @@
 $(D)/busybox: $(D)/bootstrap @DEPENDS_busybox@ $(buildprefix)/Patches/busybox.config$(if $(UFS912)$(UFS913)$(SPARK)$(SPARK7162),_nandwrite)
 	@PREPARE_busybox@
 	cd @DIR_busybox@ && \
-		patch -p1 < $(PATCHES)/busybox-1.24.1-unzip.patch && \
 		patch -p1 < $(PATCHES)/busybox-1.24.1-ifupdown.patch && \
 		patch -p1 < $(PATCHES)/busybox-1.24.1-unicode.patch && \
 		patch -p1 < $(PATCHES)/busybox-1.24.1-extra.patch && \
