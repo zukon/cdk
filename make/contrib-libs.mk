@@ -44,10 +44,9 @@ $(D)/openssl: $(D)/bootstrap @DEPENDS_openssl@
 	@PREPARE_openssl@
 	cd @DIR_openssl@ && \
 		$(BUILDENV) \
-		./Configure -DL_ENDIAN shared no-hw no-engine linux-generic32 \
+		./Configure -DL_ENDIAN shared no-hw linux-generic32 \
 			--prefix=/usr \
 			--openssldir=/etc/ssl \
-			--openssldir=/.remove \
 		&& \
 		$(MAKE) && \
 		@INSTALL_openssl@
