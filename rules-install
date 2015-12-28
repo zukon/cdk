@@ -230,6 +230,7 @@ sdparm;make:install:DESTDIR=TARGET
 parted;make:install
 utillinux;rewrite-pkgconfig:libsmartcols/smartcols.pc;make:install:DESTDIR=TARGET;rewrite-libtool:TARGET/usr/lib/libsmartcols.la
 xfsprogs;make:install:prefix=TARGET/usr
+smartmontools;make:install:prefix=TARGET/usr
 
 #
 # Networking Libraries / Networking Utilities

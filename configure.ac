@@ -1005,6 +1005,7 @@ TUXBOX_RULES_MAKE(parted)
 TUXBOX_RULES_MAKE(sdparm)
 TUXBOX_RULES_MAKE(utillinux)
 TUXBOX_RULES_MAKE(xfsprogs)
+TUXBOX_RULES_MAKE(smartmontools)
 
 #
 # Networking Libraries / Networking Utilities

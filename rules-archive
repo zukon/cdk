@@ -246,6 +246,7 @@ sdparm-1.07.tgz;http://sg.danny.cz/sg/p
 parted-3.0.tar.gz;http://ftp.gnu.org/pub/gnu/parted
 util-linux-2.25.2.tar.gz;http://ftp.kernel.org/pub/linux/utils/util-linux/v2.25
 xfsprogs-3.1.8.tar.gz;http://ftp.gwdg.de/pub/linux/misc/xfs/xfs/cmd_tars
+smartmontools-6.4.tar.gz;http://sourceforge.net/projects/smartmontools/files/smartmontools/6.4
 
 #
 # Networking Libraries / Networking Utilities
