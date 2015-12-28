@@ -791,6 +791,6 @@ $(D)/smartmontools: $(D)/bootstrap @DEPENDS_smartmontools@
 		&& \
 		$(MAKE) && \
 		@INSTALL_smartmontools@
-#	@CLEANUP_smartmontools@
+	@CLEANUP_smartmontools@
 	touch $@
 
