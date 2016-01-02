@@ -54,23 +54,6 @@ $(D)/openssl: $(D)/bootstrap @DEPENDS_openssl@
 	touch $@
 
 #
-# openssl_old
-#
-$(D)/openssl_old: $(D)/bootstrap @DEPENDS_openssl_old@
-	@PREPARE_openssl_old@
-	cd @DIR_openssl_old@ && \
-		$(BUILDENV) \
-		./Configure shared linux-sh no-hw \
-			--prefix=/usr \
-			--openssldir=/.remove \
-		&& \
-		$(MAKE) depend && \
-		$(MAKE) && \
-		@INSTALL_openssl_old@
-	@CLEANUP_openssl_old@
-	touch $@
-
-#
 # libbluray
 #
 $(D)/libbluray: $(D)/bootstrap @DEPENDS_libbluray@
