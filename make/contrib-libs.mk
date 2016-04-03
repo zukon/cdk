@@ -1444,7 +1444,9 @@ $(D)/libxslt: $(D)/bootstrap $(D)/libxml2_e2 @DEPENDS_libxslt@
 $(D)/graphlcd: $(D)/bootstrap $(D)/libfreetype $(D)/libusb @DEPENDS_graphlcd@
 	@PREPARE_graphlcd@
 	[ -d "$(archivedir)/graphlcd-base-touchcol.git" ] && \
-	(cd $(archivedir)/graphlcd-base-touchcol.git; git pull; git checkout touchcol; cd "$(buildprefix)";); \
+	(cd $(archivedir)/graphlcd-base-touchcol.git; git pull; cd "$(buildprefix)";); \
+	[ -d "$(archivedir)/graphlcd-base-touchcol.git" ] || \
+	git clone -b touchcol git://projects.vdr-developer.org/graphlcd-base.git $(archivedir)/graphlcd-base-touchcol.git; \
 	cd @DIR_graphlcd@ && \
 		export TARGET=$(target)- && \
 		export LDFLAGS="-L$(targetprefix)/usr/lib -Wl,-rpath-link,$(targetprefix)/usr/lib" && \
