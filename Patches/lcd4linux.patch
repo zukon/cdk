@@ -47,19 +47,3 @@
  	    break;
  	case 'v':
  	    verbose_level++;
---- lcd4linux/drv_SamsungSPF.c.org
-+++ lcd4linux/drv_SamsungSPF.c
-@@ -89,6 +89,13 @@
-      .xRes = 1024,
-      .yRes = 600,
-      },
-+    {
-+     .type = "SPF-87H",
-+     .vendorID = 0x04e8,
-+     .productID = {0x2033, 0x2034},
-+     .xRes = 800,
-+     .yRes = 480,
-+     },
- };
- 
- static int numFrames = sizeof(spfDevices) / sizeof(spfDevices[0]);
