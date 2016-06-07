@@ -260,7 +260,7 @@
  
  -- 'cfg.proxy' enables proxy for injection DLNA headers to stream
  -- 0-off, 1-radio, 2-radio/TV
-@@ -48,16 +48,17 @@
+@@ -48,19 +48,20 @@
  cfg.dlna_notify=true
  
  -- UPnP/DLNA subscribe ttl
@@ -280,7 +280,11 @@
 +cfg.name=io.popen("uname -n"):read("*l")..'-xupnpd'
  
  -- static device UUID, '60bd2fb3-dabe-cb14-c766-0e319b54c29a' for example or nil
- cfg.uuid='60bd2fb3-dabe-cb14-c766-0e319b54c29a'
+-cfg.uuid='60bd2fb3-dabe-cb14-c766-0e319b54c29a'
++cfg.uuid=''
+ 
+ -- max url cache size
+ cfg.cache_size=8
 @@ -72,12 +73,14 @@
  cfg.default_mime_type='mpeg'
  
