@@ -119,12 +119,10 @@ release_neutrino_common_ipbox:
 	cp -f $(buildprefix)/root/release/fstab_ipbox $(prefix)/release/etc/fstab
 	cp $(targetprefix)/boot/video_7109.elf $(prefix)/release/lib/firmware/video.elf
 	cp -dp $(buildprefix)/root/release/lircd_ipbox.conf $(prefix)/release/etc/lircd.conf
-	cp -p $(buildprefix)/root/release/lircd_ipbox $(prefix)/release/usr/bin/lircd
+	cp -p $(targetprefix)/usr/sbin/lircd $(prefix)/release/usr/bin/
 	rm -f $(prefix)/release/lib/firmware/*
 	rm -f $(prefix)/release/lib/modules/boxtype.ko
-	rm -f $(prefix)/release/lib/modules/bpamem.ko
 	rm -f $(prefix)/release/lib/modules/ramzswap.ko
-	rm -f $(prefix)/release/lib/modules/simu_button.ko
 	rm -f $(prefix)/release/lib/modules/stmvbi.ko
 	rm -f $(prefix)/release/lib/modules/stmvout.ko
 	rm -f $(prefix)/release/bin/gotosleep
