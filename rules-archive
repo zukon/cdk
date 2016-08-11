@@ -134,7 +134,7 @@ grep-2.5.1.tar.bz2;ftp://mirrors.kernel.org/gnu/grep
 grep_2.5.1.ds2-6.diff.gz;http://64studio.hivelocity.net/apt/pool/main/g/grep
 openrdate-1.1.2.tar.gz;http://prdownloads.sourceforge.net/sourceforge/openrdate
 termcap-2.0.8.tar.gz;http://fresh.t-systems-sfr.com/linux/src
-mc-4.8.1.7.tar.bz2;http://www.midnight-commander.org/downloads
+mc-4.8.15.tar.bz2;http://www.midnight-commander.org/downloads
 console-data_1.03.orig.tar.gz;ftp://ftp.debian.org/debian/pool/main/c/console-data
 nano-2.0.6.tar.gz;http://www.nano-editor.org/dist/v2.0
 rsync-2.6.9.tar.gz;http://samba.anu.edu.au/ftp/rsync

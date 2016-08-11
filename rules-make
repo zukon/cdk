@@ -150,7 +150,7 @@ pugixml;1.6;pugixml-1.6;pugixml-1.6.tar.gz;extract:pugixml-1.6.tar.gz
 bzip2;1.0.6;bzip2-1.0.6;bzip2-1.0.6.tar.gz:bzip2.patch;extract:bzip2-1.0.6.tar.gz;patch:bzip2.patch
 grep;2.5.1;grep-2.5.1;grep-2.5.1.tar.bz2:grep_2.5.1.ds2-6.diff.gz;extract:grep-2.5.1.tar.bz2
 openrdate;1.1.2;openrdate-1.1.2;openrdate-1.1.2.tar.gz;extract:openrdate-1.1.2.tar.gz
-mc;4.8.1.7;mc-4.8.1.7;mc-4.8.1.7.tar.bz2;extract:mc-4.8.1.7.tar.bz2
+mc;4.8.15;mc-4.8.15;mc-4.8.15.tar.bz2;extract:mc-4.8.15.tar.bz2
 console_data;1.03;console-data-1.03;console-data_1.03.orig.tar.gz;extract:console-data_1.03.orig.tar.gz
 nano;2.0.6;nano-2.0.6;nano-2.0.6.tar.gz;extract:nano-2.0.6.tar.gz
 rsync;2.6.9;rsync-2.6.9;rsync-2.6.9.tar.gz;extract:rsync-2.6.9.tar.gz
